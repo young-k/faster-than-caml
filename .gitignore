@@ -18,3 +18,8 @@ _build/
 # oasis generated files
 setup.data
 setup.log
+
+# vim files
+*.swp
+
+.DS_Store
