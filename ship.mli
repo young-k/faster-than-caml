@@ -1,8 +1,8 @@
 (* [Ship] contains all data and methods of the player's ship *)
 module type Ship = sig
 
-  type weapon_type = Ion | Lazer | Beam
-  (* [weapon] represents the tuple 
+  type weapon_type = Ion | Laser | Beam
+  (* [weapon] represents the tuple
    * (weapon name, charge, charge time, damage, type) *)
   type weapon = (string * int * int * int * weapon_type)
   (* [crew] represents the tuple
@@ -12,24 +12,24 @@ module type Ship = sig
   (* [ship] represents the state of the player's ship *)
   type ship = {
     (* [resources] is (fuel, missiles, scrap) *)
-    resources : int * int * int;
+    resources: int * int * int;
     (* [crew] is the list of crew members *)
-    crew : person list;
+    crew: person list;
     (* [hull] the ship's hp, max hull = 30 *)
-    hull : int;
+    hull: int;
     (* [evade] the ship's evade, 0 <= evade <= 100 *)
-    evade : int;
+    evade: int;
     (* [weapons] represents the list of ship's weapons *)
     (* TODO: swap order of weapons *)
     (* TODO: implement different types of weapons
      * e.g. 0 = ion, 1 = beam *)
-    weapons : weapon list;
+    weapons: weapon list;
     (* [location] represents string id of ship's current location *)
-    location : string;
+    location: string;
     (* [shield] represents the tuple (current shield level, charge time)
      * current shield level = # active shields * charge time + stored charges
      * current shield level <= shield power * charge time*)
-    shield : (int * int);
+    shield: (int * int);
 
 
     (* TODO for engine/power features
@@ -75,7 +75,7 @@ module type Ship = sig
   (* [repair] returns ship with hull increased by specified amount *)
   val repair : ship -> int -> ship
 
-  (* [get_weapon] returns [Some index] of a weapon 
+  (* [get_weapon] returns [Some index] of a weapon
    * if no weapon is available, returns [None] *)
   val get_weapon : ship -> int option
 
