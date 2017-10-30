@@ -1,32 +1,35 @@
 (* [Ship] contains all data and methods of the player's ship *)
 module type Ship = sig
 
-  (* [weapon] represents (weapon name, charge, charge time, damage, type) *)
-  type weapon = (string*int*int*int*int)
-  (* [crew] represents (name, weapon skills, engine skills, shield skills) *)
-  type person = (string*int*int*int)
+  type weapon_type = Ion | Lazer | Beam
+  (* [weapon] represents the tuple 
+   * (weapon name, charge, charge time, damage, type) *)
+  type weapon = (string * int * int * int * weapon_type)
+  (* [crew] represents the tuple
+   * (name, weapon skills, engine skills, shield skills) *)
+  type person = (string * int * int * int)
 
   (* [ship] represents the state of the player's ship *)
   type ship = {
     (* [resources] is (fuel, missiles, scrap) *)
-    resources : int*int*int;
+    resources : int * int * int;
     (* [crew] is the list of crew members *)
     crew : person list;
     (* [hull] the ship's hp, max hull = 30 *)
     hull : int;
     (* [evade] the ship's evade, 0 <= evade <= 100 *)
     evade : int;
-    (* [weapons] list of weapons *)
+    (* [weapons] represents the list of ship's weapons *)
     (* TODO: swap order of weapons *)
     (* TODO: implement different types of weapons
      * e.g. 0 = ion, 1 = beam *)
     weapons : weapon list;
-    (* [location] id of ship's current location *)
+    (* [location] represents string id of ship's current location *)
     location : string;
-    (* [shield] is (current shield level, charge time)
+    (* [shield] represents the tuple (current shield level, charge time)
      * current shield level = # active shields * charge time + stored charges
      * current shield level <= shield power * charge time*)
-    shield : (int*int);
+    shield : (int * int);
 
 
     (* TODO for engine/power features
@@ -43,51 +46,50 @@ module type Ship = sig
     *)
   }
 
-  (* initiates ship *)
+  (* [init] initiates ship *)
   val init : ship
 
-  (* returns string id of location *)
+  (* [get_location] returns string id of location *)
   val get_location : ship -> string
 
-  (* requires [str] is valid location id
-   * returns new ship *)
+  (* [set_location] returns ship with new location
+   * requires [str] is valid location id *)
   val set_location : ship -> string -> ship
 
-  (* returns tuple of ship resources *)
-  val get_resources : ship -> (int*int*int)
+  (* [get_resources] returns tuple of ship resources *)
+  val get_resources : ship -> (int * int * int)
 
-  (* requires [delta] to be tuple of val changes in resources
-   * returns new ship *)
-  val set_resources : ship -> (int*int*int) -> ship
+  (* [set_resources] returns ship with new tuple of resources
+   * requires [delta] to be tuple of val changes in resources *)
+  val set_resources : ship -> (int * int * int) -> ship
 
-  (* returns t/f for evasion based on ship stats*)
-  val evade : ship -> bool
+  (* [evade] returns int stat for evasion based on ship stats*)
+  val evade : ship -> int
 
-  (* returns [ship]'s hull *)
+  (* [get_hull] returns [ship]'s hull *)
   val get_hull : ship -> int
 
-  (* returns ship with shield/hull reduced by specified amount
-   * calls evade *)
+  (* [damage] returns ship with shield/hull reduced by specified amount *)
   val damage : ship -> int -> ship
 
-  (* returns ship with hull increased by specified amount *)
+  (* [repair] returns ship with hull increased by specified amount *)
   val repair : ship -> int -> ship
 
-  (* returns damage of [i]th weapon
-   * if [i] is out of bounds, return 0 *)
-  val weapon_dmg : ship -> int -> int
+  (* [get_weapon] returns [Some index] of a weapon 
+   * if no weapon is available, returns [None] *)
+  val get_weapon : ship -> int option
 
   (* TODO: system features
-  (* upgrades [i]th system, expends scraps *)
+  (* [upgrade_system] upgrades [i]th system, expends scraps *)
   val upgrade_system : ship -> int -> ship
 
-  (* upgrades total power, expends scraps *)
+  (* [upgrade_power] upgrades total power, expends scraps *)
   val upgrade_power : ship -> ship
 
-  (* damages [i]th system. calls damage *)
+  (* [damage_system] damages [i]th system. calls damage *)
   val damage_system : ship -> int -> ship
 
-  (* repairs [i]th system. calls repair *)
+  (* [repair_system] repairs [i]th system. calls repair *)
   val repair_system : ship -> int -> ship
   *)
 end
