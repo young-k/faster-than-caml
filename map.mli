@@ -16,7 +16,7 @@ module type Map = sig
   (* [init a] generates random stars based on an id system [a]
    * requires: id system of type int 
    * returns: generated map and the start id of the star the user starts on *)
-  val init: int -> (map * int)
+  val init : int -> (map * int)
 
   (* [reachable a] returns all reachable stars with their event from a current
    * star with id [a]. 
@@ -24,16 +24,16 @@ module type Map = sig
    * returns: list of (event_type option, int) where event_type is None if
    * it is not a store or end since this is used for display, and its
    * corresponding int is the star id *)
-  val reachable: map -> int -> ((event_type option) * int) list
+  val reachable : map -> int -> ((event_type option) * int) list
 
   (* [get_event a] returns the event of a given star id [a]
    * requires: map and valid star id of type int 
    * returns: the event_type of the star *)
-  val get_event: map -> int -> event_type
+  val get_event : map -> int -> event_type
 
   (* [get_end a] returns the last star given a map
    * requires: map
    * returns: the id of the last star *)
-  val get_end: map -> int
+  val get_end : map -> int
 
 end
