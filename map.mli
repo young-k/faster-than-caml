@@ -5,18 +5,22 @@ module type Map = sig
    * galaxy could have *)
   type event_type = Store | Nothing | Event | Combat | End
 
-  (* [star] is a tuple (id, event) where id is the star's id and event
-   * is the event_type that this star contains *)
-  type star = (int * event_type)
+  (* [star] has fields [id], [event], [reachable] where [id] is the star's id, 
+   * [event] is the [event_type] that this star contains, and [reachable] is a 
+   * list of all reachable star ids  *)
+  type star = {
+    id : int;
+    event : event_type;
+    reachable : int list;
+  }
 
   (* [map] is a star list that contains all the stars in this specific
    * galaxy *)
   type map = star list
 
   (* [init a] generates random stars based on an id system [a]
-   * requires: id system of type int 
    * returns: generated map and the start id of the star the user starts on *)
-  val init : int -> (map * int)
+  val init : (map * int)
 
   (* [reachable a] returns all reachable stars with their event from a current
    * star with id [a]. 
@@ -35,5 +39,11 @@ module type Map = sig
    * requires: map
    * returns: the id of the last star *)
   val get_end : map -> int
+
+  (* [display (x,y) m] returns a string intended to display the map
+   * requires: int [x] and [y] that correspond to the width and height of the 
+   * user's window, a map [m]
+   * returns: string that is a visual representation of the map *)
+  val display : (int * int) -> map -> string
 
 end
