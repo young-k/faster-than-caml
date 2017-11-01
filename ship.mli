@@ -19,22 +19,19 @@ module type Ship = sig
     hull: int;
     (* [evade] the ship's evade, 0 <= evade <= 100 *)
     evade: int;
-    (* [weapons] represents the list of ship's weapons *)
-    (* TODO: swap order of weapons *)
-    (* TODO: implement different types of weapons
-     * e.g. 0 = ion, 1 = beam *)
-    weapons: weapon list;
-    (* [location] represents string id of ship's current location *)
-    location: string;
+    (* [equipped] represents the list of ship's equipped weapons 
+     * index of weapon represents slot *)
+    equipped : weapon list;
+    (* [location] represents int id of ship's current location *)
+    location: int;
     (* [shield] represents the tuple (current shield level, charge time)
      * current shield level = # active shields * charge time + stored charges
      * current shield level <= shield power * charge time*)
     shield: (int * int);
-
-
-    (* TODO for engine/power features
-    (* [power] total power *)
-    power : int;
+    (* [inventory] stores all the weapons a ship owns *)
+    inventory : weapon list;
+    (* [augmentations] represents the list of ship's augmentations *)
+    augmentations : string list;
     (* [system_levels] are the max power each system can have
      * can be upgraded *)
     system_levels : (int*int*int);
@@ -43,18 +40,18 @@ module type Ship = sig
      * each system power <= system level
      * tentative: (shield, engine, weapons) *)
     system_powers : (int*int*int);
-    *)
+    
   }
 
   (* [init] initiates ship *)
   val init : ship
 
-  (* [get_location] returns string id of location *)
-  val get_location : ship -> string
+  (* [get_location] returns int id of location *)
+  val get_location : ship -> int
 
   (* [set_location] returns ship with new location
    * requires [str] is valid location id *)
-  val set_location : ship -> string -> ship
+  val set_location : ship -> int -> ship
 
   (* [get_resources] returns tuple of ship resources *)
   val get_resources : ship -> (int * int * int)
@@ -77,19 +74,18 @@ module type Ship = sig
 
   (* [get_weapon] returns [Some index] of a weapon
    * if no weapon is available, returns [None] *)
-  val get_weapon : ship -> int option
+  val get_weapon : ship -> int -> weapon option
 
-  (* TODO: system features
   (* [upgrade_system] upgrades [i]th system, expends scraps *)
   val upgrade_system : ship -> int -> ship
-
-  (* [upgrade_power] upgrades total power, expends scraps *)
-  val upgrade_power : ship -> ship
 
   (* [damage_system] damages [i]th system. calls damage *)
   val damage_system : ship -> int -> ship
 
-  (* [repair_system] repairs [i]th system. calls repair *)
-  val repair_system : ship -> int -> ship
-  *)
+  (* [repair_system] restores all systems. *)
+  val repair_system : ship -> ship
+
+  (* [add_augmentation] takes an augmentation name and adds it to the ship *)
+  val add_augmentation : ship -> string -> ship
+  
 end
