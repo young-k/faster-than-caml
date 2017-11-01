@@ -2,13 +2,28 @@
  * ship. *)
 module type Store = sig
 
-  (* [weapons] represents a list of weapons comprised of a tuple with
-     * (weapon name, cost) *)
-  type weapons = (string * int) list
+  (* [weapon] represents a weapon comprised of fields
+     * weapon name, cost, damage, and cool down *)
+  type weapon = {
+    name : string;
+    cost : int;
+    damage : int;
+    cool_down : int;
+  }
 
-  (* [augmentations] represents a list of augmentations comprised of a tuple 
-   * with (augmentation name, cost) *)
-  type augmentations = (string * int) list
+  (* [weapons] represents a list of weapons *)
+  type weapons = weapon list
+
+  (* [augmentation] represents an augmentation comprised of fields 
+   * augmentation name, cost, and description *)
+  type augmentation = {
+    name : string;
+    cost : int;
+    description : string;
+  }
+
+  (* [augmentations] represents a list of augmentations*)
+  type augmentations = augmentation list
 
   (* [store] contains all weapons and all augmentaitons *)
   type store = {
@@ -16,8 +31,9 @@ module type Store = sig
     augmentations : augmentations;
   }
 
-  (* [init] generates weapons and augmentations and returns a store *)
-  val init : store
+  (* [init s] generates weapons and augmentations and returns a store 
+   * requires: [s] a ship state *)
+  val init : 'a -> store
 
   (* [get_augmentations s] returns a list of all augmentation
    * requires: [s] a store state *)
@@ -29,17 +45,17 @@ module type Store = sig
 
   (* will change 'a to ship state once implemented *)
 
-  (* [buy_augmentations s s' i] returns a new ship state after buying an
-   * augmentation
+  (* [buy s s' i] returns a new ship state after buying an
+   * augmentation or weapon
    * requires: [s] a store state, [s'] a valid ship state, 
-      [i] an augmentation name 
+      [i] an augmentation or weapon name 
    * returns: a new ship state after buying augmentation*)
-  val buy_augmentations : store -> 'a -> string -> 'a
+  val buy : store -> 'a -> string -> 'a
 
-  (* [buy_weapons s s' i] returns a new ship state after buying a weapon
-   * requires: [s] a store state, [s'] a valid ship state, 
-      [i] a weapon name 
-   * returns: a new ship state after buying augmentation*)
-  val buy_weapons : store -> 'a -> string -> 'a
+  (* [display (x,y) s s'] returns a string intended to display the store
+   * requires: int [x] and [y] that correspond to the width and 
+   * height of the user's window, [s] a store state, [s'] a ship state
+   * returns: string that is a visual representation of the store *)
+  val display : (int * int) -> store -> 'a -> string
 
 end
