@@ -8,3 +8,10 @@ It can be installed through opam:
 ```
 opam install lambda-term
 ```
+
+## Running
+
+```
+make 
+make play
+```
