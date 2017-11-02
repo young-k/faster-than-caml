@@ -1,10 +1,21 @@
-(* Main is where the game and REPL will be initialized *)
+open Lwt_react
+open Lwt
 
-(* [repl st] executes the steps in a REPL.
- * requires: [st] is the ship's current state *)
-let rec repl st = failwith "Unimplemented"
+let main () =
+  (* Create a thread waiting for escape to be pressed. *)
+  let waiter, wakener = wait () in
 
-(* [main ()] initializes the game and begins the REPL *)
-let main () = failwith "Unimplemented"
+  (* Create the UI. *)
+  let vbox = new LTerm_widget.vbox in
+  vbox#add (new LTerm_widget.label "Hello, world!");
+  vbox#add (new LTerm_widget.label "Press escape to exit.");
+  vbox#on_event (function
+                   | LTerm_event.Key { LTerm_key.code = LTerm_key.Escape } -> wakeup wakener (); true
+                   | _ -> false);
 
-let () = main ()
+  (* Run. *)
+  Lazy.force LTerm.stdout
+  >>= fun term ->
+  LTerm_widget.run term vbox waiter
+
+let () = Lwt_main.run (main ())

@@ -7,6 +7,7 @@
 *.cmx
 *.cmxs
 *.cmxa
+.merlin
 
 # ocamlbuild working directory
 _build/
@@ -23,4 +24,5 @@ setup.log
 *.swp
 *.swo
 
+# mac file
 .DS_Store
