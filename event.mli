@@ -2,25 +2,23 @@ open Ship
 (* [Event] contains all data and methods of randomly generated events *)
 module type Event = sig
 
-  (* [choice] contains (description, resource effects, next)*)
+  (* [choice] contains (description, resource effects)*)
   type choice = {
     description: string;
-    resource: (int * int * int);
-    next: event} and 
-  (* [event] is either a choice or an ending outcome *)
-  event =
-    | Choice of choice * choice
-    | End of string * (int * int * int)
-  
+    resource: (int * int * int);}
+  (* [event] contains (description, choice 1, choice 2) *)
+  type event = string * choice * choice
+
   (* [init] randomly generates event tree from game data *)
   val init : event
 
   (* [traverse] apply consequences of given choice and return *)
-  val traverse: ship -> event -> bool -> ship
+  val pick_choice: ship -> event -> bool -> ship
 
-  (* [get_desciption] returns the string description of event choice *)
+  (* [choice_description] returns string of choice description *)
+  val choice_description : event -> bool -> string
+
+  (* [get_description] returns the string description of event choice *)
   val get_description : event -> bool -> string
 
-  (* [event] get next event *)
-  val next: event -> bool -> event
 end
