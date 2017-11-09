@@ -13,7 +13,7 @@ module type Combat = sig
     turn_count: int;
     (* list of weapons that have fired but have not hit yet *)
     (* (number of turns, ship that will be hit, weapon_type, damage) *)
-    incoming: (int * ship_type * weapon_type * int)
+    incoming: (int * (ship_type * (weapon_type * int))) list
   }
 
   (* [outcome] represents possible outcomes from increasing turn_count by one.
@@ -23,11 +23,10 @@ module type Combat = sig
    * lost. *)
   type outcome = Nothing | Input | Text of string | Winner of ship_type
 
-  (* [init d p] generates a combat_event, where ship1 is generated from the
-   * player's ship [p]. ship2 is generated with stats dependent on [d], where
-   * [d] represents the difficulty.
-   * requires: d is a number in range [0, 10] *)
-  val init : int -> ship-> combat_event
+  (* [init p] generates a combat_event, where ship1 is generated from the
+   * player's ship [p]. ship2 is generated with stats dependent on [p], with
+   * random changes made to the stats from [p]. *)
+  val init : ship -> combat_event
 
   (* [step c] returns the outcome after increasing [turn_count] by one.
    * All outcomes are documented above in the type definition. *)
