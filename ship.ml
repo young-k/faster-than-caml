@@ -12,7 +12,7 @@ type weapon = {
   wtype : weapon_type;
 }
 
-(* [augmentation] represents an augmentation comprised of fields 
+(* [augmentation] represents an augmentation comprised of fields
  * augmentation name, cost, and description *)
 type augmentation = {
   name : string;
@@ -37,7 +37,7 @@ type ship = {
   hull: int;
   (* [evade] the ship's evade, 0 <= evade <= 100 *)
   evade: int;
-  (* [equipped] represents the list of ship's equipped weapons 
+  (* [equipped] represents the list of ship's equipped weapons
    * index of weapon represents slot *)
   equipped : weapon list;
   (* [location] represents int id of ship's current location *)
@@ -58,7 +58,7 @@ type ship = {
    * each system power <= system level
    * tentative: (shield, engine, weapons) *)
   system_powers : (int*int*int);
-    
+
   }
 
 let init = {
@@ -134,12 +134,12 @@ let get_weapon ship ind = try (Some (List.nth (ship.equipped) ind))
 
 (* [equip] equips the ith weapon from the inventory to the nth (0-3) slot
  * throws "Illegal weapon slot" and "Illegal weapon slot" *)
-let equip ship inv_ind slot = 
+let equip ship inv_ind slot =
   let rec replace lst i weap acc = match lst with
     | [] -> List.rev_append acc (weap::[])
     | h::t -> if i = slot then List.rev_append acc (weap::t)
       else replace t (i+1) weap (h::acc) in
-  let w = (try (List.nth ship.inventory inv_ind) 
+  let w = (try (List.nth ship.inventory inv_ind)
     with _ -> failwith "Illegal inventory index") in
   let new_equipped = replace ship.equipped 0 w [] in
   if slot < 0 || slot > 3 then failwith "Illegal weapon slot"
@@ -150,7 +150,7 @@ let add_weapon ship weapon = {ship with inventory = weapon::ship.inventory}
 
 (*----------------------system functions---------------------------*)
 
-(* [upgrade_system] upgrades [i]th system, expends scraps 
+(* [upgrade_system] upgrades [i]th system, expends scraps
  * throws "Invalid system index" *)
 let upgrade_system ship ind = let (x, y, z) = ship.system_levels in
   if ind = 0 then {ship with system_levels = (x+1, y, z)}
@@ -175,7 +175,7 @@ let repair_system ship = {ship with system_powers = ship.system_levels}
 (* [add_augmentation] takes an augmentation name and adds it to the ship *)
 let add_augmentation ship aug = {ship with augmentations = aug::ship.augmentations}
 
-(* [get_augmentation] returns the ith augmentation. 
+(* [get_augmentation] returns the ith augmentation.
  * If wrong index/none available, returns None *)
 let get_augmentation ship ind = try (Some (List.nth (ship.augmentations) ind))
   with _ -> None
