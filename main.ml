@@ -2,6 +2,8 @@ open Lwt
 open Lwt_react
 open LTerm_widget
 
+open Start_screen
+
 (* logo text *)
 let text = "    ___ _   ___ _____ ___ ___   _____ _  _   _   _  _    ___   _   __  __ _    \n" ^
            "   | __/_\\ / __|_   _| __| _ \\ |_   _| || | /_\\ | \\| |  / __| /_\\ |  \\/  | |   \n" ^
@@ -15,26 +17,15 @@ let main () =
   (* Create a thread waiting for escape to be pressed. *)
   let waiter, wakener = wait () in
 
-  let mainbox = new vbox in
-  let homescreen = new LTerm_widget.label (text ^ "\n\nCreated by [we need a team name]") in
-  mainbox#add homescreen;
+  let wrapper = new vbox in
 
-  let hbox = new hbox in
-  let start_button = new button ("START") in
-  start_button#on_click (fun () -> failwith "Unimplemented");
-
-  hbox#add (new spacing ~cols:15 ());
-  hbox#add (in_frame start_button);
-  hbox#add (new spacing ~cols:15 ());
-
-  mainbox#add ~expand:false hbox;
-  mainbox#add (new spacing ~rows:1 ());
+  wrapper#add (Start_screen.render_start_screen ());
 
   let frame = new frame in
-  frame#set mainbox;
+  frame#set wrapper;
 
   (* escape to exit *)
-  mainbox#on_event (function
+  wrapper#on_event (function
       | LTerm_event.Key { LTerm_key.code = LTerm_key.Escape } -> wakeup wakener (); true
       | _ -> false);
 
