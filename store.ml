@@ -10,6 +10,7 @@ type weapon = {
   charge : int;
   wtype : weapon_type;
 }
+
 type augmentation = {
   name : string;
   cost : int;
