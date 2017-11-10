@@ -47,10 +47,10 @@ type weapon_type = Ion | Laser | Beam | Missile
    * requires: [s] a store state, [s'] a valid ship state,
       [i] an augmentation or weapon name
    * returns: a new ship state after buying augmentation*)
-  val buy : store -> 'a -> string -> 'a
+  val buy : store -> Ship.ship -> string -> Ship.ship
 
   (* [display (x,y) s s'] returns a string intended to display the store
    * requires: int [x] and [y] that correspond to the width and
    * height of the user's window, [s] a store state, [s'] a ship state
    * returns: string that is a visual representation of the store *)
-  val display : (int * int) -> store -> 'a -> string
+  val display : (int * int) -> store -> Ship.ship -> string
