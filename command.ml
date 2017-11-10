@@ -1,6 +1,6 @@
 open Ship
 open Event
-open Map
+open Galaxy
 open Store
 
 (* [command] represents a command input by a player. *)
