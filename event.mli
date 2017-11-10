@@ -4,7 +4,7 @@ open Ship
 (* [choice] contains a description and resource effects *)
 type choice = {
   description: string;
-  delta_resources: (int * int * int);
+  delta_resources: Ship.resources;
 }
 
 (* [event] contains a name, choice 1, and choice 2) *)

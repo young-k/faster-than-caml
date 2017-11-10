@@ -30,7 +30,7 @@ type person = {
 
 (* [resources] type represents the resources of a ship *)
 type resources = {
-  fuel : int;  
+  fuel : int;
   missiles : int;
   scraps : int;
 }
@@ -111,7 +111,7 @@ let set_location ship id = {ship with location = id}
 
 let get_resources ship = ship.resources
 
-let set_resources ship (da, db, dc) = 
+let set_resources ship (da, db, dc) =
   {ship with resources = {fuel = ship.resources.fuel + da;
    missiles = ship.resources.missiles + db;
    scraps = ship.resources.scraps + dc;}

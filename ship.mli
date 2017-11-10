@@ -30,7 +30,7 @@ type person = {
 
 (* [resources] type represents the resources of a ship *)
 type resources = {
-  fuel : int;  
+  fuel : int;
   missiles : int;
   scraps : int;
 }
