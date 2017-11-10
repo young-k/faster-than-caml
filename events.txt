@@ -1,0 +1,22 @@
+# Format is: "-event-;-choice1-;change to fuel1;change to missiles1;
+# change to scraps1;-choice2-;change to fuel2; change to missiles2;
+# change to scraps2"
+
+# Lines beginning with "#" are treated as comments and are not considered.
+# Blank lines are also skipped.
+
+# Sample event:
+event1;choice1;1;2;3;choice2;4;5;6
+
+i
+hate
+3110
+so
+much
+why
+is
+are
+the
+assignments
+so
+long
