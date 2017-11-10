@@ -49,8 +49,8 @@ let pick_choice s e b =
     let updated_resources = (f+delta_f, m+delta_m, s+delta_s) in
     {s with resources=updated_resources}
 
-  let choice_description e b =
-    if b then e.fst_choice.description
-    else e.snd_choice.description
+let choice_description e b =
+  if b then e.fst_choice.description
+  else e.snd_choice.description
 
-  let get_description e = e.name
+let get_description e = e.name
