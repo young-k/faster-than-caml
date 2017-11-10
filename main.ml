@@ -3,23 +3,27 @@ open Lwt_react
 open LTerm_widget
 
 open Start_screen
-
-(* logo text *)
-let text = "    ___ _   ___ _____ ___ ___   _____ _  _   _   _  _    ___   _   __  __ _    \n" ^
-           "   | __/_\\ / __|_   _| __| _ \\ |_   _| || | /_\\ | \\| |  / __| /_\\ |  \\/  | |   \n" ^
-           "   | _/ _ \\\\__ \\ | | | _||   /   | | | __ |/ _ \\| .` | | (__ / _ \\| |\\/| | |__ \n" ^
-           "   |_/_/ \\_\\___/ |_| |___|_|_\\   |_| |_||_/_/ \\_\\_|\\_|  \\___/_/ \\_\\_|  |_|____|\n"
-
-(* [in_frame w] is w wrapped in a frame *)
-let in_frame w = let f = new frame in f#set w; f 
+open Start_text
 
 let main () =
   (* Create a thread waiting for escape to be pressed. *)
   let waiter, wakener = wait () in
-
   let wrapper = new vbox in
 
-  wrapper#add (Start_screen.render_start_screen ());
+  (* temp code for exiting *)
+  let button = new button ~brackets:("[ "," ]") "exit" in
+  button#on_click (wakeup wakener);
+  wrapper#add ~expand:false button;
+
+  let result = Start_screen.get_components () in 
+  wrapper#add (fst result);
+  (snd result)#on_click 
+    (fun () -> 
+       wrapper#remove (fst result); 
+       let result = Start_text.get_components () in
+       wrapper#add (fst result);
+       (snd result)#on_click (fun () -> wrapper#remove (fst result));
+    );
 
   let frame = new frame in
   frame#set wrapper;

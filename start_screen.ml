@@ -11,20 +11,19 @@ let text = "    ___ _   ___ _____ ___ ___   _____ _  _   _   _  _    ___   _   _
 (* [in_frame w] is w wrapped in a frame *)
 let in_frame w = let f = new frame in f#set w; f 
 
-let render_start_screen () =
+let get_components () =
   let mainbox = new vbox in
 
   let logo = new LTerm_widget.label (text ^ "\n\nCreated by [we need a team name]") in
   mainbox#add logo;
 
+  (* button code: refactor this *)
   let hbox = new hbox in
   let start_button = new button ("START") in
-  start_button#on_click (fun () -> failwith "Unimplemented");
-
   hbox#add (new spacing ~cols:15 ());
   hbox#add (in_frame start_button);
   hbox#add (new spacing ~cols:15 ());
 
   mainbox#add ~expand:false hbox;
   mainbox#add (new spacing ~rows:1 ());
-  mainbox
+  (mainbox, start_button);
