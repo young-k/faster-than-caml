@@ -5,6 +5,9 @@ open LTerm_widget
 open Start_screen
 open Start_text
 
+open Command
+open Ship
+
 let main () =
   (* Create a thread waiting for escape to be pressed. *)
   let waiter, wakener = wait () in

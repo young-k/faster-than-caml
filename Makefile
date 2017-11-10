@@ -1,5 +1,4 @@
 compile:
-	ocamlbuild 
 	rm -rf _build/
 	jbuilder build main.exe
 
