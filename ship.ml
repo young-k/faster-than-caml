@@ -27,10 +27,17 @@ type person = {
   skills : (int * int * int);
 }
 
+(* [resources] type represents the resources of a ship *)
+type resources = {
+  fuel : int;  
+  missiles : int;
+  scraps : int;
+}
+
 (* [ship] represents the state of the player's ship *)
 type ship = {
-  (* [resources] is (fuel, missiles, scrap) *)
-  resources: int * int * int;
+  (* [resources] is the record containting (fuel, missiles, scrap) *)
+  resources: resources;
   (* [crew] is the list of crew members *)
   crew: person list;
   (* [hull] the ship's hp, max hull = 30 *)
@@ -63,7 +70,7 @@ type ship = {
 
 let init = {
   (* Starting resources *)
-  resources = (5,0,0);
+  resources = {fuel = 5; missiles = 0; scraps = 0;};
   crew = [{
     name = "O Camel";
     skills = (3,3,3)
@@ -103,12 +110,35 @@ let set_location ship id = {ship with location = id}
 
 let get_resources ship = ship.resources
 
-let set_resources ship (da, db, dc) = let (a, b, c) = ship.resources in
-  {ship with resources = (a + da, b + db, c + dc)}
+let set_resources ship (da, db, dc) = 
+  {ship with resources = {fuel = ship.resources.fuel + da;
+   missiles = ship.resources.missiles + db;
+   scraps = ship.resources.scraps + dc;}
+  }
 
 let evade ship = ship.evade
 
 let get_hull ship = ship.hull
+
+(*----------------------resources get/set functions----------------*)
+
+(* [get_fuel] returns number of ship's fuel *)
+let get_fuel ship = ship.resources.fuel
+
+(* [set_fuel] returns ship with number of fuel *)
+let set_fuel ship i = {ship with resources = {ship.resources with fuel = i}}
+
+(* [get_missiles] returns number of ship's missiles *)
+let get_missiles ship = ship.resources.missiles
+
+(* [set_missiles] returns ship with number of missiles *)
+let set_missiles ship i = {ship with resources = {ship.resources with missiles = i}}
+
+(* [get_scraps] returns number of ship's scraps *)
+let get_scraps ship = ship.resources.scraps
+
+(* [set_scraps] returns ship with number of scraps *)
+let set_scraps ship i = {ship with resources = {ship.resources with scraps = i}}
 
 (*----------------------weapon/hull functions----------------------*)
 

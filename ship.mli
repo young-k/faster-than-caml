@@ -28,10 +28,17 @@ type person = {
   skills : (int * int * int);
 }
 
+(* [resources] type represents the resources of a ship *)
+type resources = {
+  fuel : int;  
+  missiles : int;
+  scraps : int;
+}
+
 (* [ship] represents the state of the player's ship *)
 type ship = {
-  (* [resources] is (fuel, missiles, scrap) *)
-  resources: int * int * int;
+  (* [resources] is the record containting (fuel, missiles, scrap) *)
+  resources: resources;
   (* [crew] is the list of crew members *)
   crew: person list;
   (* [hull] the ship's hp, max hull = 30 *)
@@ -74,18 +81,31 @@ val get_location : ship -> int
  * requires [str] is valid location id *)
 val set_location : ship -> int -> ship
 
-(* [get_resources] returns tuple of ship resources *)
-val get_resources : ship -> (int * int * int)
-
-(* [set_resources] returns ship with new tuple of resources
- * requires [delta] to be tuple of val changes in resources *)
-val set_resources : ship -> (int * int * int) -> ship
-
 (* [evade] returns int stat for evasion based on ship stats*)
 val evade : ship -> int
 
 (* [get_hull] returns [ship]'s hull *)
 val get_hull : ship -> int
+
+(*----------------------resources get/set functions----------------*)
+
+(* [get_fuel] returns number of ship's fuel *)
+val get_fuel : ship -> int
+
+(* [set_fuel] returns ship with number of fuel *)
+val set_fuel : ship -> int -> ship
+
+(* [get_missiles] returns number of ship's missiles *)
+val get_missiles : ship -> int
+
+(* [set_missiles] returns ship with number of missiles *)
+val set_missiles : ship -> int -> ship
+
+(* [get_scraps] returns number of ship's scraps *)
+val get_scraps : ship -> int
+
+(* [set_scraps] returns ship with number of scraps *)
+val set_scraps : ship -> int -> ship
 
 (*----------------------weapon/hull functions----------------------*)
 
