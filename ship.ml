@@ -1,6 +1,7 @@
 (* types from ship.mli *)
 
 type weapon_type = Ion | Laser | Beam | Missile
+
 (* [weapon] represents the tuple
  * {weapon name, cost, charge, cool_down, damage, wtype} *)
 type weapon = {
