@@ -2,6 +2,8 @@
  * ship. *)
 module type Store = sig
 
+  type weapon_type = Ion | Laser | Beam | Missile
+
   (* [weapon] represents a weapon comprised of fields
      * weapon name, cost, damage, and cool down *)
   type weapon = {
@@ -9,10 +11,9 @@ module type Store = sig
     cost : int;
     damage : int;
     cool_down : int;
+    charge : int;
+    wtype : weapon_type;
   }
-
-  (* [weapons] represents a list of weapons *)
-  type weapons = weapon list
 
   (* [augmentation] represents an augmentation comprised of fields 
    * augmentation name, cost, and description *)
@@ -22,13 +23,10 @@ module type Store = sig
     description : string;
   }
 
-  (* [augmentations] represents a list of augmentations*)
-  type augmentations = augmentation list
-
   (* [store] contains all weapons and all augmentaitons *)
   type store = {
-    weapons : weapons;
-    augmentations : augmentations;
+    weapons : weapons list;
+    augmentations : augmentations list;
   }
 
   (* [init s] generates weapons and augmentations and returns a store 
