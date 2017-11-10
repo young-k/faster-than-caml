@@ -1,6 +1,5 @@
 (* [Ship] contains all data and methods of the player's ship *)
 
-
 type weapon_type = Ion | Laser | Beam | Missile
 
 (* [weapon] represents the record
@@ -14,7 +13,7 @@ type weapon = {
   wtype : weapon_type;
 }
 
-(* [augmentation] represents an augmentation comprised of fields 
+(* [augmentation] represents an augmentation comprised of fields
  * augmentation name, cost, and description *)
 type augmentation = {
   name : string;
@@ -39,7 +38,7 @@ type ship = {
   hull: int;
   (* [evade] the ship's evade, 0 <= evade <= 100 *)
   evade: int;
-  (* [equipped] represents the list of ship's equipped weapons 
+  (* [equipped] represents the list of ship's equipped weapons
    * index of weapon represents slot *)
   equipped : weapon list;
   (* [location] represents int id of ship's current location *)
@@ -60,7 +59,7 @@ type ship = {
    * each system power <= system level
    * tentative: (shield, engine, weapons) *)
   system_powers : (int*int*int);
-  
+
 }
 
 (* [init] initiates ship *)
@@ -112,8 +111,8 @@ val add_weapon : ship -> weapon -> ship
  * Throws "Invalid system index" *)
 val upgrade_system : ship -> int -> ship
 
-(* [damage_system] damages [i]th system with [dmg] amount of hits. 
- * calls damage 
+(* [damage_system] damages [i]th system with [dmg] amount of hits.
+ * calls damage
  * Throws "Invalid system index" *)
 val damage_system : ship -> int -> int -> ship
 
@@ -125,7 +124,7 @@ val repair_system : ship -> ship
 (* [add_augmentation] takes an augmentation name and adds it to the ship *)
 val add_augmentation : ship -> augmentation -> ship
 
-(* [get_augmentation] returns the ith augmentation. 
+(* [get_augmentation] returns the ith augmentation.
  * If wrong index/none available, returns None *)
 val get_augmentation : ship -> int -> augmentation option
 
@@ -134,4 +133,3 @@ val get_augmentation : ship -> int -> augmentation option
 (* [get_person] returns the ith crew member
  * If wrong index/none available, returns None *)
 val get_person : ship -> int -> person option
-
