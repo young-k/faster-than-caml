@@ -1,41 +1,50 @@
+(* open Ship *)
+
+type weapon_type = Ion | Laser | Beam | Missile
+
 type weapon = {
   name : string;
   cost : int;
   damage : int;
   cool_down : int;
+  charge : int;
+  wtype : weapon_type;
 }
-type weapons = weapon list
 type augmentation = {
   name : string;
   cost : int;
   description : string;
 }
-type augmentations = augmentation list
 
 type store = {
-  weapons : weapons;
-  augmentations : augmentations;
+  weapons : weapon list;
+  augmentations : augmentation list;
 }
 
 (* Will import from Ship. Need to discuss ship types *)
+type person = {
+  name : string;
+  skills : (int * int * int);
+}
+
 type resource = {
   fuel : int;
   missiles : int;
   scrap : int;
 }
-type person = (string * int * int * int)
+
 type ship = {
-  resources : resource;
+  resources: resource;
   crew: person list;
   hull: int;
   evade: int;
   equipped : weapon list;
   location: int;
   shield: (int * int);
-  inventory : weapons;
-  augmentations : augmentations;
-  system_levels : (int * int * int);
-  system_powers : (int * int * int);
+  inventory : weapon list;
+  augmentations : augmentation list;
+  system_levels : (int*int*int);
+  system_powers : (int*int*int);
 }
 
 let init s = failwith "Unimplemented. Figure out .txt file for data"
