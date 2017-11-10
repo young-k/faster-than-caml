@@ -4,7 +4,7 @@ open Parser
 
 type choice = {
   description: string;
-  delta_resources: (int * int * int);
+  delta_resources: Ship.resources;
 }
 
 type event = {
@@ -27,8 +27,10 @@ let init =
           let g = int_of_string g in
           let h = int_of_string h in
           let i = int_of_string i in
-          let choice1 = {description=b; delta_resources=(c,d,e)} in
-          let choice2 = {description=f; delta_resources=(g,h,i)} in
+          let delt1 = {fuel=c; missiles=d; scraps=e} in
+          let delt2 = {fuel=g; missiles=h; scraps=i} in
+          let choice1 = {description=b; delta_resources=delt1} in
+          let choice2 = {description=f; delta_resources=delt2} in
           {name=a; fst_choice=choice1; snd_choice=choice2}
         | _ -> failwith "Line does not contain number of necessary components"
       end
@@ -37,17 +39,25 @@ let init =
 
 
 let pick_choice s e b =
-  let (f, m, s) = get_resources s in
+  let res = s.resources in
   if b then
-    let choice1 = e.fst_choice in
-    let (delta_f,delta_m,delta_s) = choice1.delta_resources in
-    let updated_resources = (f+delta_f, m+delta_m, s+delta_s) in
+    let delt1 = e.fst_choice.delta_resources in
+    let updated_resources =
+      {
+        fuel = res.fuel + delt1.fuel;
+        missiles = res.missiles + delt1.missiles;
+        scraps = res.scraps + delt1.scraps;
+      } in
     {s with resources=updated_resources}
   else
-    let choice2 = e.snd_choice in
-    let (delta_f,delta_m,delta_s) = choice2.delta_resources in
-    let updated_resources = (f+delta_f, m+delta_m, s+delta_s) in
-    {s with resources=updated_resources}
+  let delt2 = e.snd_choice.delta_resources in
+  let updated_resources =
+    {
+      fuel = res.fuel + delt2.fuel;
+      missiles = res.missiles + delt2.missiles;
+      scraps = res.scraps + delt2.scraps;
+    } in
+  {s with resources=updated_resources}
 
 let choice_description e b =
   if b then e.fst_choice.description
