@@ -5,22 +5,11 @@ type weapon_type = Ion | Laser | Beam | Missile
 
   (* [weapon] represents a weapon comprised of fields
      * weapon name, cost, damage, and cool down *)
-  type weapon = {
-    name : string;
-    cost : int;
-    damage : int;
-    cool_down : int;
-    charge : int;
-    wtype : weapon_type;
-  }
+  type weapon = Ship.weapon
 
   (* [augmentation] represents an augmentation comprised of fields
    * augmentation name, cost, and description *)
-  type augmentation = {
-    name : string;
-    cost : int;
-    description : string;
-  }
+  type augmentation = Ship.augmentation
 
   (* [store] contains all weapons and all augmentaitons *)
   type store = {
