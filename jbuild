@@ -3,3 +3,7 @@
 (executable
  ((name main)
   (libraries (lambda-term))))
+
+(library 
+  ((name lib)
+   (libraries (ounit))))

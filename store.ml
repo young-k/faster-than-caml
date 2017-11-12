@@ -1,4 +1,4 @@
-type weapon_type = Ion | Laser | Beam | Missile
+type weapon_type = Ship.weapon_type
 
 type weapon = Ship.weapon
 
