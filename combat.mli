@@ -6,14 +6,22 @@ type weapon_type
 
 type ship_type = Player | Enemy
 
+type fired_weapon = {
+  turns: int; (* number of turns until [target] is hit *)
+  ship_target: ship_type;
+  room_target: int;
+  name: string;
+  w_type: weapon_type; (* type of weapon *)
+  damage: int; (* damage done *)
+}
+
 type combat_event = {
   player: ship;
   enemy: ship;
   (* current turn number that combat has been going on for *)
   turn_count: int;
   (* list of weapons that have fired but have not hit yet *)
-  (* (number of turns, ship that will be hit, weapon_type, damage) *)
-  incoming: (int * (ship_type * (weapon_type * int))) list
+  incoming: fired_weapon list
 }
 
 (* [outcome] represents possible outcomes from increasing turn_count by one.
