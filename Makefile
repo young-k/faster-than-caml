@@ -9,4 +9,4 @@ play:
 	./_build/default/main.exe
 
 test:
-	ocamlbuild -use-ocamlfind test_main.byte && ./test_main.byte
+	ocamlbuild -use-ocamlfind test.byte && ./test.byte
