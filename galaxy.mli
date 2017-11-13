@@ -1,4 +1,5 @@
-(* types form ship.mli *)
+(* The [Galaxy] represents a galaxy that is made up of stars each corresponding
+ * to an event that a user can encounter. *)
 
 (* [event_type] is the different type of events that each point in the
  * galaxy could have *)
