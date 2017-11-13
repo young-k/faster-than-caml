@@ -42,12 +42,14 @@ let step c =
   let firing = List.filter (fun fw -> fw.turns=0) incoming in
   let new_ships =
     List.fold_left
-      (fun fw acc -> 
+      (fun acc fw -> 
          if ship_target=Player
-         then let outcome = weapon_outcome c.player fw true in
-           (fst acc ^ "\n" fst outcome, snd outcome, snd (snd acc))
-         else let outcome = weapon_outcome c.enemy fw false in
-           (fst acc ^ "\n" fst outcome, fst (snd acc), snd outcome))
+         then 
+           let outcome = weapon_outcome c.player fw true in
+           (fst acc ^ "\n" fst outcome, (snd outcome, snd (snd acc)))
+         else 
+           let outcome = weapon_outcome c.enemy fw false in
+           (fst acc ^ "\n" fst outcome, (fst (snd acc), snd outcome)))
       ("", (c.player, c.enemy))
       firing
   let new_incoming = List.filter (fun fw -> fw.turns<>0) incoming in
