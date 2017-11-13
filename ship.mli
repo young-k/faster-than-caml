@@ -1,9 +1,10 @@
 (* [Ship] contains all data and methods of the player's ship *)
 
+(* [weapon_type] is the variant that represents the types of ship weapons *)
 type weapon_type = Ion | Laser | Beam | Missile
 
-(* [weapon] represents the record
- * {weapon name, cost, charge, cool_down, damage, wtype} *)
+(* [weapon] represents the record which represents a ship weapon
+ * contains fields {name, cost, damage, cool_down, charge, wtype} *)
 type weapon = {
   name : string;
   cost : int;
@@ -21,18 +22,31 @@ type augmentation = {
   description : string;
 }
 
-(* [person] represents the record
- * (name, weapon skills, engine skills, shield skills) *)
+(* [person] is the record that represents a crew member, contains fields
+ * {name, skills: (weapon skills, engine skills, shield skills)} *)
 type person = {
   name : string;
   skills : (int * int * int);
 }
 
-(* [resources] type represents the resources of a ship *)
+(* [resources] is the record that represents the resources of a ship *)
 type resources = {
   fuel : int;
   missiles : int;
   scraps : int;
+}
+
+(* [systems] is the record representing the state of the ship's systems 
+ * [< >_level] is the max power each system can have.
+ * [< >_power] is the power distrubuted to each system
+ * requires each system power <= system level *)
+type systems = {
+  shield_level : int;
+  shield_power : int;
+  engine_level : int;
+  engine_power : int;
+  weapons_level : int;
+  weapons_power : int;
 }
 
 (* [ship] represents the state of the player's ship *)
@@ -43,10 +57,10 @@ type ship = {
   crew: person list;
   (* [hull] the ship's hp, max hull = 30 *)
   hull: int;
-  (* [evade] the ship's evade, 0 <= evade <= 100 *)
+  (* [evade] the ship's evade chance, 0 <= evade <= 100 *)
   evade: int;
   (* [equipped] represents the list of ship's equipped weapons
-   * index of weapon represents slot *)
+   * index of weapon represents slot, index = 0-3 *)
   equipped : weapon list;
   (* [location] represents int id of ship's current location *)
   location: int;
@@ -54,22 +68,16 @@ type ship = {
    * current shield level = # active shields * charge time + stored charges
    * current shield level <= shield power * charge time*)
   shield: (int * int);
-  (* [inventory] stores all the weapons a ship owns *)
+  (* [inventory] is the list of all the weapons a ship owns *)
   inventory : weapon list;
-  (* [augmentations] represents the list of ship's augmentations *)
+  (* [augmentations] is the list of ship's augmentations *)
   augmentations : augmentation list;
-  (* [system_levels] are the max power each system can have
-   * can be upgraded *)
-  system_levels : (int*int*int);
-  (* [system_power] power distrubuted to each system
-   * requires sum of all system_power <= power AND
-   * each system power <= system level
-   * tentative: (shield, engine, weapons) *)
-  system_powers : (int*int*int);
+  (* [system_levels] is the triple of the max power each system can have *)
+  systems: systems;
 
 }
 
-(* [init] initiates ship *)
+(* [init] returns an initiated ship *)
 val init : ship
 
 (*----------------------basic get/set functions--------------------*)
@@ -81,60 +89,95 @@ val get_location : ship -> int
  * requires [str] is valid location id *)
 val set_location : ship -> int -> ship
 
-(* [evade] returns int stat for evasion based on ship stats*)
+(* [evade] returns int for evasion chance based on ship stats *)
 val evade : ship -> int
 
-(* [get_hull] returns [ship]'s hull *)
+(* [get_hull] returns int of ship's hp *)
 val get_hull : ship -> int
 
 (*----------------------resources get/set functions----------------*)
 
-(* [get_fuel] returns number of ship's fuel *)
+(* [get_resources] returns record of the ship's resources *)
+val get_resources : ship -> resources
+
+(* [set_resources] returns ship with each element of the triple added to 
+ * each respective field of resources *)
+val set_resources : ship -> (int*int*int) -> ship
+
+(* [get_fuel] returns int number of ship's fuel *)
 val get_fuel : ship -> int
 
-(* [set_fuel] returns ship with number of fuel *)
+(* [set_fuel] returns ship with given number of fuel *)
 val set_fuel : ship -> int -> ship
 
-(* [get_missiles] returns number of ship's missiles *)
+(* [get_missiles] returns int number of ship's missiles *)
 val get_missiles : ship -> int
 
-(* [set_missiles] returns ship with number of missiles *)
+(* [set_missiles] returns ship with given number of missiles *)
 val set_missiles : ship -> int -> ship
 
-(* [get_scraps] returns number of ship's scraps *)
+(* [get_scraps] returns int number of ship's scraps *)
 val get_scraps : ship -> int
 
-(* [set_scraps] returns ship with number of scraps *)
+(* [set_scraps] returns ship with given number of scraps *)
 val set_scraps : ship -> int -> ship
 
 (*----------------------weapon/hull functions----------------------*)
 
-(* [damage] returns ship with shield/hull reduced by specified amount *)
+(* [damage] returns ship damaged by specified weapon type and by 
+ * the specified amount *)
 val damage : ship -> int -> weapon_type -> ship
 
 (* [repair] returns ship with hull increased by specified amount *)
 val repair : ship -> int -> ship
 
-(* [get_weapon] returns [Some weapon]
+(* [get_weapon] returns [Some weapon] from the equipped slot with given index
  * if no weapon is available, returns [None] *)
 val get_weapon : ship -> int -> weapon option
 
 (* [equip] equips the ith weapon from the inventory to the nth (0-3) slot*)
 val equip : ship -> int -> int -> ship
 
-(* [add_weapon] adds a weapon to the ship's inventory *)
+(* [add_weapon] returns ship with added weapon to its inventory *)
 val add_weapon : ship -> weapon -> ship
 
 (*----------------------system functions---------------------------*)
 
-(* [upgrade_system] upgrades [i]th system, expends scraps
- * Throws "Invalid system index" *)
-val upgrade_system : ship -> int -> ship
+(* [get_shield_power] returns int of ship's shield system power *)
+val get_shield_power : ship -> int
 
-(* [damage_system] damages [i]th system with [dmg] amount of hits.
- * calls damage
- * Throws "Invalid system index" *)
-val damage_system : ship -> int -> int -> ship
+(* [set_shield_power] returns ship with specified shield system power *)
+val set_shield_power : ship -> int -> ship
+
+(* [get_engine_power] returns int of ship's engine system power *)
+val get_engine_power : ship -> int
+
+(* [set_engine_power] returns ship with specified engine system power *)
+val set_engine_power : ship -> int -> ship
+
+(* [get_weapons_power] returns int of ship's weapons system power *)
+val get_weapons_power : ship -> int
+
+(* [set_weapons_power] returns ship with specified weapons system power *)
+val set_weapons_power : ship -> int -> ship
+
+(* [get_shield_level] returns int of ship's shield system level *)
+val get_shield_level : ship -> int
+
+(* [set_shield_level] returns ship with specified shield system level *)
+val set_shield_level : ship -> int -> ship
+
+(* [get_engine_level] returns int of ship's engine system level *)
+val get_engine_level : ship -> int
+
+(* [set_engine_level] returns ship with specified engine system level *)
+val set_engine_level : ship -> int -> ship
+
+(* [get_weapons_level] returns int of ship's weapons system level *)
+val get_weapons_level : ship -> int
+
+(* [set_weapons_level] returns ship with specified weapons system level *)
+val set_weapons_level : ship -> int -> ship
 
 (* [repair_system] restores all systems. *)
 val repair_system : ship -> ship
