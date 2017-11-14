@@ -113,17 +113,17 @@ let set_resources ship (da, db, dc) =
 
 let get_fuel ship = ship.resources.fuel
 
-let set_fuel ship i = 
+let set_fuel ship i =
   {ship with resources = {ship.resources with fuel = i}}
 
 let get_missiles ship = ship.resources.missiles
 
-let set_missiles ship i = 
+let set_missiles ship i =
   {ship with resources = {ship.resources with missiles = i}}
 
 let get_scraps ship = ship.resources.scraps
 
-let set_scraps ship i = 
+let set_scraps ship i =
   {ship with resources = {ship.resources with scraps = i}}
 
 (*----------------------weapon/hull functions----------------------*)
@@ -160,32 +160,32 @@ let add_weapon ship weapon = {ship with inventory = weapon::ship.inventory}
 (*----------------------system functions---------------------------*)
 let get_shield_power ship = ship.systems.shield_power
 
-let set_shield_power ship n = 
+let set_shield_power ship n =
   {ship with systems = {ship.systems with shield_power = n}}
 
 let get_engine_power ship = ship.systems.engine_power
 
-let set_engine_power ship n = 
+let set_engine_power ship n =
   {ship with systems = {ship.systems with engine_power = n}}
 
 let get_weapons_power ship = ship.systems.weapons_power
 
-let set_weapons_power ship n = 
+let set_weapons_power ship n =
   {ship with systems = {ship.systems with weapons_power = n}}
 
 let get_shield_level ship = ship.systems.shield_level
 
-let set_shield_level ship n = 
+let set_shield_level ship n =
   {ship with systems = {ship.systems with shield_level = n}}
 
 let get_engine_level ship = ship.systems.engine_level
 
-let set_engine_level ship n = 
+let set_engine_level ship n =
   {ship with systems = {ship.systems with engine_level = n}}
 
 let get_weapons_level ship = ship.systems.weapons_level
 
-let set_weapons_level ship n = 
+let set_weapons_level ship n =
   {ship with systems = {ship.systems with weapons_level = n}}
 
 let repair_system ship = {ship with systems = {ship.systems with
@@ -195,7 +195,7 @@ let repair_system ship = {ship with systems = {ship.systems with
 
 (*----------------------augmentation functions---------------------*)
 
-let add_augmentation ship aug = 
+let add_augmentation ship aug =
   {ship with augmentations = aug::ship.augmentations}
 
 let get_augmentation ship ind = try (Some (List.nth (ship.augmentations) ind))
