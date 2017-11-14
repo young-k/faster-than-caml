@@ -2,8 +2,4 @@
 
 (executable
  ((name main)
-  (libraries (lambda-term))))
-
-(library 
-  ((name lib)
-   (libraries (ounit))))
+  (libraries (lambda-term ounit))))
