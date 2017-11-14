@@ -18,7 +18,7 @@ let parse_weapon s : weapon =
     name = List.nth w 0;
     cost = List.nth w 1 |> int_of_string;
     damage = List.nth w 2 |> int_of_string;
-    cool_down = List.nth w 3 |> int_of_string;
+    capacity = List.nth w 3 |> int_of_string;
     charge = List.nth w 4 |> int_of_string;
     wtype = typ;
   }
@@ -55,17 +55,17 @@ let buy st (s : Ship.ship) i =
   let aug = (try List.find_opt (fun (a : augmentation) -> a.name = i)
     st.augmentations with _ -> None) in
   match weapon, aug with
-    | Some w, _ -> if s.resources.scraps > w.cost then 
+    | Some w, _ -> if s.resources.scrap > w.cost then 
       { 
         s with 
-        resources = {s.resources with scraps = s.resources.scraps - w.cost};
+        resources = {s.resources with scrap = s.resources.scrap - w.cost};
         inventory = w::s.inventory
       } 
       else s
-    | _, Some a -> if s.resources.scraps > a.cost then 
+    | _, Some a -> if s.resources.scrap > a.cost then 
       {
         s with 
-        resources = {s.resources with scraps = s.resources.scraps - a.cost};
+        resources = {s.resources with scrap = s.resources.scrap - a.cost};
         augmentations = a::s.augmentations
       } 
       else s
