@@ -63,4 +63,4 @@ let choice_description e b =
   if b then e.fst_choice.description
   else e.snd_choice.description
 
-let get_description e = e.name
+let get_name e = e.name

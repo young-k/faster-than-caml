@@ -21,7 +21,7 @@ val init : event
 val pick_choice: ship -> event -> bool -> ship
 
 (* [choice_description e b] returns string of choice description *)
-val choice_description : event -> bool -> string
+val choice_description: event -> bool -> string
 
-(* [get_description e] returns the string description of event *)
-val get_description : event -> string
+(* [get_name e] returns the string name of event *)
+val get_name: event -> string

@@ -8,15 +8,15 @@
 # Sample event:
 event1;choice1;1;2;3;choice2;4;5;6
 
-i
-hate
-3110
-so
-much
-why
-is
-are
-the
-assignments
-so
-long
+#i
+#hate
+#3110
+#so
+#much
+#why
+#is
+#are
+#the
+#assignments
+#so
+#long
