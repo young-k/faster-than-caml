@@ -5,7 +5,7 @@ type star = {
   event : event_type;
   reachable : int list;
 }
-type map = star list
+type galaxy = star list
 
 let rec random_nums r n acc =
   if n = 0 then List.sort_uniq Pervasives.compare acc
