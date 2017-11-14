@@ -4,12 +4,12 @@
 type weapon_type = Ion | Laser | Beam | Missile
 
 (* [weapon] represents the record which represents a ship weapon
- * contains fields {name, cost, damage, cool_down, charge, wtype} *)
+ * contains fields {name, cost, damage, capacity, charge, wtype} *)
 type weapon = {
   name : string;
   cost : int;
   damage : int;
-  cool_down : int;
+  capacity : int;
   charge : int;
   wtype : weapon_type;
 }
@@ -33,7 +33,7 @@ type person = {
 type resources = {
   fuel : int;
   missiles : int;
-  scraps : int;
+  scrap : int;
 }
 
 (* [systems] is the record representing the state of the ship's systems 
@@ -116,11 +116,11 @@ val get_missiles : ship -> int
 (* [set_missiles] returns ship with given number of missiles *)
 val set_missiles : ship -> int -> ship
 
-(* [get_scraps] returns int number of ship's scraps *)
-val get_scraps : ship -> int
+(* [get_scrap] returns int number of ship's scrap *)
+val get_scrap : ship -> int
 
-(* [set_scraps] returns ship with given number of scraps *)
-val set_scraps : ship -> int -> ship
+(* [set_scrap] returns ship with given number of scrap *)
+val set_scrap : ship -> int -> ship
 
 (*----------------------weapon/hull functions----------------------*)
 
@@ -143,38 +143,20 @@ val add_weapon : ship -> weapon -> ship
 
 (*----------------------system functions---------------------------*)
 
-(* [get_shield_power] returns int of ship's shield system power *)
-val get_shield_power : ship -> int
-
 (* [set_shield_power] returns ship with specified shield system power *)
 val set_shield_power : ship -> int -> ship
-
-(* [get_engine_power] returns int of ship's engine system power *)
-val get_engine_power : ship -> int
 
 (* [set_engine_power] returns ship with specified engine system power *)
 val set_engine_power : ship -> int -> ship
 
-(* [get_weapons_power] returns int of ship's weapons system power *)
-val get_weapons_power : ship -> int
-
 (* [set_weapons_power] returns ship with specified weapons system power *)
 val set_weapons_power : ship -> int -> ship
-
-(* [get_shield_level] returns int of ship's shield system level *)
-val get_shield_level : ship -> int
 
 (* [set_shield_level] returns ship with specified shield system level *)
 val set_shield_level : ship -> int -> ship
 
-(* [get_engine_level] returns int of ship's engine system level *)
-val get_engine_level : ship -> int
-
 (* [set_engine_level] returns ship with specified engine system level *)
 val set_engine_level : ship -> int -> ship
-
-(* [get_weapons_level] returns int of ship's weapons system level *)
-val get_weapons_level : ship -> int
 
 (* [set_weapons_level] returns ship with specified weapons system level *)
 val set_weapons_level : ship -> int -> ship
