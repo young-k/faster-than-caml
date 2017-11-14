@@ -143,38 +143,20 @@ val add_weapon : ship -> weapon -> ship
 
 (*----------------------system functions---------------------------*)
 
-(* [get_shield_power] returns int of ship's shield system power *)
-val get_shield_power : ship -> int
-
 (* [set_shield_power] returns ship with specified shield system power *)
 val set_shield_power : ship -> int -> ship
-
-(* [get_engine_power] returns int of ship's engine system power *)
-val get_engine_power : ship -> int
 
 (* [set_engine_power] returns ship with specified engine system power *)
 val set_engine_power : ship -> int -> ship
 
-(* [get_weapons_power] returns int of ship's weapons system power *)
-val get_weapons_power : ship -> int
-
 (* [set_weapons_power] returns ship with specified weapons system power *)
 val set_weapons_power : ship -> int -> ship
-
-(* [get_shield_level] returns int of ship's shield system level *)
-val get_shield_level : ship -> int
 
 (* [set_shield_level] returns ship with specified shield system level *)
 val set_shield_level : ship -> int -> ship
 
-(* [get_engine_level] returns int of ship's engine system level *)
-val get_engine_level : ship -> int
-
 (* [set_engine_level] returns ship with specified engine system level *)
 val set_engine_level : ship -> int -> ship
-
-(* [get_weapons_level] returns int of ship's weapons system level *)
-val get_weapons_level : ship -> int
 
 (* [set_weapons_level] returns ship with specified weapons system level *)
 val set_weapons_level : ship -> int -> ship
