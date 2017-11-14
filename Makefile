@@ -10,3 +10,7 @@ play:
 
 test:
 	ocamlbuild -use-ocamlfind test.byte && ./test.byte
+
+# For utop testing
+modules:
+	ocamlbuild -use-ocamlfind ship.cmo parser.cmo

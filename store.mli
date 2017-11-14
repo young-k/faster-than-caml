@@ -1,19 +1,10 @@
 (* The [Store] represents the store where a user can buy upgrades for their
  * ship. *)
 
-(* [weapon_type] represents the type of a ship's weapon *)
-type weapon_type = Ship.weapon_type
-
-(* [weapon] represents a ship's weapon *)
-type weapon = Ship.weapon
-
-(* [augmentation] represents a ship's augmentation *)
-type augmentation = Ship.augmentation
-
 (* [store] contains all weapons and all augmentations availalbe to buy *)
 type store = {
-  weapons : weapon list;
-  augmentations : augmentation list;
+  weapons : Ship.weapon list;
+  augmentations : Ship.augmentation list;
 }
 
 (* [init s] generates weapons and augmentations from a .txt file
@@ -24,11 +15,11 @@ val init : Ship.ship -> store
 
 (* [get_augmentations s] returns a list of all augmentation of a store
   * requires: [s] a store state *)
-val get_augmentations : store -> augmentation list
+val get_augmentations : store -> Ship.augmentation list
 
 (* [get_weapons s] returns a list of all weapons of a store
   * requires: [s] a store state *)
-val get_weapons : store -> weapon list
+val get_weapons : store -> Ship.weapon list
 
 (* [buy s s' i] returns a new ship state after buying an
   * augmentation or weapon

@@ -2,6 +2,7 @@ open OUnit2
 open Ship
 open Event
 open Galaxy
+open Store
 
 let test_galaxy = [{id = 10; event = End; reachable = []};
                     {id = 9; event = Store; reachable = [0; 3; 4; 10]};
@@ -15,8 +16,8 @@ let test_galaxy = [{id = 10; event = End; reachable = []};
                     {id = 1; event = Store; reachable = [2]}]
 
 let galaxy_tests = [
-  "init" >:: (fun _ -> assert_equal 10 (List.length (fst init)));
-  "start_star" >:: (fun _ -> assert_equal 1 (snd init));
+  "init" >:: (fun _ -> assert_equal 10 (List.length (fst Galaxy.init)));
+  "start_star" >:: (fun _ -> assert_equal 1 (snd Galaxy.init));
 
   "reachable" >:: (fun _ -> assert_equal [(Some Store, 4); (None, 5);
                                           (None, 8); (Some Store, 9)]
@@ -29,7 +30,28 @@ let galaxy_tests = [
   "get_event_end" >:: (fun _ -> assert_equal End (get_event test_galaxy 10));
 
   "get_end" >:: (fun _ -> assert_equal 10 (get_end test_galaxy));
-  "get_end_random" >:: (fun _ -> assert_equal 10 (get_end (fst init)));
+  "get_end_random" >:: (fun _ -> assert_equal 10 (get_end (fst Galaxy.init)));
+]
+
+let store = Store.init Ship.init
+
+let store_tests = [
+  "init_weapons" >:: (fun _ -> assert_equal 3 (List.length store.weapons));
+  "init_aug" >:: (fun _ -> assert_equal 3 (List.length store.augmentations));
+
+  "get_augmentations" >:: 
+    (fun _ -> assert_equal 3 (List.length (get_augmentations store)));
+  
+  "get_weapons" >:: 
+    (fun _ -> assert_equal 3 (List.length (get_weapons store)));
+
+  "buy_weap_no_scrap" >::
+    (fun _ -> assert_equal 1 
+      ((buy store (Ship.init) "Basic Laser").inventory |> List.length));
+  "buy_aug_no_scrap" >::
+    (fun _ -> assert_equal 0 
+      ((buy store (Ship.init) "Automated Re-loader").augmentations 
+        |> List.length));
 ]
 
 let e = Event.init
@@ -57,6 +79,7 @@ let event_tests = [
 
 let tests = "test suite" >::: List.flatten [
   galaxy_tests;
+  store_tests;
   event_tests;
 ]
 

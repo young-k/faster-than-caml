@@ -1,15 +1,49 @@
-type weapon_type = Ship.weapon_type
-
-type weapon = Ship.weapon
-
-type augmentation = Ship.augmentation
+open Ship
 
 type store = {
   weapons : weapon list;
   augmentations : augmentation list;
 }
 
-let init s = failwith "Unimplemented. Figure out .txt file for data"
+let parse_weapon s : weapon = 
+  let w = String.split_on_char ';' s in
+  let typ = (match (List.nth w 5) with
+    | "Ion" -> Ion
+    | "Laser" -> Laser
+    | "Beam" -> Beam
+    | "Missile" -> Missile
+    | _ -> failwith "Invalid weapon type!"
+  ) in
+  {
+    name = List.nth w 0;
+    cost = List.nth w 1 |> int_of_string;
+    damage = List.nth w 2 |> int_of_string;
+    cool_down = List.nth w 3 |> int_of_string;
+    charge = List.nth w 4 |> int_of_string;
+    wtype = typ;
+  }
+
+let parse_augmentations s : augmentation = 
+  let w = String.split_on_char ';' s in
+  {
+    name = List.nth w 0;
+    cost = List.nth w 1 |> int_of_string;
+    description = List.nth w 2;
+  }
+
+let init (s : ship) = 
+  let aug_strings = Parser.get_lines_from_f "./game_data/augmentations.txt" 3 in
+  let weaps_strings = Parser.get_lines_from_f "./game_data/weapons.txt" 3 in
+  let augs = List.fold_left (fun acc x -> let aug = parse_augmentations x in
+                             if List.mem aug s.augmentations then acc 
+                             else aug::acc) [] aug_strings in
+  let weaps = List.fold_left (fun acc x -> let weap = parse_weapon x in
+                              if List.mem weap s.inventory then acc
+                              else weap::acc) [] weaps_strings in
+  {
+    weapons = weaps;
+    augmentations = augs;
+  }
 
 let get_augmentations (st : store) = st.augmentations
 
