@@ -158,32 +158,20 @@ let equip ship inv_ind slot =
 let add_weapon ship weapon = {ship with inventory = weapon::ship.inventory}
 
 (*----------------------system functions---------------------------*)
-let get_shield_power ship = ship.systems.shield_power
-
 let set_shield_power ship n = 
   {ship with systems = {ship.systems with shield_power = n}}
-
-let get_engine_power ship = ship.systems.engine_power
 
 let set_engine_power ship n = 
   {ship with systems = {ship.systems with engine_power = n}}
 
-let get_weapons_power ship = ship.systems.weapons_power
-
 let set_weapons_power ship n = 
   {ship with systems = {ship.systems with weapons_power = n}}
-
-let get_shield_level ship = ship.systems.shield_level
 
 let set_shield_level ship n = 
   {ship with systems = {ship.systems with shield_level = n}}
 
-let get_engine_level ship = ship.systems.engine_level
-
 let set_engine_level ship n = 
   {ship with systems = {ship.systems with engine_level = n}}
-
-let get_weapons_level ship = ship.systems.weapons_level
 
 let set_weapons_level ship n = 
   {ship with systems = {ship.systems with weapons_level = n}}
