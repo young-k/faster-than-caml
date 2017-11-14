@@ -1,0 +1,6 @@
+# Augmentations
+# name cost description
+
+Automated Re-loader;40;Cooldown between weapon shots is improved by 10 percent
+Weapon Pre-Igniter;120;Weapons are made immediately available after an FTL jump
+

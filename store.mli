@@ -10,7 +10,7 @@ type weapon = Ship.weapon
 (* [augmentation] represents a ship's augmentation *)
 type augmentation = Ship.augmentation
 
-(* [store] contains all weapons and all augmentaitons availalbe to buy *)
+(* [store] contains all weapons and all augmentations availalbe to buy *)
 type store = {
   weapons : weapon list;
   augmentations : augmentation list;
