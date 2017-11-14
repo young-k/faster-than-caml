@@ -4,12 +4,12 @@
 type weapon_type = Ion | Laser | Beam | Missile
 
 (* [weapon] represents the record which represents a ship weapon
- * contains fields {name, cost, damage, cool_down, charge, wtype} *)
+ * contains fields {name, cost, damage, capacity, charge, wtype} *)
 type weapon = {
   name : string;
   cost : int;
   damage : int;
-  cool_down : int;
+  capacity : int;
   charge : int;
   wtype : weapon_type;
 }
@@ -33,7 +33,7 @@ type person = {
 type resources = {
   fuel : int;
   missiles : int;
-  scraps : int;
+  scrap : int;
 }
 
 (* [systems] is the record representing the state of the ship's systems 
@@ -116,11 +116,11 @@ val get_missiles : ship -> int
 (* [set_missiles] returns ship with given number of missiles *)
 val set_missiles : ship -> int -> ship
 
-(* [get_scraps] returns int number of ship's scraps *)
-val get_scraps : ship -> int
+(* [get_scrap] returns int number of ship's scrap *)
+val get_scrap : ship -> int
 
-(* [set_scraps] returns ship with given number of scraps *)
-val set_scraps : ship -> int -> ship
+(* [set_scrap] returns ship with given number of scrap *)
+val set_scrap : ship -> int -> ship
 
 (*----------------------weapon/hull functions----------------------*)
 
