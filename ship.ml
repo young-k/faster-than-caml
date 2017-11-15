@@ -96,7 +96,6 @@ let get_location ship = ship.location
 
 let set_location ship id = {ship with location = id}
 
-
 let evade ship = ship.evade
 
 let get_hull ship = ship.hull
@@ -152,7 +151,10 @@ let equip ship inv_ind slot =
   let w = (try (List.nth ship.inventory inv_ind)
     with _ -> failwith "Illegal inventory index") in
   let new_equipped = replace ship.equipped 0 w [] in
+  let len = List.length ship.equipped in
   if slot < 0 || slot > 3 then failwith "Illegal weapon slot"
+    else if (slot >= len && len + 1 > ship.systems.weapons_power)
+    then failwith "Not enough weapons power"
     else {ship with equipped = new_equipped}
 
 let add_weapon ship weapon = {ship with inventory = weapon::ship.inventory}

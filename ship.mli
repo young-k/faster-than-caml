@@ -66,7 +66,7 @@ type ship = {
   location: int;
   (* [shield] represents the tuple (current shield level, charge time)
    * current shield level = # active shields * charge time + stored charges
-   * current shield level <= shield power * charge time*)
+   * current shield level <= shield power * charge time *)
   shield: (int * int);
   (* [inventory] is the list of all the weapons a ship owns *)
   inventory : weapon list;
@@ -135,7 +135,8 @@ val repair : ship -> int -> ship
  * if no weapon is available, returns [None] *)
 val get_weapon : ship -> int -> weapon option
 
-(* [equip] equips the ith weapon from the inventory to the nth (0-3) slot*)
+(* [equip] equips the ith weapon from the inventory to the nth (0-3) slot
+ * If not enough weapons system power, return ship *)
 val equip : ship -> int -> int -> ship
 
 (* [add_weapon] returns ship with added weapon to its inventory *)
