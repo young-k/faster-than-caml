@@ -14,7 +14,7 @@ type event = {
 }
 
 let init =
-  match (get_lines_from_f "events.txt" 1) with
+  match (get_lines_from_f "./game_data/events.txt" 1) with
   | [] -> failwith "File does not contain an event"
   | h::t ->
     try

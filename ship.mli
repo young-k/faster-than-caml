@@ -4,7 +4,7 @@
 type weapon_type = Ion | Laser | Beam | Missile
 
 (* [weapon] represents the record which represents a ship weapon
- * contains fields {name, cost, damage, capacity, charge, wtype} *)
+ * contains fields {name, cost, damage, capacity, charge, and wtype} *)
 type weapon = {
   name : string;
   cost : int;
@@ -15,7 +15,7 @@ type weapon = {
 }
 
 (* [augmentation] represents an augmentation comprised of fields
- * augmentation name, cost, and description *)
+ * {name, cost, and description} *)
 type augmentation = {
   name : string;
   cost : int;
@@ -29,7 +29,8 @@ type person = {
   skills : (int * int * int);
 }
 
-(* [resources] is the record that represents the resources of a ship *)
+(* [resources] is the record that represents the resources of a ship including
+ * fuel, missiles, and scrap *)
 type resources = {
   fuel : int;
   missiles : int;
@@ -102,7 +103,7 @@ val get_resources : ship -> resources
 
 (* [set_resources] returns ship with each element of the triple added to 
  * each respective field of resources *)
-val set_resources : ship -> (int*int*int) -> ship
+val set_resources : ship -> (int * int * int) -> ship
 
 (* [get_fuel] returns int number of ship's fuel *)
 val get_fuel : ship -> int
@@ -135,7 +136,9 @@ val repair : ship -> int -> ship
  * if no weapon is available, returns [None] *)
 val get_weapon : ship -> int -> weapon option
 
-(* [equip] equips the ith weapon from the inventory to the nth (0-3) slot*)
+(* [equip] equips the ith weapon from the inventory to the nth (0-3) slot 
+ * requires: [i] a valid int weapon index from inventory, [n] an int that is
+ * 0 <= n <= 3 *)
 val equip : ship -> int -> int -> ship
 
 (* [add_weapon] returns ship with added weapon to its inventory *)
@@ -166,7 +169,7 @@ val repair_system : ship -> ship
 
 (*----------------------augmentation functions---------------------*)
 
-(* [add_augmentation] takes an augmentation name and adds it to the ship *)
+(* [add_augmentation] takes an augmentation and adds it to the ship *)
 val add_augmentation : ship -> augmentation -> ship
 
 (* [get_augmentation] returns the ith augmentation.

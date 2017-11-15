@@ -18,7 +18,7 @@ type command =
 
 type screen_type =
   | HomeScreen
-  | Galaxy of map
+  | Galaxy of galaxy
   | StartScreen
   | Resting
   | Event of event
@@ -27,7 +27,7 @@ type screen_type =
 type controller = {
   ship: ship;
   screen_type: screen_type;
-  galaxy: map;
+  galaxy: galaxy;
 }
 
 (* [init] generates a controller *)
