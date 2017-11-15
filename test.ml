@@ -39,18 +39,18 @@ let store_tests = [
   "init_weapons" >:: (fun _ -> assert_equal 3 (List.length store.weapons));
   "init_aug" >:: (fun _ -> assert_equal 3 (List.length store.augmentations));
 
-  "get_augmentations" >:: 
+  "get_augmentations" >::
     (fun _ -> assert_equal 3 (List.length (get_augmentations store)));
-  
-  "get_weapons" >:: 
+
+  "get_weapons" >::
     (fun _ -> assert_equal 3 (List.length (get_weapons store)));
 
   "buy_weap_no_scrap" >::
-    (fun _ -> assert_equal 1 
+    (fun _ -> assert_equal 1
       ((buy store (Ship.init) "Basic Laser").inventory |> List.length));
   "buy_aug_no_scrap" >::
-    (fun _ -> assert_equal 0 
-      ((buy store (Ship.init) "Automated Re-loader").augmentations 
+    (fun _ -> assert_equal 0
+      ((buy store (Ship.init) "Automated Re-loader").augmentations
         |> List.length));
 ]
 
@@ -68,9 +68,9 @@ let event_tests = [
   "init_snd_choice_missiles" >::
     (fun _ -> assert_equal true
       ((string_of_int e.fst_choice.delta_resources.missiles)<>""));
-  "init_snd_choice_scraps" >::
+  "init_snd_choice_scrap" >::
     (fun _ -> assert_equal true
-      ((string_of_int e.fst_choice.delta_resources.scraps)<>""));
+      ((string_of_int e.fst_choice.delta_resources.scrap)<>""));
   "init_choice_description" >::
     (fun _ -> assert_equal
         e.fst_choice.description (choice_description e true));
