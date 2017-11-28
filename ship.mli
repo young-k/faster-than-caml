@@ -14,11 +14,16 @@ type weapon = {
   wtype : weapon_type;
 }
 
+(* [augmentation_type] represents the different types of augmentations *)
+type augmentation_type = Damage | CoolDown | Evade | Hull
+
 (* [augmentation] represents an augmentation comprised of fields
- * {name, cost, and description} *)
+ * {name, cost, description, aug_type, and stat} *)
 type augmentation = {
   name : string;
   cost : int;
+  aug_type : augmentation_type;
+  stat : int;
   description : string;
 }
 

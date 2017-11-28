@@ -11,9 +11,13 @@ type weapon = {
   wtype : weapon_type;
 }
 
+type augmentation_type = Damage | CoolDown | Evade | Hull
+
 type augmentation = {
   name : string;
   cost : int;
+  aug_type : augmentation_type;
+  stat : int;
   description : string;
 }
 
