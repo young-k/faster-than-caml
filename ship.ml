@@ -11,9 +11,13 @@ type weapon = {
   wtype : weapon_type;
 }
 
+type augmentation_type = Damage | CoolDown | Evade | Hull
+
 type augmentation = {
   name : string;
   cost : int;
+  aug_type : augmentation_type;
+  stat : int;
   description : string;
 }
 
@@ -69,7 +73,7 @@ let init = {
   }];
   (* placeholder location *)
   location = 0;
-  shield = (1, 5);
+  shield = (5, 5);
   inventory = [{
     name = "Ion cannon";
     cost = 10;
@@ -178,7 +182,7 @@ let set_engine_level ship n =
 let set_weapons_level ship n =
   {ship with systems = {ship.systems with weapons_level = n}}
 
-let repair_system ship = {ship with systems = {ship.systems with
+let repair_systems ship = {ship with systems = {ship.systems with
   shield_power = ship.systems.shield_level;
   engine_power = ship.systems.engine_level;
   weapons_power = ship.systems.weapons_level;}}

@@ -36,9 +36,10 @@ type outcome = Nothing | Input | Text of string | Winner of ship_type
  * random changes made to the stats from [p]. *)
 val init : ship -> combat_event
 
-(* [step c] returns the outcome after increasing [turn_count] by one.
- * All outcomes are documented above in the type definition. *)
-val step : combat_event -> outcome
+(* [step c] returns the updated combat_event and the outcome after
+ * increasing [turn_count] by one. All outcomes are documented above in
+ * the type definition. *)
+val step : combat_event -> combat_event * outcome
 
 (* [parse_input c i] takes the weapon number that the player wants to fire
  * and fires that weapon. *)

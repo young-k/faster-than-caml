@@ -14,11 +14,16 @@ type weapon = {
   wtype : weapon_type;
 }
 
+(* [augmentation_type] represents the different types of augmentations *)
+type augmentation_type = Damage | CoolDown | Evade | Hull
+
 (* [augmentation] represents an augmentation comprised of fields
- * {name, cost, and description} *)
+ * {name, cost, description, aug_type, and stat} *)
 type augmentation = {
   name : string;
   cost : int;
+  aug_type : augmentation_type;
+  stat : int;
   description : string;
 }
 
@@ -164,8 +169,8 @@ val set_engine_level : ship -> int -> ship
 (* [set_weapons_level] returns ship with specified weapons system level *)
 val set_weapons_level : ship -> int -> ship
 
-(* [repair_system] restores all systems. *)
-val repair_system : ship -> ship
+(* [repair_systems] restores all systems. *)
+val repair_systems : ship -> ship
 
 (*----------------------augmentation functions---------------------*)
 

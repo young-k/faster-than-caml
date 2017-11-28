@@ -10,34 +10,41 @@ type command =
   | CloseMap                  (* Gets rid of the display of the map *)
   | Equip of (string * int)   (* Equip a weapon to a certain slot *)
   | Go of int                 (* Go to another star *)
-  | Look                      (* Look at reachable stars *)
   | Power of string           (* Get the power level of a system *)
   | Purchase of string        (* Purchase an item (weapon/augmentation) from a store *)
   | ShowMap                   (* Displays the map *)
-  | None
+  | ShowStartText             (* Shows start text *)
+  | CloseStartText            (* Closes start text *)
 
 (* screen_type contains information about what to display on UI *)
 type screen_type =
   | HomeScreen
-  | Galaxy of galaxy
+  | Galaxy of (int * galaxy) (* star, galaxy *)
   | StartScreen
   | Resting
   | Event of event
   | Store of store
 
+type storage =
+  | Event of event
+  | Store of store
+  | None
+
 type controller = {
   ship: ship;
   screen_type: screen_type;
+  star: int;
   galaxy: galaxy;
+  storage: storage; (* storing either an event or a store *)
 }
 
 (* [init] generates a controller *)
 val init: controller
 
-(* [parse_command contr com] is the resulting controller after parsing a command
+(* [parse_command c com] is the resulting controller after parsing a command
    and applying the results. *)
 val parse_command: controller -> command -> controller
 
-(* [get_display contr] is a tuple containing a ship state and a screen_type to
+(* [get_display c] is a tuple containing a ship state and a screen_type to
    display on the UI. *)
 val get_display: controller -> (ship * screen_type)

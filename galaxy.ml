@@ -19,16 +19,16 @@ let init =
       | 1 -> Nothing
       | 2 -> Event
       | _ -> Combat
-      in let reach = random_nums n ((Random.int 6)+1) [a+1] 
+      in let reach = random_nums n ((Random.int 6)+1) [a+1]
       in let filtered = List.filter (fun x -> x <> a) reach
       in create (a+1) n (({id = a; event = e; reachable = filtered})::acc)
   in create 1 10 []
 
 let find_star m id = List.find (fun s -> s.id = id) m
 
-let reachable m id = 
+let reachable m id =
   let star = find_star m id in
-    List.map (fun s -> 
+    List.map (fun s ->
       let s' = find_star m s in
         match s'.event with
         | Store -> (Some Store, s'.id)
@@ -36,11 +36,11 @@ let reachable m id =
         | _ -> (None, s'.id)
     ) star.reachable
 
-let get_event m id = 
+let get_event m id =
   let star = find_star m id in star.event
 
-let get_end m = 
-  let star = List.find (fun s -> 
+let get_end m =
+  let star = List.find (fun s ->
     match s.event with
     | End -> true
     | _ -> false
