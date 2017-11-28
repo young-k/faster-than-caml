@@ -40,19 +40,29 @@ let step c =
   let incoming =
     List.map (fun fw -> {fw with turns=fw.turns - 1}) c.incoming in
   let firing = List.filter (fun fw -> fw.turns=0) incoming in
-  (* let new_ships =
+  let new_ships =
     List.fold_left
-      (fun acc fw -> 
-         if ship_target=Player
-         then 
+      (fun acc fw ->
+         if fw.ship_target=Player
+         then
            let outcome = weapon_outcome c.player fw true in
-           (fst acc ^ "\n" fst outcome, (snd outcome, snd (snd acc)))
-         else 
+           (fst acc ^ "\n" ^ fst outcome, (snd outcome, snd (snd acc)))
+         else
            let outcome = weapon_outcome c.enemy fw false in
-           (fst acc ^ "\n" fst outcome, (fst (snd acc), snd outcome)))
+           (fst acc ^ "\n" ^ fst outcome, (fst (snd acc), snd outcome)))
       ("", (c.player, c.enemy))
-      firing *)
+      firing in
+  let text = fst new_ships in
+  let new_player = fst (snd new_ships) in
+  let new_enemy = snd (snd new_ships) in
   let new_incoming = List.filter (fun fw -> fw.turns<>0) incoming in
-  {c with incoming=new_incoming}
+  match text with
+  | "" -> (c, Nothing)
+  | _ ->
+    ({c with
+        incoming=new_incoming;
+        player=new_player;
+        enemy=new_enemy},
+    Text text) 
 
 let parse_input c num = failwith "Unimplemented"
