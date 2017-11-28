@@ -1,5 +1,5 @@
 # Weapons
-# name cost damage cool_down charge weapon_type
+# name cost damage capacity charge weapon_type
 
 Basic Laser;20;1;10;10;Laser
 Dual Lasers;25;2;10;10;Laser

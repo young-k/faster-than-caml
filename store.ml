@@ -89,14 +89,14 @@ let buy st (s : Ship.ship) i =
   let aug = (try List.find_opt (fun (a : augmentation) -> a.name = i)
     st.augmentations with _ -> None) in
   match weapon, aug with
-    | Some w, _ -> if s.resources.scrap > w.cost then 
+    | Some w, _ -> if s.resources.scrap >= w.cost then 
       { 
         s with 
         resources = {s.resources with scrap = s.resources.scrap - w.cost};
         inventory = w::s.inventory
       } 
       else s
-    | _, Some a -> if s.resources.scrap > a.cost then 
+    | _, Some a -> if s.resources.scrap >= a.cost then 
       {
         (apply_augmentation s a) with 
         resources = {s.resources with scrap = s.resources.scrap - a.cost};

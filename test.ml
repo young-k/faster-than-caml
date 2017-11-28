@@ -35,6 +35,33 @@ let galaxy_tests = [
 
 let store = Store.init Ship.init
 
+let test_weapon = 
+{
+  name = "Test Weapon";
+  cost = 0;
+  damage = 1;
+  capacity = 10;
+  charge = 10;
+  wtype = Laser;
+}
+
+let test_aug = 
+{
+  name = "Test Augmentation";
+  cost = 0;
+  aug_type = Damage;
+  stat = 1;
+  description = "Increase damage of all weapons by 1";
+}
+
+let new_store : store = {
+  weapons = test_weapon::store.weapons;
+  augmentations = test_aug::store.augmentations
+}
+
+let ship_with_weap = (buy new_store (Ship.init) "Test Weapon")
+let ship_with_aug = (buy new_store ship_with_weap "Test Augmentation")
+
 let store_tests = [
   "init_weapons" >:: (fun _ -> assert_equal 3 (List.length store.weapons));
   "init_aug" >:: (fun _ -> assert_equal 3 (List.length store.augmentations));
@@ -50,8 +77,18 @@ let store_tests = [
       ((buy store (Ship.init) "Basic Laser").inventory |> List.length));
   "buy_aug_no_scrap" >::
     (fun _ -> assert_equal 0
-      ((buy store (Ship.init) "Automated Re-loader").augmentations
+      ((buy store (Ship.init) "Increase Damage I").augmentations
         |> List.length));
+   
+  "buy_weap" >::
+    (fun _ -> assert_equal 2 (ship_with_weap.inventory |> List.length));
+  
+  "before_aug" >::
+    (fun _ -> assert_equal 2 (List.fold_left (fun acc w -> acc + w.damage) 0 
+                              ship_with_weap.inventory));
+  "buy_aug" >::
+    (fun _ -> assert_equal 4 (List.fold_left (fun acc w -> acc + w.damage) 0 
+                              ship_with_aug.inventory));
 ]
 
 let e = Event.init
