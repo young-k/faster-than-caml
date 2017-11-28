@@ -17,7 +17,8 @@ type event = {
 (* [init] randomly generates an event from game data *)
 val init : event
 
-(* [pick_choice s e b] applies consequences of choice to ship and returns *)
+(* [pick_choice s e b] applies consequences of choice to ship and returns the
+   resulting ship. *)
 val pick_choice: ship -> event -> bool -> ship
 
 (* [choice_description e b] returns string of choice description *)

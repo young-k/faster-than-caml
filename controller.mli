@@ -16,6 +16,7 @@ type command =
   | ShowMap                   (* Displays the map *)
   | None
 
+(* screen_type contains information about what to display on UI *)
 type screen_type =
   | HomeScreen
   | Galaxy of galaxy

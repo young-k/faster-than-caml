@@ -37,7 +37,7 @@ type resources = {
   scrap : int;
 }
 
-(* [systems] is the record representing the state of the ship's systems 
+(* [systems] is the record representing the state of the ship's systems
  * [< >_level] is the max power each system can have.
  * [< >_power] is the power distrubuted to each system
  * requires each system power <= system level *)
@@ -101,7 +101,7 @@ val get_hull : ship -> int
 (* [get_resources] returns record of the ship's resources *)
 val get_resources : ship -> resources
 
-(* [set_resources] returns ship with each element of the triple added to 
+(* [set_resources] returns ship with each element of the triple added to
  * each respective field of resources *)
 val set_resources : ship -> (int * int * int) -> ship
 
@@ -125,7 +125,7 @@ val set_scrap : ship -> int -> ship
 
 (*----------------------weapon/hull functions----------------------*)
 
-(* [damage] returns ship damaged by specified weapon type and by 
+(* [damage] returns ship damaged by specified weapon type and by
  * the specified amount *)
 val damage : ship -> int -> weapon_type -> ship
 
@@ -136,8 +136,8 @@ val repair : ship -> int -> ship
  * if no weapon is available, returns [None] *)
 val get_weapon : ship -> int -> weapon option
 
-(* [equip] equips the ith weapon from the inventory to the nth (0-3) slot 
- * throws "Illegal inventory index", "Illegal weapon slot" 
+(* [equip] equips the ith weapon from the inventory to the nth (0-3) slot
+ * throws "Illegal inventory index", "Illegal weapon slot"
  * and "Not enough weapons power" *)
 val equip : ship -> int -> int -> ship
 
