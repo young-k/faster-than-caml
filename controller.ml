@@ -9,11 +9,9 @@ type command =
   | CloseMap
   | Equip of (string * int)
   | Go of int
-  | Look
   | Power of string
   | Purchase of string
   | ShowMap
-  | None
 
 type screen_type =
   | HomeScreen
@@ -23,12 +21,17 @@ type screen_type =
   | Event of event
   | Store of store
 
+type storage =
+  | Event of event
+  | Store of store
+  | None
+
 type controller = {
   ship: ship;
   screen_type: screen_type;
   star: int;
   galaxy: galaxy;
-  event: event option;
+  storage: storage;
 }
 
 let init =
@@ -38,11 +41,15 @@ let init =
     screen_type=HomeScreen;
     star=(snd init_galaxy);
     galaxy=(fst init_galaxy);
-    event=None;
+    storage=None;
   }
 
 let parse_command c com =
-  failwith "Unimplemented"
+  match com with
+  | ShowMap -> {c with screen_type=Galaxy (c.star, c.galaxy)}
+  | CloseMap -> {c with screen_type=Resting}
+  | _ -> failwith "Unimplemented"
+
 
 let get_display c =
   failwith "Unimplemented"

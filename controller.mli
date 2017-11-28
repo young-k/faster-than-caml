@@ -10,11 +10,9 @@ type command =
   | CloseMap                  (* Gets rid of the display of the map *)
   | Equip of (string * int)   (* Equip a weapon to a certain slot *)
   | Go of int                 (* Go to another star *)
-  | Look                      (* Look at reachable stars *)
   | Power of string           (* Get the power level of a system *)
   | Purchase of string        (* Purchase an item (weapon/augmentation) from a store *)
   | ShowMap                   (* Displays the map *)
-  | None
 
 type screen_type =
   | HomeScreen
@@ -24,12 +22,17 @@ type screen_type =
   | Event of event
   | Store of store
 
+type storage =
+  | Event of event
+  | Store of store
+  | None
+
 type controller = {
   ship: ship;
   screen_type: screen_type;
   star: int;
   galaxy: galaxy;
-  event: event option; (* if there's an event store it *)
+  storage: storage; (* storing either an event or a store *)
 }
 
 (* [init] generates a controller *)
