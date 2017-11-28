@@ -12,6 +12,8 @@ type command =
   | Power of string
   | Purchase of string
   | ShowMap
+  | ShowStartText
+  | CloseStartText
 
 type screen_type =
   | HomeScreen
@@ -48,8 +50,9 @@ let parse_command c com =
   match com with
   | ShowMap -> {c with screen_type=Galaxy (c.star, c.galaxy)}
   | CloseMap -> {c with screen_type=Resting}
+  | ShowStartText -> {c with screen_type=StartScreen}
   | _ -> failwith "Unimplemented"
 
 
 let get_display c =
-  failwith "Unimplemented"
+  c.ship, c.screen_type

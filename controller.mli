@@ -13,6 +13,8 @@ type command =
   | Power of string           (* Get the power level of a system *)
   | Purchase of string        (* Purchase an item (weapon/augmentation) from a store *)
   | ShowMap                   (* Displays the map *)
+  | ShowStartText             (* Shows start text *)
+  | CloseStartText            (* Closes start text *)
 
 type screen_type =
   | HomeScreen
