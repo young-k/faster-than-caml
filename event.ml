@@ -14,7 +14,7 @@ type event = {
 }
 
 let init =
-  match (get_lines_from_f "events.txt" 1) with
+  match (get_lines_from_f "./game_data/events.txt" 1) with
   | [] -> failwith "File does not contain an event"
   | h::t ->
     try
@@ -27,8 +27,8 @@ let init =
           let g = int_of_string g in
           let h = int_of_string h in
           let i = int_of_string i in
-          let delt1 = {fuel=c; missiles=d; scraps=e} in
-          let delt2 = {fuel=g; missiles=h; scraps=i} in
+          let delt1 = {fuel=c; missiles=d; scrap=e} in
+          let delt2 = {fuel=g; missiles=h; scrap=i} in
           let choice1 = {description=b; delta_resources=delt1} in
           let choice2 = {description=f; delta_resources=delt2} in
           {name=a; fst_choice=choice1; snd_choice=choice2}
@@ -46,7 +46,7 @@ let pick_choice s e b =
       {
         fuel = res.fuel + delt1.fuel;
         missiles = res.missiles + delt1.missiles;
-        scraps = res.scraps + delt1.scraps;
+        scrap = res.scrap + delt1.scrap;
       } in
     {s with resources=updated_resources}
   else
@@ -55,7 +55,7 @@ let pick_choice s e b =
     {
       fuel = res.fuel + delt2.fuel;
       missiles = res.missiles + delt2.missiles;
-      scraps = res.scraps + delt2.scraps;
+      scrap = res.scrap + delt2.scrap;
     } in
   {s with resources=updated_resources}
 

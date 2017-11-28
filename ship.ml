@@ -6,14 +6,18 @@ type weapon = {
   name : string;
   cost : int;
   damage : int;
-  cool_down : int;
+  capacity : int;
   charge : int;
   wtype : weapon_type;
 }
 
+type augmentation_type = Damage | CoolDown | Evade | Hull
+
 type augmentation = {
   name : string;
   cost : int;
+  aug_type : augmentation_type;
+  stat : int;
   description : string;
 }
 
@@ -25,7 +29,7 @@ type person = {
 type resources = {
   fuel : int;
   missiles : int;
-  scraps : int;
+  scrap : int;
 }
 
 type systems = {
@@ -52,7 +56,7 @@ type ship = {
 
 let init = {
   (* Starting resources *)
-  resources = {fuel = 5; missiles = 0; scraps = 0;};
+  resources = {fuel = 5; missiles = 0; scrap = 0;};
   crew = [{
     name = "O Camel";
     skills = (3,3,3)
@@ -63,7 +67,7 @@ let init = {
     name = "Ion cannon";
     cost = 10;
     damage = 1;
-    cool_down = 2;
+    capacity = 2;
     charge = 0;
     wtype = Ion;
   }];
@@ -74,7 +78,7 @@ let init = {
     name = "Ion cannon";
     cost = 10;
     damage = 1;
-    cool_down = 2;
+    capacity = 2;
     charge = 0;
     wtype = Ion;
   }];
@@ -107,7 +111,7 @@ let get_resources ship = ship.resources
 let set_resources ship (da, db, dc) =
   {ship with resources = {fuel = ship.resources.fuel + da;
    missiles = ship.resources.missiles + db;
-   scraps = ship.resources.scraps + dc;}
+   scrap = ship.resources.scrap + dc;}
   }
 
 let get_fuel ship = ship.resources.fuel
@@ -120,10 +124,10 @@ let get_missiles ship = ship.resources.missiles
 let set_missiles ship i =
   {ship with resources = {ship.resources with missiles = i}}
 
-let get_scraps ship = ship.resources.scraps
+let get_scrap ship = ship.resources.scrap
 
-let set_scraps ship i =
-  {ship with resources = {ship.resources with scraps = i}}
+let set_scrap ship i =
+  {ship with resources = {ship.resources with scrap = i}}
 
 (*----------------------weapon/hull functions----------------------*)
 
@@ -151,7 +155,10 @@ let equip ship inv_ind slot =
   let w = (try (List.nth ship.inventory inv_ind)
     with _ -> failwith "Illegal inventory index") in
   let new_equipped = replace ship.equipped 0 w [] in
+  let len = List.length ship.equipped in
   if slot < 0 || slot > 3 then failwith "Illegal weapon slot"
+    else if (slot >= len && len + 1 > ship.systems.weapons_power)
+    then failwith "Not enough weapons power"
     else {ship with equipped = new_equipped}
 
 let add_weapon ship weapon = {ship with inventory = weapon::ship.inventory}

@@ -4,21 +4,26 @@
 type weapon_type = Ion | Laser | Beam | Missile
 
 (* [weapon] represents the record which represents a ship weapon
- * contains fields {name, cost, damage, cool_down, charge, wtype} *)
+ * contains fields {name, cost, damage, capacity, charge, and wtype} *)
 type weapon = {
   name : string;
   cost : int;
   damage : int;
-  cool_down : int;
+  capacity : int;
   charge : int;
   wtype : weapon_type;
 }
 
+(* [augmentation_type] represents the different types of augmentations *)
+type augmentation_type = Damage | CoolDown | Evade | Hull
+
 (* [augmentation] represents an augmentation comprised of fields
- * augmentation name, cost, and description *)
+ * {name, cost, description, aug_type, and stat} *)
 type augmentation = {
   name : string;
   cost : int;
+  aug_type : augmentation_type;
+  stat : int;
   description : string;
 }
 
@@ -29,11 +34,12 @@ type person = {
   skills : (int * int * int);
 }
 
-(* [resources] is the record that represents the resources of a ship *)
+(* [resources] is the record that represents the resources of a ship including
+ * fuel, missiles, and scrap *)
 type resources = {
   fuel : int;
   missiles : int;
-  scraps : int;
+  scrap : int;
 }
 
 (* [systems] is the record representing the state of the ship's systems 
@@ -66,7 +72,7 @@ type ship = {
   location: int;
   (* [shield] represents the tuple (current shield level, charge time)
    * current shield level = # active shields * charge time + stored charges
-   * current shield level <= shield power * charge time*)
+   * current shield level <= shield power * charge time *)
   shield: (int * int);
   (* [inventory] is the list of all the weapons a ship owns *)
   inventory : weapon list;
@@ -102,7 +108,7 @@ val get_resources : ship -> resources
 
 (* [set_resources] returns ship with each element of the triple added to 
  * each respective field of resources *)
-val set_resources : ship -> (int*int*int) -> ship
+val set_resources : ship -> (int * int * int) -> ship
 
 (* [get_fuel] returns int number of ship's fuel *)
 val get_fuel : ship -> int
@@ -116,11 +122,11 @@ val get_missiles : ship -> int
 (* [set_missiles] returns ship with given number of missiles *)
 val set_missiles : ship -> int -> ship
 
-(* [get_scraps] returns int number of ship's scraps *)
-val get_scraps : ship -> int
+(* [get_scrap] returns int number of ship's scrap *)
+val get_scrap : ship -> int
 
-(* [set_scraps] returns ship with given number of scraps *)
-val set_scraps : ship -> int -> ship
+(* [set_scrap] returns ship with given number of scrap *)
+val set_scrap : ship -> int -> ship
 
 (*----------------------weapon/hull functions----------------------*)
 
@@ -135,7 +141,9 @@ val repair : ship -> int -> ship
  * if no weapon is available, returns [None] *)
 val get_weapon : ship -> int -> weapon option
 
-(* [equip] equips the ith weapon from the inventory to the nth (0-3) slot*)
+(* [equip] equips the ith weapon from the inventory to the nth (0-3) slot 
+ * throws "Illegal inventory index", "Illegal weapon slot" 
+ * and "Not enough weapons power" *)
 val equip : ship -> int -> int -> ship
 
 (* [add_weapon] returns ship with added weapon to its inventory *)
@@ -166,7 +174,7 @@ val repair_system : ship -> ship
 
 (*----------------------augmentation functions---------------------*)
 
-(* [add_augmentation] takes an augmentation name and adds it to the ship *)
+(* [add_augmentation] takes an augmentation and adds it to the ship *)
 val add_augmentation : ship -> augmentation -> ship
 
 (* [get_augmentation] returns the ith augmentation.

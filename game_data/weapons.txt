@@ -1,7 +1,14 @@
 # Weapons
-# name cost damage cool_down charge weapon_type
+# name cost damage capacity charge weapon_type
 
 Basic Laser;20;1;10;10;Laser
 Dual Lasers;25;2;10;10;Laser
 Burst Laser;50;3;11;11;Laser
+Heavy Laser;65;4;13;13;Laser
+Hull Laser;75;5;15;15;Laser
 
+Leto;20;1;9;9;Missile
+Artemis;38;2;10;10;Missile
+Hermes;45;3;14;14;Missile
+Pegasus;60;4;20;20;Missile
+Breach;65;5;22;22;Missile

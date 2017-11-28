@@ -5,7 +5,11 @@ open LTerm_widget
 open Start_screen
 open Start_text
 
-open Command
+(* Temporarily for compiling until command.ml is done *)
+open Ship
+open Galaxy
+open Event
+open Store
 
 let main () =
   (* Create a thread waiting for escape to be pressed. *)
