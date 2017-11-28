@@ -169,8 +169,8 @@ val set_engine_level : ship -> int -> ship
 (* [set_weapons_level] returns ship with specified weapons system level *)
 val set_weapons_level : ship -> int -> ship
 
-(* [repair_system] restores all systems. *)
-val repair_system : ship -> ship
+(* [repair_systems] restores all systems. *)
+val repair_systems : ship -> ship
 
 (*----------------------augmentation functions---------------------*)
 
