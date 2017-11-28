@@ -18,7 +18,7 @@ type command =
 
 type screen_type =
   | HomeScreen
-  | Galaxy of galaxy
+  | Galaxy of (int * galaxy) (* star, galaxy *)
   | StartScreen
   | Resting
   | Event of event
@@ -27,16 +27,18 @@ type screen_type =
 type controller = {
   ship: ship;
   screen_type: screen_type;
+  star: int;
   galaxy: galaxy;
+  event: event option; (* if there's an event store it *)
 }
 
 (* [init] generates a controller *)
 val init: controller
 
-(* [parse_command contr com] is the resulting controller after parsing a command
+(* [parse_command c com] is the resulting controller after parsing a command
    and applying the results. *)
 val parse_command: controller -> command -> controller
 
-(* [get_display contr] is a tuple containing a ship state and a screen_type to
+(* [get_display c] is a tuple containing a ship state and a screen_type to
    display on the UI. *)
 val get_display: controller -> (ship * screen_type)
