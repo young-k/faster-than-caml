@@ -11,7 +11,7 @@ let rec random_nums r n acc =
   if n = 0 then List.sort_uniq Pervasives.compare acc
   else random_nums r (n-1) ((Random.int r)::acc)
 
-let init = 
+let init =
   let rec create a n acc =
     if a = n then (({id = a; event = End; reachable = []})::acc, 1)
     else let e = match Random.int 4 with
@@ -22,7 +22,7 @@ let init =
       in let reach = random_nums n ((Random.int 6)+1) [a+1]
       in let filtered = List.filter (fun x -> x <> a) reach
       in create (a+1) n (({id = a; event = e; reachable = filtered})::acc)
-  in create 1 10 []
+  in create 0 10 []
 
 let find_star m id = List.find (fun s -> s.id = id) m
 
