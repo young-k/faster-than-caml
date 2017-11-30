@@ -19,7 +19,7 @@ type command =
 (* screen_type contains information about what to display on UI *)
 type screen_type =
   | HomeScreen
-  | Galaxy of (int * galaxy) (* star, galaxy *)
+  | GalaxyScreen of (int * galaxy) (* star, galaxy *)
   | StartScreen
   | Resting
   | Event of event
@@ -33,7 +33,7 @@ type storage =
 type controller = {
   ship: ship;
   screen_type: screen_type;
-  star: int;
+  star_id: int;
   galaxy: galaxy;
   storage: storage; (* storing either an event or a store *)
 }
