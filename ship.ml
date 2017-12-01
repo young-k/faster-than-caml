@@ -52,7 +52,7 @@ type ship = {
   inventory : weapon list;
   augmentations : augmentation list;
   systems: systems;
-  }
+}
 
 let init = {
   (* Starting resources *)

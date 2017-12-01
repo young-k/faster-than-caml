@@ -53,6 +53,7 @@ let parse_command c com =
   | ShowMap -> {c with screen_type=GalaxyScreen (c.star_id, c.galaxy)}
   | CloseMap -> {c with screen_type=Resting}
   | ShowStartText -> {c with screen_type=StartScreen}
+  | CloseStartText -> {c with screen_type=Resting}
   | ShowStore -> 
     (match c.storage with
       | Store s -> {c with screen_type=Store s}
