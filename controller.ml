@@ -64,6 +64,12 @@ let parse_command c com =
       | _ -> failwith "No store in controller"
     )
   | Go star_id -> {c with screen_type=Resting; star_id=star_id} (* TEMP *)
+  | Choice b -> 
+    (match c.storage with
+      | Event e -> {c with ship = (pick_choice c.ship e b); 
+          screen_type = Resting; storage = None}
+      | _ -> failwith "No event in controller"
+    )
   | _ -> failwith "Unimplemented"
 
 
