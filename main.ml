@@ -26,6 +26,15 @@ let rec loop t c =
   let display = get_display c in
 
   match snd display with
+  | Event event -> 
+    let result = Event_screen.get_components () in
+    wrapper#add (fst result);
+    (snd result)#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c ShowStartText))
   | HomeScreen ->
     let result = Home_screen.get_components () in
     wrapper#add (fst result);
