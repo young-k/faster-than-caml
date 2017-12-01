@@ -29,17 +29,6 @@ let rec loop t c =
   let display = get_display c in
 
   match snd display with
-  | Event event -> 
-    let result = Event_screen.get_components event () in
-    let bool = if (snd (snd result))#text = "Yes" then true
-      else false in
-    wrapper#add (fst result);
-    (fst (snd result))#on_click (wakeup wakener);
-    Lwt.finalize
-      (fun () -> run t frame waiter)
-      (fun () ->
-        if !exit then return ()
-        else loop t (parse_command c (Choice bool)))
   | HomeScreen ->
     let result = Home_screen.get_components () in
     wrapper#add (fst result);
@@ -89,6 +78,17 @@ let rec loop t c =
     (fun () ->
       if !exit then return ()
       else loop t (parse_command c ShowStartText))
+  | Event event -> 
+    let result = Event_screen.get_components event () in
+    let bool = if (snd (snd result))#text = "Yes" then true
+      else false in
+    wrapper#add (fst result);
+    (fst (snd result))#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c (Choice bool)))
   | _ -> return ()
 
 let main () =

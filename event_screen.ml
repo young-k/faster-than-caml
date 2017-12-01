@@ -18,6 +18,7 @@ let get_components e () =
   hbox#add descrp;
   mainbox#add ~expand:false hbox;
   mainbox#add ~expand:false (new hline);
+  mainbox#add ~expand:false(new spacing ~rows:5 ());
 
   let result_string = (new label "Yes") in
   let group_string = new radiogroup in
@@ -38,6 +39,7 @@ let get_components e () =
   hbox#add (new radiobutton group_string (choice_description e false) "No");
   hbox#add (new spacing ~cols:20 ());
   mainbox#add ~expand:false hbox;
+  mainbox#add ~expand:false(new spacing ~rows:5 ());
 
   let hbox = new hbox in
   let submit_button = new button ("Confirm") in
