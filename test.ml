@@ -35,7 +35,7 @@ let galaxy_tests = [
 
 let store = Store.init Ship.init
 
-let test_weapon = 
+let test_weapon =
 {
   name = "Test Weapon";
   cost = 0;
@@ -45,7 +45,7 @@ let test_weapon =
   wtype = Laser;
 }
 
-let test_aug = 
+let test_aug =
 {
   name = "Test Augmentation";
   cost = 0;
@@ -79,15 +79,15 @@ let store_tests = [
     (fun _ -> assert_equal 0
       ((buy store (Ship.init) "Increase Damage I").augmentations
         |> List.length));
-   
+
   "buy_weap" >::
     (fun _ -> assert_equal 2 (ship_with_weap.inventory |> List.length));
-  
+
   "before_aug" >::
-    (fun _ -> assert_equal 2 (List.fold_left (fun acc w -> acc + w.damage) 0 
+    (fun _ -> assert_equal 2 (List.fold_left (fun acc w -> acc + w.damage) 0
                               ship_with_weap.inventory));
   "buy_aug" >::
-    (fun _ -> assert_equal 4 (List.fold_left (fun acc w -> acc + w.damage) 0 
+    (fun _ -> assert_equal 4 (List.fold_left (fun acc w -> acc + w.damage) 0
                               ship_with_aug.inventory));
 ]
 
@@ -159,36 +159,36 @@ let ship_tests = [
 (*----------------------resources get/set functions----------------*)
 
   "get_resources" >:: (fun _ -> assert_equal init_rcs (get_resources ship));
-  "set_resources" >:: (fun _ -> assert_equal {ship with resources = new_rcs} 
+  "set_resources" >:: (fun _ -> assert_equal {ship with resources = new_rcs}
     (set_resources ship (-1,2,3)));
   "get_fuel" >:: (fun _ -> assert_equal 5 (get_fuel ship));
-  "set_fuel" >:: (fun _ -> assert_equal {ship with resources = new_rcs1} 
+  "set_fuel" >:: (fun _ -> assert_equal {ship with resources = new_rcs1}
     (set_fuel ship 6));
   "get_missiles" >:: (fun _ -> assert_equal 0 (get_missiles ship));
-  "set_missiles" >:: (fun _ -> assert_equal {ship with resources = new_rcs2} 
+  "set_missiles" >:: (fun _ -> assert_equal {ship with resources = new_rcs2}
     (set_missiles ship 2));
   "get_scrap" >:: (fun _ -> assert_equal 0 (get_scrap ship));
-  "set_scrap" >:: (fun _ -> assert_equal {ship with resources = new_rcs3} 
+  "set_scrap" >:: (fun _ -> assert_equal {ship with resources = new_rcs3}
     (set_scrap ship 3));
 
 (*----------------------weapon/hull functions----------------------*)
 
-  "damage0" >:: (fun _ -> assert_equal {ship with shield = (0,5)} 
+  "damage0" >:: (fun _ -> assert_equal {ship with shield = (0,5)}
     (damage ship 1 Laser));
-  "damage1" >:: (fun _ -> assert_equal {ship with shield = (0,5); hull = 28} 
+  "damage1" >:: (fun _ -> assert_equal {ship with shield = (0,5); hull = 28}
     (damage ship 3 Laser));
-  "damage2" >:: (fun _ -> assert_equal {ship with hull = 29} 
+  "damage2" >:: (fun _ -> assert_equal {ship with hull = 29}
     (damage ship 1 Missile));
-  "repair" >:: (fun _ -> assert_equal {ship with hull = 31} 
+  "repair" >:: (fun _ -> assert_equal {ship with hull = 31}
     (repair ship 1));
   "get_weapon0" >:: (fun _ -> assert_equal (Some ion)
     (get_weapon ship 0));
   "get_weapon1" >:: (fun _ -> assert_equal None
     (get_weapon ship 2));
-  "add_weapon" >:: (fun _ -> assert_equal 
+  "add_weapon" >:: (fun _ -> assert_equal
     {ship with inventory = weap::ship.inventory}
     (add_weapon ship weap));
-  "equip" >:: (fun _ -> assert_equal 
+  "equip" >:: (fun _ -> assert_equal
     {ship with inventory = weap::ship.inventory; equipped = weap::[]}
     (equip (add_weapon ship weap) 0 0));
 
@@ -198,20 +198,20 @@ let ship_tests = [
     (set_shield_power ship 2).systems.shield_power);
   "set_engine_power" >:: (fun _ -> assert_equal 2
     (set_engine_power ship 2).systems.engine_power);
-  "set_weapons_power" >:: (fun _ -> assert_equal 2 
+  "set_weapons_power" >:: (fun _ -> assert_equal 2
     (set_weapons_power ship 2).systems.weapons_power);
   "set_shield_level" >:: (fun _ -> assert_equal 2
     (set_shield_level ship 2).systems.shield_level);
   "set_engine_level" >:: (fun _ -> assert_equal 2
     (set_engine_level ship 2).systems.engine_level);
-  "set_weapons_level" >:: (fun _ -> assert_equal 2 
+  "set_weapons_level" >:: (fun _ -> assert_equal 2
     (set_weapons_level ship 2).systems.weapons_level);
-  "repair_systems" >:: (fun _ -> assert_equal ship 
+  "repair_systems" >:: (fun _ -> assert_equal ship
     (repair_systems damaged_ship));
 
 (*----------------------augmentation functions---------------------*)
 
-  "add_augmentation" >:: (fun _ -> assert_equal 
+  "add_augmentation" >:: (fun _ -> assert_equal
     {ship with augmentations = test_aug::[]}
     (add_augmentation ship test_aug));
   "get_augmentation0" >:: (fun _ -> assert_equal (Some test_aug)
@@ -220,7 +220,7 @@ let ship_tests = [
     (get_augmentation ship 0));
 
 (*----------------------crew functions-----------------------------*)
-  
+
   "get_person0" >:: (fun _ -> assert_equal (Some dude)
     (get_person ship 0));
   "get_person1" >:: (fun _ -> assert_equal None
