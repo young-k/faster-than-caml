@@ -24,7 +24,7 @@ let get_components (c : controller) () =
   "Augmentations: " ^ (List.fold_right 
     (fun (x : Ship.augmentation) acc -> acc ^ x.name ^ "; ") 
       c.ship.augmentations "") ^ "\n\n" ^
-  "Star: " ^ string_of_int c.star ^ "\n" in
+  "Star: " ^ string_of_int c.star_id ^ "\n" in
 
 
   let modal = new vbox in
