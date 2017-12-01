@@ -103,6 +103,6 @@ let buy st (s : Ship.ship) i =
         augmentations = a::s.augmentations
       } 
       else s
-    | _ -> failwith "Item not found"
+    | _ -> failwith ("Item not found: " ^ i)
 
 let display (x, y) s st = failwith "Unimplemented"

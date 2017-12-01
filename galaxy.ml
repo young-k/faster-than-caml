@@ -9,7 +9,7 @@ type galaxy = star list
 
 let rec random_nums r n acc =
   if n = 0 then List.sort_uniq Pervasives.compare acc
-  else random_nums r (n-1) ((Random.int r)::acc)
+  else random_nums r (n-1) ((Random.int r)+1::acc)
 
 let init = 
   let rec create a n acc =

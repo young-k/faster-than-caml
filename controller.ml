@@ -12,6 +12,7 @@ type command =
   | Power of string
   | Purchase of string
   | ShowMap
+  | ShowStore
   | ShowStartText
   | CloseStartText
 
@@ -22,6 +23,7 @@ type screen_type =
   | Resting
   | Event of event
   | Store of store
+  | Debug
 
 type storage =
   | Event of event
@@ -51,6 +53,16 @@ let parse_command c com =
   | ShowMap -> {c with screen_type=Galaxy (c.star, c.galaxy)}
   | CloseMap -> {c with screen_type=Resting}
   | ShowStartText -> {c with screen_type=StartScreen}
+  | ShowStore -> 
+    (match c.storage with
+      | Store s -> {c with screen_type=Store s}
+      | _ -> failwith "No store in controller"
+    )
+  | Purchase s -> 
+    (match c.storage with
+      | Store st -> {c with ship=(buy st c.ship s); screen_type=Debug}
+      | _ -> failwith "No store in controller"
+    )
   | _ -> failwith "Unimplemented"
 
 

@@ -13,6 +13,7 @@ type command =
   | Power of string           (* Get the power level of a system *)
   | Purchase of string        (* Purchase an item (weapon/augmentation) from a store *)
   | ShowMap                   (* Displays the map *)
+  | ShowStore                 (* Displays a store *) 
   | ShowStartText             (* Shows start text *)
   | CloseStartText            (* Closes start text *)
 
@@ -24,6 +25,7 @@ type screen_type =
   | Resting
   | Event of event
   | Store of store
+  | Debug
 
 type storage =
   | Event of event

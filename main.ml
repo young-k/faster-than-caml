@@ -4,6 +4,8 @@ open LTerm_widget
 
 open Home_screen
 open Start_screen
+open Store_screen
+open Debug_screen
 
 open Controller
 
@@ -37,6 +39,24 @@ let rec loop t c =
         else loop t (parse_command c ShowStartText))
   | StartScreen ->
     let result = Start_screen.get_components () in
+    wrapper#add (fst result);
+    (snd result)#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c ShowStartText))
+  | Store s ->
+    let result = Store_screen.get_components s () in
+    wrapper#add (fst result);
+    (fst(snd result))#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c (Purchase (snd (snd result))#text)))
+  | Debug ->
+    let result = Debug_screen.get_components c () in
     wrapper#add (fst result);
     (snd result)#on_click (wakeup wakener);
     Lwt.finalize
