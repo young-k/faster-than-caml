@@ -18,7 +18,7 @@ type command =
 
 type screen_type =
   | HomeScreen
-  | Galaxy of (int * galaxy)
+  | GalaxyScreen of (int * galaxy)
   | StartScreen
   | Resting
   | Event of event
@@ -33,7 +33,7 @@ type storage =
 type controller = {
   ship: ship;
   screen_type: screen_type;
-  star: int;
+  star_id: int;
   galaxy: galaxy;
   storage: storage;
 }
@@ -43,14 +43,14 @@ let init =
   {
     ship=Ship.init;
     screen_type=HomeScreen;
-    star=(snd init_galaxy);
+    star_id=(snd init_galaxy);
     galaxy=(fst init_galaxy);
     storage=None;
   }
 
 let parse_command c com =
   match com with
-  | ShowMap -> {c with screen_type=Galaxy (c.star, c.galaxy)}
+  | ShowMap -> {c with screen_type=GalaxyScreen (c.star_id, c.galaxy)}
   | CloseMap -> {c with screen_type=Resting}
   | ShowStartText -> {c with screen_type=StartScreen}
   | ShowStore -> 
@@ -63,6 +63,7 @@ let parse_command c com =
       | Store st -> {c with ship=(buy st c.ship s); screen_type=Debug}
       | _ -> failwith "No store in controller"
     )
+  | Go star_id -> {c with screen_type=Resting; star_id=star_id} (* TEMP *)
   | _ -> failwith "Unimplemented"
 
 
