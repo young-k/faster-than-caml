@@ -50,12 +50,13 @@ let rec loop t c =
   | Resting ->
     let result = Resting_screen.get_components button (fst display) () in
     wrapper#remove button;
-    wrapper#add (fst result);
+    wrapper#add (snd result);
+    (fst result)#on_click (wakeup wakener);
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c ShowStartText))
+        else loop t (parse_command c ShowMap))
   | Store s ->
     let result = Store_screen.get_components s () in
     wrapper#add (fst result);

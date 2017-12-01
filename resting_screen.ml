@@ -33,9 +33,9 @@ let get_components exit ship () =
   vbox#add ~expand:false exit;
 
   let mapbox = new hbox in
-  let button = new button ("MAP") in
+  let map = new button ("MAP") in
   mapbox#add (new spacing ~cols:40 ());
-  mapbox#add (in_frame button);
+  mapbox#add (in_frame map);
   mapbox#add (new spacing ~cols:40 ());
 
   let footer = new vbox in
@@ -68,4 +68,4 @@ let get_components exit ship () =
   mainbox#add ~expand:false vbox;
   mainbox#add ~expand:false new vline;
   mainbox#add vbox2;
-  (mainbox, mainbox);
+  (map, mainbox);
