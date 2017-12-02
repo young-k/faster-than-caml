@@ -79,16 +79,16 @@ let get_components c () =
   done;
 
   let box = new hbox in
-  let ftext = if c.ship.resources.scrap < Store.fuel_cost 
-    then ("\nYou do not have enough scrap", "_")
-    else if s.fuel = 0 then ("\nNo more fuel available", "_")
+  let ftext = if s.fuel = 0 then ("\nNo more fuel available", "_")
+    else if c.ship.resources.scrap < Store.fuel_cost 
+      then ("\nYou do not have enough scrap", "_")
     else ("\nCost: " ^ string_of_int Store.fuel_cost, "Fuel") in
   let fbutton = new button ("Fuel: " ^ string_of_int s.fuel ^ " available") in
     fbutton#on_click (fun () -> label#set_text ("Fuel" ^ fst ftext); 
                                 item#set_text(snd ftext));
-  let mtext = if c.ship.resources.scrap < Store.missile_cost 
-    then ("\nYou do not have enough scrap", "_")
-    else if s.missiles = 0 then ("\nNo more missiles available", "_")
+  let mtext = if s.missiles = 0 then ("\nNo more missiles available", "_")
+    else if c.ship.resources.scrap < Store.missile_cost 
+      then ("\nYou do not have enough scrap", "_")
     else ("\nCost: " ^ string_of_int Store.missile_cost, "Missile") in
   let mbutton = new button ("Missiles: " ^ string_of_int s.missiles ^ " available") in
     mbutton#on_click (fun () -> label#set_text ("Missile" ^ fst mtext); 
