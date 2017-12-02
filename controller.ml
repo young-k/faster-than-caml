@@ -90,7 +90,6 @@ let parse_command c com =
     )
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
-    print_endline (string_of_int star_id);
     begin
       match (get_event c.galaxy star_id) with
       | Store ->
