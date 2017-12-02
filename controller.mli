@@ -16,6 +16,7 @@ type command =
   | ShowStartText             (* Shows start text *)
   | GoToResting               (* Go to resting screen *)
   | ShowShipConfirm
+  | ShowShipScreen
 
 (* screen_type contains information about what to display on UI *)
 type screen_type =
@@ -28,6 +29,7 @@ type screen_type =
   | Notification of Ship.resources
   | Debug
   | ShipConfirm
+  | ShipScreen
 
 type storage =
   | Event of event

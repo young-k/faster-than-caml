@@ -15,6 +15,7 @@ type command =
   | ShowStartText
   | GoToResting
   | ShowShipConfirm
+  | ShowShipScreen
 
 type screen_type =
   | HomeScreen
@@ -26,6 +27,7 @@ type screen_type =
   | Notification of Ship.resources
   | Debug
   | ShipConfirm
+  | ShipScreen
 
 type storage =
   | Event of event
@@ -89,6 +91,7 @@ let parse_command c com =
           screen_type = Notification (choice_resources e b); storage = None}
       | _ -> failwith "No event in controller"
     )
+  | ShowShipScreen -> {c with screen_type=ShipScreen}
   | _ -> failwith "Unimplemented"
 
 
