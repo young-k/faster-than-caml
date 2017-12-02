@@ -143,7 +143,8 @@ val get_weapon : ship -> int -> weapon option
 
 (* [equip] equips the ith weapon from the inventory to the nth (0-3) slot
  * throws "Illegal inventory index", "Illegal weapon slot"
- * and "Not enough weapons power" *)
+ * If there is not enough weapon_power then [equip] 
+ * returns unchanged ship state *)
 val equip : ship -> int -> int -> ship
 
 (* [unequip] unequips a weapon given slot number and returns a new modified ship
@@ -193,20 +194,20 @@ val get_person : ship -> int -> person option
 
 (*----------------------upgrade functions-----------------------------*)
 
-(* [upgrade_engine_level] returns a ship option after attempting to upgrade 
+(* [upgrade_engine_level] returns a ship after attempting to upgrade 
  * engine level
- * returns: Some ship with upgraded engine level or None if invalid amount of 
+ * returns: updated ship with upgraded weapon level or same ship if invalid amount of 
  * scrap *)
-val upgrade_engine_level : ship -> ship option
+val upgrade_engine_level : ship -> ship
 
-(* [upgrade_shield_level] returns a ship option after attempting to upgrade 
+(* [upgrade_shield_level] returns a ship after attempting to upgrade 
  * shield level
- * returns: Some ship with upgraded ship level or None if invalid amount of 
+ * returns: updated ship with upgraded weapon level or same ship if invalid amount of 
  * scrap *)
-val upgrade_shield_level : ship -> ship option
+val upgrade_shield_level : ship -> ship
 
-(* [upgrade_weapons_level] returns a ship option after attempting to upgrade 
+(* [upgrade_weapons_level] returns a ship after attempting to upgrade 
  * weapon level
- * returns: Some ship with upgraded weapon level or None if invalid amount of 
+ * returns: updated ship with upgraded weapon level or same ship if invalid amount of 
  * scrap *)
-val upgrade_weapons_level : ship -> ship option
+val upgrade_weapons_level : ship -> ship
