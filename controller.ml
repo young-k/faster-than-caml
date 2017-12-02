@@ -70,6 +70,8 @@ let parse_command c com =
       | Store ->
         let s = Store.init c.ship in
         {c with screen_type=Store s; star_id=star_id}
+      | Event ->
+        {c with screen_type=Event (Event.init); star_id=star_id}
       | _ -> {c with screen_type=Resting; star_id=star_id}
     end
   | Choice b ->
