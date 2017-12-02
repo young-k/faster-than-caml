@@ -35,22 +35,18 @@ let get_components star_id galaxy =
 
   (* Setup "Going to: " label *)
   let going_to = ref (reachable |> List.hd |> snd) in (* initialize value to first choice *)
-  let going_to_label = new label "Going to: " in
   let radio_g = new radiogroup in
   let star_changed = function
     | Some n ->
       going_to := n;
-      going_to_label#set_text ("Going to: " ^ string_of_int !going_to)
     | None -> ()
   in
   radio_g#on_state_change star_changed;
-  mainbox#add going_to_label;
 
   let button_hbox = new hbox in (* hbox containing the radio buttons *)
   button_hbox#add (new spacing ~cols:5 ());
 
   (* Default goes to first star if no other choice is pressed *)
-  going_to_label#set_text ("Going to: " ^ string_of_int !going_to);
   let add_star (event_type, id) =
     let str_id = string_of_int id in
     match event_type with
