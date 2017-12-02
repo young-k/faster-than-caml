@@ -9,7 +9,7 @@ let text = "    ___ _   ___ _____ ___ ___   _____ _  _   _   _  _    ___   _   _
            "   |_/_/ \\_\\___/ |_| |___|_|_\\   |_| |_||_/_/ \\_\\_|\\_|  \\___/_/ \\_\\_|  |_|____|\n"
 
 (* [in_frame w] is w wrapped in a frame *)
-let in_frame w = let f = new frame in f#set w; f 
+let in_frame w = let f = new frame in f#set w; f
 
 let get_components () =
   let mainbox = new vbox in
