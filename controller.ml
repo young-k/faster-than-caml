@@ -18,6 +18,7 @@ type command =
   | ShowShipScreen
   | ShowHomeScreen
   | ShowInstructions
+  | ShowGameOver
 
 type screen_type =
   | HomeScreen
@@ -28,9 +29,9 @@ type screen_type =
   | Event of event
   | Store of store
   | Notification of Ship.resources
-  | Debug
   | ShipConfirm
   | ShipScreen
+  | GameOver
 
 type storage =
   | Event of event
@@ -65,6 +66,7 @@ let parse_command c com =
   match com with
   | ShowHomeScreen -> {c with screen_type=HomeScreen}
   | ShowInstructions -> {c with screen_type=Instructions}
+  | ShowGameOver -> {c with screen_type=GameOver}
   | ShowMap -> {c with screen_type=GalaxyScreen (c.star_id, c.galaxy)}
   | GoToResting -> {c with screen_type=Resting}
   | ShowStartText -> {c with screen_type=StartScreen}

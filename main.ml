@@ -94,6 +94,20 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else loop t (parse_command c ShowHomeScreen))
+  | GameOver ->
+    let result = Game_over_screen.get_components () in
+    wrapper#remove sidebar;
+    wrapper#remove sidebarline;
+    let screen = new vbox in
+    screen#add ~expand:false button;
+    screen#add (fst result);
+    wrapper#add screen;
+    (snd result)#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c ShowStartText))
   | StartScreen ->
     let result = Start_screen.get_components () in
     wrapper#remove sidebar;
