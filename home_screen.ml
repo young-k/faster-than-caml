@@ -32,4 +32,4 @@ let get_components () =
   mainbox#add ~expand:false hbox;
   mainbox#add ~expand:false hbox2;
   mainbox#add (new spacing ~rows:1 ());
-  (mainbox, start_button);
+  (mainbox, (start_button, instructions));

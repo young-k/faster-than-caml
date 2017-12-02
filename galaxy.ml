@@ -7,13 +7,15 @@ type star = {
 }
 type galaxy = star list
 
+let _ = Random.self_init()
+
 let rec random_nums r n acc =
   if n = 0 then List.sort_uniq Pervasives.compare acc
   else random_nums r (n-1) ((Random.int r)+1::acc)
 
 let init =
-  let _ = Random.self_init () in 
-  let random_event () = 
+  let _ = Random.self_init () in
+  let random_event () =
     match Random.int 4 with
     | 0 -> Store
     | 1 -> Nothing
