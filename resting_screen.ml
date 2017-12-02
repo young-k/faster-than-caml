@@ -40,26 +40,56 @@ let get_components exit ship () =
   mapbox#add (in_frame map);
   mapbox#add (new spacing ~cols:40 ());
 
-  let footer = new vbox in
-  let inventory = new label "Inventory" in
+  let footer = new hbox in
+
+  (* Generating weapons section *)
+  let weapons_section = new vbox in 
+  let weapons_label = new label "Weapons" in
   let weapons = new hbox in
   for i = 0 to 3 do
-    let temp = new vbox in
     match (Ship.get_weapon ship i) with
     | Some w ->
       let some = new label "Weapon" in
-      temp#add some;
+      weapons#add some;
+      if i<>3 then weapons#add new vline
+      else () 
     | None -> 
       let none = new label "None" in
-      temp#add none;
-    weapons#add temp;
-    weapons#add new vline;
+      weapons#add none;
+      if i<>3 then weapons#add new vline
+      else () 
   done;
+  
+  (* Generating Systems section *)
+  let systems_section = new vbox in 
+  let systems_label = new label "Systems" in
+  let systems = new hbox in 
+  
+  let engine_system = new vbox in
+  let engine_lbl = new label "Engine" in 
+  systems#add engine_system;
+  systems#add ~expand:false new vline;
 
-  footer#add ~expand:false new hline;
-  footer#add inventory;
-  footer#add ~expand:false new hline;
-  footer#add weapons;
+  let shield_system = new vbox in 
+  let shield_lbl = new label "Shield" in
+  systems#add shield_system;
+  
+  let weapons_system = new vbox in 
+  let weapons_lbl = new label "Weapons" in
+  systems#add weapons_system;
+  
+
+  weapons_section#add ~expand:false new hline;
+  weapons_section#add weapons_label;
+  weapons_section#add ~expand:false new hline;
+  weapons_section#add weapons;
+  
+  systems_section#add ~expand:false new hline;
+  systems_section#add systems_label;
+  systems_section#add ~expand:false new hline;
+  
+  footer#add weapons_section;
+
 
   let vbox2 = new vbox in
   let ship_ascii = new label ship_ascii in
