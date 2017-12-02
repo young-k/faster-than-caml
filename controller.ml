@@ -44,6 +44,7 @@ type controller = {
   galaxy: galaxy;
   storage: storage;
   score: int;
+  jumps: int;
   start_time: float;
 }
 
@@ -56,6 +57,7 @@ let init =
     galaxy = (fst init_galaxy);
     storage = None;
     score = 0;
+    jumps = 0;
     start_time = Unix.gettimeofday();
   }
 
@@ -89,11 +91,13 @@ let parse_command c com =
       match (get_event c.galaxy star_id) with
       | Store ->
         let s = Store.init c.ship in
-        {c with screen_type=Store s; star_id=star_id; storage=Store s}
+        {c with screen_type=Store s; star_id=star_id; storage=Store s;
+          jumps = c.jumps+1}
       | Event ->
         let e = Event.init in
-        {c with screen_type=Event e; star_id=star_id; storage=Event e}
-      | _ -> {c with screen_type=Resting; star_id=star_id}
+        {c with screen_type=Event e; star_id=star_id; storage=Event e;
+          jumps = c.jumps+1}
+      | _ -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1}
     end
   | Choice b ->
     (match c.storage with
