@@ -6,8 +6,8 @@ let text = "                           Instructions                        \n" ^
            "                           ============                        \n" ^
            "                                                               \n" ^
            "1. FTC is a rougelike, meaning if you lose you must start over.\n" ^
-           "2. The exit for a galaxy is always star 10, and visiting every \n" ^
-           "   star is recommended.                                        \n" ^
+           "2. The exit for a galaxy is always star 10, and you must exit a\n" ^
+           "   galaxy in at most 6 jumps.                                  \n" ^
            "3. Buying an item does not come with any confirmation!         \n" 
 
 (* [in_frame w] is w wrapped in a frame *)

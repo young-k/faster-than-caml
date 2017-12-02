@@ -64,12 +64,17 @@ let rec loop t c =
     screen#add ~expand:false button;
     screen#add (fst result);
     wrapper#add screen;
-    (snd result)#on_click (wakeup wakener);
+    let continue = ref true in
+    (fst (snd result))#on_click (fun () -> 
+        continue := true; (wakeup wakener) ());
+    (snd (snd result))#on_click (fun () -> 
+        continue := false; (wakeup wakener) ());
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c ShowStartText))
+        else if !continue then loop t (parse_command c ShowStartText)
+        else loop t (parse_command c ShowInstructions))
   | Instructions ->
     let result = Instruction_screen.get_components () in
     wrapper#remove sidebar;

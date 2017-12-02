@@ -57,7 +57,8 @@ let init =
 
 let parse_command c com =
   match com with
-  | ShowHomeScreen -> {c with screen_type=Instructions}
+  | ShowHomeScreen -> {c with screen_type=HomeScreen}
+  | ShowInstructions -> {c with screen_type=Instructions}
   | ShowMap -> {c with screen_type=GalaxyScreen (c.star_id, c.galaxy)}
   | GoToResting -> {c with screen_type=Resting}
   | ShowStartText -> {c with screen_type=StartScreen}
