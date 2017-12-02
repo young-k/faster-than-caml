@@ -46,7 +46,7 @@ let rec loop t c =
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c CloseStartText))
+        else loop t (parse_command c GoToResting))
   | Resting ->
     let result = Resting_screen.get_components button (fst display) () in
     wrapper#remove button;
@@ -99,6 +99,15 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else loop t (parse_command c (Choice bool)))
+  | Notification rsc ->
+    let result = Notification_screen.get_components rsc () in
+    wrapper#add (fst result);
+    (snd result)#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c (GoToResting)))
   | _ -> return ()
 
 let main () =

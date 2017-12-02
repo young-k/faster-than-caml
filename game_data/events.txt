@@ -6,17 +6,11 @@
 # Blank lines are also skipped.
 
 # Sample event:
-event1;choice1;1;2;3;choice2;4;5;6
+#event1;choice1;1;2;3;choice2;4;5;6
 
-#i
-#hate
-#3110
-#so
-#much
-#why
-#is
-#are
-#the
-#assignments
-#so
-#long
+A ship without life forms is nearby. Shall we investigate?;For sure!;1;1;100;No thank you!;0;0;0
+You see a stranded ship without fuel. Do you go to help?;Let's go help them;-1;2;70;Let's leave before they see us;0;0;0
+You run into a nearby mining colony where an unknown disease is being spread. Do you go in to help?;We have to help them;-1;1;90;We don't have time to help them;0;0;0
+You see a research station being attacked by pirates. Do you go to interfere?;Lets save the researchers;-2;100;-1;Researchers are overrated;-1;0;0
+Two space ships are about to explode but you can only save one. Which one do you save?;The one with more people!;-1;1;100;The one with more missiles!;-1;2;50
+You find a number of ships fleeing from a small space station. You ask what's wrong: "Help! We're being overrun by some sort of giant alien spiders!";Get rid of the spiders;-1;0;100;Leave the spiders alone;0;0;0

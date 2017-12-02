@@ -6,7 +6,6 @@ open Store
 type command =
   | Attack of (int * string)
   | Choice of bool
-  | CloseMap
   | Equip of (string * int)
   | Go of int
   | Power of string
@@ -14,7 +13,7 @@ type command =
   | ShowMap
   | ShowStore
   | ShowStartText
-  | CloseStartText
+  | GoToResting
   | ShowShipConfirm
 
 type screen_type =
@@ -24,6 +23,8 @@ type screen_type =
   | Resting
   | Event of event
   | Store of store
+  | Notification of Ship.resources
+  | Debug
   | ShipConfirm
 
 type storage =
@@ -52,19 +53,18 @@ let init =
 let parse_command c com =
   match com with
   | ShowMap -> {c with screen_type=GalaxyScreen (c.star_id, c.galaxy)}
-  | CloseMap -> {c with screen_type=Resting}
+  | GoToResting -> {c with screen_type=Resting}
   | ShowStartText -> {c with screen_type=StartScreen}
-  | CloseStartText -> {c with screen_type=Resting}
   | ShowStore ->
     (match c.storage with
       | Store s -> {c with screen_type=Store s}
       | _ -> failwith "No store in controller"
     )
-  | Purchase s -> 
+  | Purchase s ->
     (match c.storage with
-      | Store st -> 
+      | Store st ->
         let store = if (can_buy st c.ship s) then {
-            augmentations = List.filter (fun (a : augmentation) -> a.name <> s) 
+            augmentations = List.filter (fun (a : augmentation) -> a.name <> s)
               st.augmentations;
             weapons = List.filter (fun (w : weapon) -> w.name <> s) st.weapons;
         } else st in
@@ -79,13 +79,14 @@ let parse_command c com =
         let s = Store.init c.ship in
         {c with screen_type=Store s; star_id=star_id; storage=Store s}
       | Event ->
-        {c with screen_type=Event (Event.init); star_id=star_id}
+        let e = Event.init in
+        {c with screen_type=Event e; star_id=star_id; storage=Event e}
       | _ -> {c with screen_type=Resting; star_id=star_id}
     end
   | Choice b ->
     (match c.storage with
       | Event e -> {c with ship = (pick_choice c.ship e b);
-          screen_type = Resting; storage = None}
+          screen_type = Notification (choice_resources e b); storage = None}
       | _ -> failwith "No event in controller"
     )
   | _ -> failwith "Unimplemented"
