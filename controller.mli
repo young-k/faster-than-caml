@@ -40,6 +40,8 @@ type controller = {
   star_id: int;
   galaxy: galaxy;
   storage: storage; (* storing either an event or a store *)
+  score: int;       (* score is the sum of scrap spent and damage dealt *)
+  start_time: float;(* starting time of game in seconds. For game ticks*)
 }
 
 (* [init] generates a controller *)
