@@ -25,6 +25,7 @@ let rec loop t c =
   button#on_click (fun () -> exit := true; (wakeup wakener) ());
 
   (* sidebar fixture *)
+  let score = new label ("Score: " ^ string_of_int c.score) in
   let ship = c.ship in
   let resources = Ship.get_resources ship in 
   let hull = Ship.get_hull ship in
@@ -38,7 +39,10 @@ let rec loop t c =
     new label (
       "   Crew Members: " ^ string_of_int (List.length ship.crew) ^ "   "
     ) in
+  let curr_star = new label ("Star: " ^ string_of_int c.star_id) in 
   let sidebar = new vbox in 
+  sidebar#add ~expand:false score;
+  sidebar#add ~expand:false new hline;
   sidebar#add ~expand:false scrap;
   sidebar#add ~expand:false fuel;
   sidebar#add ~expand:false missiles;
@@ -46,6 +50,7 @@ let rec loop t c =
   sidebar#add ~expand:false shield;
   sidebar#add ~expand:false crew;
   sidebar#add ~expand:false button;
+  sidebar#add ~expand:false curr_star;
   wrapper#add ~expand:false sidebar;
   let sidebarline = new vline in
   wrapper#add ~expand:false sidebarline;

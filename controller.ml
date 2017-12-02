@@ -43,16 +43,20 @@ type controller = {
   star_id: int;
   galaxy: galaxy;
   storage: storage;
+  score: int;
+  start_time: float;
 }
 
 let init =
   let init_galaxy = Galaxy.init in
   {
-    ship=Ship.init;
-    screen_type=HomeScreen;
-    star_id=(snd init_galaxy);
-    galaxy=(fst init_galaxy);
-    storage=None;
+    ship = Ship.init;
+    screen_type = HomeScreen;
+    star_id = (snd init_galaxy);
+    galaxy = (fst init_galaxy);
+    storage = None;
+    score = 0;
+    start_time = Unix.gettimeofday();
   }
 
 let parse_command c com =
@@ -75,14 +79,18 @@ let parse_command c com =
               st.augmentations;
             weapons = List.filter (fun (w : weapon) -> w.name <> s) st.weapons;
         } else st in
-        {c with ship=(Store.buy st c.ship s);screen_type=Store store}
+        let new_ship = Store.buy st c.ship s in
+        let pts = (get_scrap c.ship) - (get_scrap new_ship) in 
+        {c with ship = new_ship;screen_type=Store store;score=c.score+pts}
       | _ -> failwith "No store in controller"
     )
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
+    print_endline (string_of_int star_id);
     begin
       match (get_event c.galaxy star_id) with
       | Store ->
+        print_endline (string_of_int star_id);
         let s = Store.init c.ship in
         {c with screen_type=Store s; star_id=star_id; storage=Store s}
       | Event ->

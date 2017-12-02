@@ -13,7 +13,7 @@ let get_components delta () =
   let descrp = new LTerm_widget.label ("You've gained:") in
   let rsc = new LTerm_widget.label ((string_of_int (delta.scrap))^" Scrap, "^
     (string_of_int (delta.fuel))^" Fuel, "^
-    (string_of_int (delta.missiles))^" Mssiless.") in
+    (string_of_int (delta.missiles))^" Missiles.") in
 
   let hbox = new hbox in
   mainbox#add ~expand:false (new hline);
