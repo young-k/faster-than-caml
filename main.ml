@@ -35,7 +35,7 @@ let rec loop t c =
   let missiles = new label ("Missiles: " ^ string_of_int resources.missiles) in
   let hull = new label ("Hull: " ^ string_of_int hull) in
   let shield = 
-    new label ("Shield Level: " ^ string_of_int (fst ship.shield)) in
+    new label ("Shield Level: " ^ string_of_int (ship.shield.layers)) in
   let crew = 
     new label (
       "   Crew Members: " ^ string_of_int (List.length ship.crew) ^ "   "

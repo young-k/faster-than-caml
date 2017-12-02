@@ -11,6 +11,12 @@ type weapon = {
   wtype : weapon_type;
 }
 
+type shield = {
+  layers : int;
+  charge : int;
+  capacity : int;
+}
+
 type augmentation_type = Damage | CoolDown | Evade | Hull
 
 type augmentation = {
@@ -49,7 +55,7 @@ type ship = {
   evade: int;
   equipped : weapon list;
   location: int;
-  shield: (int * int);
+  shield: shield;
   inventory : weapon list;
   augmentations : augmentation list;
   systems: systems;
@@ -75,7 +81,11 @@ let init = {
   }];
   (* placeholder location *)
   location = 0;
-  shield = (5, 5);
+  shield = {
+    layers = 1;
+    charge = 0;
+    capacity = 5;
+  };
   inventory = [{
     name = "Ion cannon";
     cost = 10;
@@ -106,6 +116,14 @@ let evade ship = ship.evade
 
 let get_hull ship = ship.hull
 
+let charge_shield ship = 
+  if ship.shield.layers = ship.systems.shield_power then ship
+  else if ship.shield.charge = ship.shield.capacity then
+    {ship with shield = {layers = ship.shield.layers+1;
+                         charge = 0;
+                         capacity = ship.shield.capacity}}
+  else {ship with shield = {ship.shield with charge = ship.shield.charge+1}}
+
 (*----------------------resources get/set functions----------------*)
 
 let get_resources ship = ship.resources
@@ -133,14 +151,14 @@ let set_scrap ship i =
 
 (*----------------------weapon/hull functions----------------------*)
 
-let damage ship dmg wtype = let (shield, charge) = ship.shield in
-  let level = shield / charge in
+let damage ship dmg wtype = let sh = ship.shield in
+  let level = sh.layers in
   if level >= dmg && wtype != Missile then
-  {ship with shield = (shield - (dmg*charge), charge)}
+  {ship with shield = {sh with layers = sh.layers - dmg}}
   else if wtype = Missile then
   {ship with hull = let red = (ship.hull - dmg) in
       if red < 0 then 0 else red}
-  else {ship with shield = (shield mod charge, charge);
+  else {ship with shield = {sh with layers = 0};
     hull = let red = (ship.hull - (dmg - level)) in
       if red < 0 then 0 else red}
 
@@ -176,6 +194,13 @@ let equip ship inv_ind slot =
     | None -> ship
 
 let add_weapon ship weapon = {ship with inventory = weapon::ship.inventory}
+
+let charge_weapons ship = 
+  let increase (weap:weapon) = 
+    if weap.charge = weap.capacity then weap
+    else {weap with charge = weap.charge+1} 
+  in
+  {ship with equipped = List.map increase ship.equipped}
 
 (*----------------------system functions---------------------------*)
 let set_shield_power ship n =

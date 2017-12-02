@@ -4,7 +4,8 @@
 type weapon_type = Ion | Laser | Beam | Missile
 
 (* [weapon] represents the record which represents a ship weapon
- * contains fields {name, cost, damage, capacity, charge, and wtype} *)
+ * contains fields {name, cost, damage, capacity, charge, and wtype} 
+ * RI: charge <= capacity*)
 type weapon = {
   name : string;
   cost : int;
@@ -12,6 +13,15 @@ type weapon = {
   capacity : int;
   charge : int;
   wtype : weapon_type;
+}
+
+(* [shield] represents represents the the record which contains
+ * the number of active shield layers, the amount of charge, and
+ * charge capacity *)
+type shield = {
+  layers : int;
+  charge : int;
+  capacity : int;
 }
 
 (* [augmentation_type] represents the different types of augmentations *)
@@ -72,10 +82,8 @@ type ship = {
   equipped : weapon list;
   (* [location] represents int id of ship's current location *)
   location: int;
-  (* [shield] represents the tuple (current shield level, charge time)
-   * current shield level = # active shields * charge time + stored charges
-   * current shield level <= shield power * charge time *)
-  shield: (int * int);
+  (* [shield] is the ship's shield *)
+  shield: shield;
   (* [inventory] is the list of all the weapons a ship owns *)
   inventory : weapon list;
   (* [augmentations] is the list of ship's augmentations *)
@@ -102,6 +110,9 @@ val evade : ship -> int
 
 (* [get_hull] returns int of ship's hp *)
 val get_hull : ship -> int
+
+(* [charge_shield] returns ship with shield charged by one tick *)
+val charge_shield : ship -> ship
 
 (*----------------------resources get/set functions----------------*)
 
@@ -159,6 +170,8 @@ val unequip : ship -> int -> ship
 (* [add_weapon] returns ship with added weapon to its inventory *)
 val add_weapon : ship -> weapon -> ship
 
+(* [charge_weapons] returns ship with all equipped weapons charged by 1 *)
+val charge_weapons : ship -> ship
 (*----------------------system functions---------------------------*)
 
 (* [set_shield_power] returns ship with specified shield system power *)
