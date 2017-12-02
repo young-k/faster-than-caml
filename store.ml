@@ -3,7 +3,12 @@ open Ship
 type store = {
   weapons : weapon list;
   augmentations : augmentation list;
+  fuel : int;
+  missiles : int;
 }
+
+let fuel_cost = 3
+let missile_cost = 7
 
 (* [parse_weapon s] generates a weapon by parsing a string [s] with format
  * "name;cost;damage;capacity;charge;wtype"
@@ -58,6 +63,8 @@ let init (s : ship) =
   {
     weapons = weaps;
     augmentations = augs;
+    fuel = 5;
+    missiles = 5;
   }
 
 let get_augmentations (st : store) = st.augmentations
@@ -84,35 +91,61 @@ let apply_augmentation (s : Ship.ship) (a : augmentation) =
                           s.inventory in {s with inventory = inv}
 
 let buy st (s : Ship.ship) i =
-  let weapon = (try List.find_opt (fun (w : weapon) -> w.name = i)
-    st.weapons with _ -> None) in
-  let aug = (try List.find_opt (fun (a : augmentation) -> a.name = i)
-    st.augmentations with _ -> None) in
-  match weapon, aug with
-    | Some w, _ -> if s.resources.scrap >= w.cost then
+  if i = "Fuel" then
+    (if s.resources.scrap >= fuel_cost then 
       {
         s with
-        resources = {s.resources with scrap = s.resources.scrap - w.cost};
-        inventory = w::s.inventory
+        resources = 
+        {s.resources with 
+          scrap = s.resources.scrap - fuel_cost;
+          fuel = s.resources.fuel + 1;
+        };
       }
-      else s
-    | _, Some a -> if s.resources.scrap >= a.cost then
-      {
-        (apply_augmentation s a) with
-        resources = {s.resources with scrap = s.resources.scrap - a.cost};
-        augmentations = a::s.augmentations
-      }
-      else s
-    | _ -> failwith ("Item not found: " ^ i)
-
-  let can_buy st (s : Ship.ship) i =
+     else s)
+  else if i = "Missile" then
+    (if s.resources.scrap >= missile_cost then 
+    {
+      s with
+      resources = 
+      {s.resources with 
+        scrap = s.resources.scrap - missile_cost;
+        missiles = s.resources.missiles + 1;
+      };
+    }
+  else s)
+  else
     let weapon = (try List.find_opt (fun (w : weapon) -> w.name = i)
-    st.weapons with _ -> None) in
+      st.weapons with _ -> None) in
     let aug = (try List.find_opt (fun (a : augmentation) -> a.name = i)
       st.augmentations with _ -> None) in
-      match weapon, aug with
-      | Some w, _ -> s.resources.scrap >= w.cost
-      | _, Some a -> s.resources.scrap >= a.cost
+    match weapon, aug with
+      | Some w, _ -> if s.resources.scrap >= w.cost then
+        {
+          s with
+          resources = {s.resources with scrap = s.resources.scrap - w.cost};
+          inventory = w::s.inventory
+        }
+        else s
+      | _, Some a -> if s.resources.scrap >= a.cost then
+        {
+          (apply_augmentation s a) with
+          resources = {s.resources with scrap = s.resources.scrap - a.cost};
+          augmentations = a::s.augmentations
+        }
+        else s
       | _ -> failwith ("Item not found: " ^ i)
+
+  let can_buy st (s : Ship.ship) i =
+    if i = "Fuel" then s.resources.scrap >= fuel_cost
+    else if i = "Missile" then s.resources.scrap >= missile_cost
+    else
+      let weapon = (try List.find_opt (fun (w : weapon) -> w.name = i)
+      st.weapons with _ -> None) in
+      let aug = (try List.find_opt (fun (a : augmentation) -> a.name = i)
+        st.augmentations with _ -> None) in
+        match weapon, aug with
+        | Some w, _ -> s.resources.scrap >= w.cost
+        | _, Some a -> s.resources.scrap >= a.cost
+        | _ -> failwith ("Item not found: " ^ i)
 
 let display (x, y) s st = failwith "Unimplemented"

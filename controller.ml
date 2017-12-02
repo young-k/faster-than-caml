@@ -87,10 +87,15 @@ let parse_command c com =
     begin
     (match c.storage with
       | Store st ->
-        let store = if (can_buy st c.ship s) then {
+        let f_count = if s = "Fuel" then 1 else 0 in
+        let m_count = if s = "Missile" then 1 else 0 in
+        let store = if (can_buy st c.ship s) then 
+        {
             augmentations = List.filter (fun (a : augmentation) -> a.name <> s)
               st.augmentations;
             weapons = List.filter (fun (w : weapon) -> w.name <> s) st.weapons;
+            missiles = st.missiles - m_count;
+            fuel = st.fuel - f_count;
         } else st in
         let new_ship = Store.buy st c.ship s in
         let pts = (get_scrap c.ship) - (get_scrap new_ship) in 

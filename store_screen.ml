@@ -65,13 +65,41 @@ let get_components c () =
             button
         )
     in
+    let t = if i = 0 then "Weapons" else "Augmentations" in
+    let lab = new label t in
     hbox#add (button (i * 3 + 1));
     hbox#add ~expand:false (new vline);
     hbox#add (button (i * 3 + 2));
     hbox#add ~expand:false (new vline);
     hbox#add (button (i * 3 + 3));
     mainBox#add ~expand:false (new hline);
+    mainBox#add ~expand:false lab;
+    mainBox#add ~expand:false (new hline);
     mainBox#add hbox
   done;
 
-  ((mainBox, item), (b, (d, quit)));
+  let box = new hbox in
+  let ftext = if c.ship.resources.scrap < Store.fuel_cost 
+    then ("\nYou do not have enough scrap", "_")
+    else if s.fuel = 0 then ("\nNo more fuel available", "_")
+    else ("\nCost: " ^ string_of_int Store.fuel_cost, "Fuel") in
+  let fbutton = new button ("Fuel: " ^ string_of_int s.fuel ^ " available") in
+    fbutton#on_click (fun () -> label#set_text ("Fuel" ^ fst ftext); 
+                                item#set_text(snd ftext));
+  let mtext = if c.ship.resources.scrap < Store.missile_cost 
+    then ("\nYou do not have enough scrap", "_")
+    else if s.missiles = 0 then ("\nNo more missiles available", "_")
+    else ("\nCost: " ^ string_of_int Store.missile_cost, "Missile") in
+  let mbutton = new button ("Missiles: " ^ string_of_int s.missiles ^ " available") in
+    mbutton#on_click (fun () -> label#set_text ("Missile" ^ fst mtext); 
+                                item#set_text(snd mtext));
+  let rlab = new label "Resources" in
+  box#add fbutton;
+  box#add ~expand:false (new vline);
+  box#add mbutton;
+  mainBox#add ~expand:false (new hline);
+  mainBox#add ~expand:false rlab;
+  mainBox#add ~expand:false (new hline);
+  mainBox#add box;
+
+  (mainBox, item, b, d, quit);
