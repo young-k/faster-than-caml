@@ -26,6 +26,7 @@ let rec loop t c =
 
   (* sidebar fixture *)
   let score = new label ("Score: " ^ string_of_int c.score) in
+  let jumps = new label ("Jumps: " ^ string_of_int c.jumps) in
   let ship = c.ship in
   let resources = Ship.get_resources ship in 
   let hull = Ship.get_hull ship in
@@ -42,6 +43,7 @@ let rec loop t c =
   let curr_star = new label ("Star: " ^ string_of_int c.star_id) in 
   let sidebar = new vbox in 
   sidebar#add ~expand:false score;
+  sidebar#add ~expand:false jumps;
   sidebar#add ~expand:false new hline;
   sidebar#add ~expand:false scrap;
   sidebar#add ~expand:false fuel;
@@ -69,12 +71,17 @@ let rec loop t c =
     screen#add ~expand:false button;
     screen#add (fst result);
     wrapper#add screen;
-    (snd result)#on_click (wakeup wakener);
+    let continue = ref true in
+    (fst (snd result))#on_click (fun () -> 
+        continue := true; (wakeup wakener) ());
+    (snd (snd result))#on_click (fun () -> 
+        continue := false; (wakeup wakener) ());
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c ShowStartText))
+        else if !continue then loop t (parse_command c ShowStartText)
+        else loop t (parse_command c ShowInstructions))
   | Instructions ->
     let result = Instruction_screen.get_components () in
     wrapper#remove sidebar;
