@@ -42,7 +42,7 @@ let init =
   let init_galaxy = Galaxy.init in
   {
     ship=Ship.init;
-    screen_type=Resting;
+    screen_type=HomeScreen;
     star_id=(snd init_galaxy);
     galaxy=(fst init_galaxy);
     storage=None;
