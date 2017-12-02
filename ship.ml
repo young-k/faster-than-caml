@@ -45,6 +45,7 @@ type ship = {
   resources: resources;
   crew: person list;
   hull: int;
+  max_hull: int;
   evade: int;
   equipped : weapon list;
   location: int;
@@ -62,6 +63,7 @@ let init = {
     skills = (3,3,3)
   }];
   hull = 30;
+  max_hull = 30;
   evade = 20;
   equipped = [{
     name = "Ion cannon";
@@ -142,7 +144,9 @@ let damage ship dmg wtype = let (shield, charge) = ship.shield in
     hull = let red = (ship.hull - (dmg - level)) in
       if red < 0 then 0 else red}
 
-let repair ship rep = {ship with hull = ship.hull + rep}
+let repair ship = {ship with hull = ship.max_hull}
+
+let increase_hull ship rep = {ship with max_hull = ship.max_hull + rep}
 
 let get_weapon ship ind = try (Some (List.nth (ship.equipped) ind))
   with _ -> None

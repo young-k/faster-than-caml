@@ -69,11 +69,14 @@ let parse_command c com =
   | GoToResting -> {c with screen_type=Resting}
   | ShowStartText -> {c with screen_type=StartScreen}
   | ShowStore ->
+    begin
     (match c.storage with
       | Store s -> {c with screen_type=Store s}
       | _ -> failwith "No store in controller"
     )
+    end
   | Purchase s ->
+    begin
     (match c.storage with
       | Store st ->
         let store = if (can_buy st c.ship s) then {
@@ -86,6 +89,7 @@ let parse_command c com =
         {c with ship = new_ship;screen_type=Store store;score=c.score+pts}
       | _ -> failwith "No store in controller"
     )
+    end
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
     print_endline (string_of_int star_id);
@@ -103,11 +107,13 @@ let parse_command c com =
       | _ -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1}
     end
   | Choice b ->
+    begin
     (match c.storage with
       | Event e -> {c with ship = (pick_choice c.ship e b);
           screen_type = Notification (choice_resources e b); storage = None}
       | _ -> failwith "No event in controller"
     )
+    end
   | ShowShipScreen -> {c with screen_type=ShipScreen}
   | _ -> failwith "Unimplemented"
 
