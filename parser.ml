@@ -32,6 +32,7 @@ let rec read_lines_rand f ch num lst =
       then
         read_lines_rand f ch num lst
       else
+        let _ = Random.self_init() in 
         if (Random.float 1.0 > 0.5)
         then
           read_lines_rand f ch (num-1) (line::lst)
