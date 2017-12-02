@@ -95,8 +95,8 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else loop t (parse_command c ShowHomeScreen))
-  | GameOver ->
-    let result = Game_over_screen.get_components () in
+  | GameOver str->
+    let result = Game_over_screen.get_components str () in
     wrapper#remove sidebar;
     wrapper#remove sidebarline;
     let screen = new vbox in
