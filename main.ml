@@ -7,6 +7,7 @@ open Start_screen
 open Store_screen
 open Ship_confirm_screen
 open Galaxy_screen
+open Ship_screen
 
 open Controller
 
@@ -78,7 +79,7 @@ let rec loop t c =
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c CloseMap))
+        else loop t (parse_command c GoToResting))
   | GalaxyScreen (star_id, gal)->
     let result = Galaxy_screen.get_components star_id gal in
     wrapper#add (fst result);
@@ -108,6 +109,15 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else loop t (parse_command c (GoToResting)))
+  | ShipScreen ->
+    let result = Ship_screen.get_components c () in
+    wrapper#add (fst result);
+    (snd result)#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c GoToResting))
   | _ -> return ()
 
 let main () =

@@ -161,6 +161,16 @@ let equip ship inv_ind slot =
     then failwith "Not enough weapons power"
     else {ship with equipped = new_equipped}
 
+  let unequip ship slot =
+    let w = List.nth_opt ship.inventory slot in
+    match w with
+    | Some weap -> 
+      {ship with 
+        equipped = 
+          (List.filter (fun (w : weapon) -> w.name <> weap.name) ship.equipped)
+      }
+    | None -> ship
+
 let add_weapon ship weapon = {ship with inventory = weapon::ship.inventory}
 
 (*----------------------system functions---------------------------*)
