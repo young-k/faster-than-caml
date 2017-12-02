@@ -33,7 +33,7 @@ let get_components exit ship () =
   vbox#add ~expand:false exit;
 
   let mapbox = new hbox in
-  let map = new button ("MAP") in
+  let map = new button ("JUMP") in
   mapbox#add (new spacing ~cols:40 ());
   mapbox#add (in_frame map);
   mapbox#add (new spacing ~cols:40 ());
