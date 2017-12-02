@@ -14,7 +14,8 @@ let rec random_nums r n acc =
 let init =
   let rec create a n acc =
     if a = n then (({id = a; event = End; reachable = []})::acc, 1)
-    else let e = match Random.int 4 with
+    else let _ = Random.self_init () in 
+      let e = match Random.int 4 with
       | 0 -> Store
       | 1 -> Nothing
       | 2 -> Event

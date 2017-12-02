@@ -43,7 +43,7 @@ let init =
   let init_galaxy = Galaxy.init in
   {
     ship=Ship.init;
-    screen_type=Resting;
+    screen_type=HomeScreen;
     star_id=(snd init_galaxy);
     galaxy=(fst init_galaxy);
     storage=None;
@@ -77,7 +77,9 @@ let parse_command c com =
       match (get_event c.galaxy star_id) with
       | Store ->
         let s = Store.init c.ship in
-        {c with screen_type=Store s; star_id=star_id}
+        {c with screen_type=Store s; star_id=star_id; storage=Store s}
+      | Event ->
+        {c with screen_type=Event (Event.init); star_id=star_id}
       | _ -> {c with screen_type=Resting; star_id=star_id}
     end
   | Choice b ->

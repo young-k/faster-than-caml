@@ -48,7 +48,6 @@ let rec loop t c =
         if !exit then return ()
         else loop t (parse_command c CloseStartText))
   | Resting ->
-    print_endline "IN RESTING";
     let result = Resting_screen.get_components button (fst display) () in
     wrapper#remove button;
     wrapper#add (snd result);
