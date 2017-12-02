@@ -63,4 +63,8 @@ let choice_description e b =
   if b then e.fst_choice.description
   else e.snd_choice.description
 
+let choice_resources e b =
+  if b then e.fst_choice.delta_resources
+  else e.snd_choice.delta_resources
+
 let get_name e = e.name
