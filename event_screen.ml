@@ -29,24 +29,25 @@ let get_components e () =
   group_string#on_state_change callback_string;
 
   let hbox = new hbox in
-  hbox#add (new spacing ~cols:20 ());
+  hbox#add ~expand:false (new spacing ~cols:80 ());
   hbox#add (new radiobutton group_string (choice_description e true) "Yes");
-  hbox#add (new spacing ~cols:20 ());
+  (*hbox#add (new spacing ~cols:20 ());*)
   mainbox#add ~expand:false hbox;
+  mainbox#add ~expand:false(new spacing ~rows:1 ());
 
   let hbox = new hbox in
-  hbox#add (new spacing ~cols:19 ());
+  hbox#add ~expand:false (new spacing ~cols:80 ());
   hbox#add (new radiobutton group_string (choice_description e false) "No");
-  hbox#add (new spacing ~cols:20 ());
+  (*hbox#add (new spacing ~cols:20 ());*)
   mainbox#add ~expand:false hbox;
-  mainbox#add ~expand:false(new spacing ~rows:5 ());
+  mainbox#add ~expand:false(new spacing ~rows:3 ());
 
   let hbox = new hbox in
   let submit_button = new button ("Confirm") in
-  hbox#add (new spacing ~cols:15 ());
-  hbox#add (in_frame submit_button);
-  hbox#add (new spacing ~cols:15 ());
+  hbox#add (new spacing ~cols:20 ());
+  hbox#add ~expand:false (in_frame submit_button);
+  hbox#add (new spacing ~cols:20 ());
   mainbox#add ~expand:false hbox;
 
-  (*mainbox#add ~expand:false result_string;*)
+  mainbox#add ~expand:false (new hbox);
   (mainbox, (submit_button, result_string));

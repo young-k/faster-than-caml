@@ -78,7 +78,7 @@ let rec loop t c =
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c CloseMap))
+        else loop t (parse_command c GoToResting))
   | GalaxyScreen (star_id, gal)->
     let result = Galaxy_screen.get_components star_id gal in
     wrapper#add (fst result);
