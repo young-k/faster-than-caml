@@ -42,7 +42,7 @@ let init =
   let init_galaxy = Galaxy.init in
   {
     ship=Ship.init;
-    screen_type=HomeScreen;
+    screen_type=Resting;
     star_id=(snd init_galaxy);
     galaxy=(fst init_galaxy);
     storage=None;
@@ -54,20 +54,27 @@ let parse_command c com =
   | CloseMap -> {c with screen_type=Resting}
   | ShowStartText -> {c with screen_type=StartScreen}
   | CloseStartText -> {c with screen_type=Resting}
-  | ShowStore -> 
+  | ShowStore ->
     (match c.storage with
       | Store s -> {c with screen_type=Store s}
       | _ -> failwith "No store in controller"
     )
-  | Purchase s -> 
+  | Purchase s ->
     (match c.storage with
       | Store st -> {c with ship=(buy st c.ship s); screen_type=Debug}
       | _ -> failwith "No store in controller"
     )
-  | Go star_id -> {c with screen_type=Resting; star_id=star_id} (* TEMP *)
-  | Choice b -> 
+  | Go star_id ->
+    begin
+      match (get_event c.galaxy star_id) with
+      | Store ->
+        let s = Store.init c.ship in
+        {c with screen_type=Store s; star_id=star_id}
+      | _ -> {c with screen_type=Resting; star_id=star_id}
+    end
+  | Choice b ->
     (match c.storage with
-      | Event e -> {c with ship = (pick_choice c.ship e b); 
+      | Event e -> {c with ship = (pick_choice c.ship e b);
           screen_type = Resting; storage = None}
       | _ -> failwith "No event in controller"
     )

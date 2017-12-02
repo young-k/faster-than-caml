@@ -48,6 +48,7 @@ let rec loop t c =
         if !exit then return ()
         else loop t (parse_command c CloseStartText))
   | Resting ->
+    print_endline "IN RESTING";
     let result = Resting_screen.get_components button (fst display) () in
     wrapper#remove button;
     wrapper#add (snd result);
@@ -78,17 +79,13 @@ let rec loop t c =
   | GalaxyScreen (star_id, gal)->
     let result = Galaxy_screen.get_components star_id gal in
     wrapper#add (fst result);
-    let submit_pressed () =
-      let _ = (loop t (parse_command c (Go (result |> snd |> snd)))) in
-      ()
-    in
-    (result |> snd |> fst)#on_click (fun () -> submit_pressed ());
+    (result |> snd |> fst)#on_click (wakeup wakener);
     Lwt.finalize
     (fun () -> run t frame waiter)
     (fun () ->
       if !exit then return ()
-      else loop t (parse_command c ShowStartText))
-  | Event event -> 
+      else loop t (parse_command c (Go (result |> snd |> snd))))
+  | Event event ->
     let result = Event_screen.get_components event () in
     let bool = if (snd (snd result))#text = "Yes" then true
       else false in
