@@ -16,6 +16,7 @@ type command =
   | ShowStore                 (* Displays a store *) 
   | ShowStartText             (* Shows start text *)
   | CloseStartText            (* Closes start text *)
+  | ShowShipConfirm
 
 (* screen_type contains information about what to display on UI *)
 type screen_type =
@@ -25,7 +26,7 @@ type screen_type =
   | Resting
   | Event of event
   | Store of store
-  | Debug
+  | ShipConfirm
 
 type storage =
   | Event of event

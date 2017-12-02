@@ -105,4 +105,14 @@ let buy st (s : Ship.ship) i =
       else s
     | _ -> failwith ("Item not found: " ^ i)
 
+  let can_buy st (s : Ship.ship) i =
+    let weapon = (try List.find_opt (fun (w : weapon) -> w.name = i)
+    st.weapons with _ -> None) in
+    let aug = (try List.find_opt (fun (a : augmentation) -> a.name = i)
+      st.augmentations with _ -> None) in
+      match weapon, aug with
+      | Some w, _ -> s.resources.scrap >= w.cost
+      | _, Some a -> s.resources.scrap >= a.cost
+      | _ -> failwith ("Item not found: " ^ i)
+
 let display (x, y) s st = failwith "Unimplemented"

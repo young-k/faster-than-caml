@@ -59,15 +59,19 @@ let rec loop t c =
         if !exit then return ()
         else loop t (parse_command c ShowMap))
   | Store s ->
-    let result = Store_screen.get_components s () in
-    wrapper#add (fst result);
+    let result = Store_screen.get_components {c with storage = Store s} () in
+    wrapper#add (fst (fst result));
     (fst(snd result))#on_click (wakeup wakener);
+    (fst(snd (snd result)))#on_click (wakeup wakener);
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c (Purchase (snd (snd result))#text)))
-  | Debug ->
+        else if !(snd (snd (snd result))) then loop t (parse_command c ShowShipConfirm)
+        else if (snd(fst result))#text <> "_" then 
+          loop t (parse_command {c with storage = Store s} (Purchase (snd(fst result))#text))
+        else loop t (parse_command {c with storage = Store s} ShowStore))
+  | ShipConfirm ->
     let result = Debug_screen.get_components c () in
     wrapper#add (fst result);
     (snd result)#on_click (wakeup wakener);
@@ -75,7 +79,7 @@ let rec loop t c =
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c ShowStartText))
+        else loop t (parse_command c CloseMap))
   | GalaxyScreen (star_id, gal)->
     let result = Galaxy_screen.get_components star_id gal in
     wrapper#add (fst result);
