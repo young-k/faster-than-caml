@@ -199,3 +199,22 @@ let get_augmentation ship ind = try (Some (List.nth (ship.augmentations) ind))
 
 let get_person ship ind = try (Some (List.nth (ship.crew) ind))
   with _ -> None
+
+(*----------------------upgrade functions-----------------------------*)
+let upgrade_engine_level ship = 
+  let new_level = ship.systems.engine_level + 1 in
+  let price = new_level * 100 in
+  if ship.resources.scrap < price then None
+  else Some (set_engine_level (set_resources ship (0, 0, -price)) new_level)
+
+let upgrade_shield_level ship = 
+  let new_level = ship.systems.shield_level + 1 in
+  let price = new_level * 100 in
+  if ship.resources.scrap < price then None
+  else Some (set_shield_level (set_resources ship (0, 0, -price)) new_level)
+
+let upgrade_weapons_level ship = 
+  let new_level = ship.systems.weapons_level + 1 in
+  let price = new_level * 100 in
+  if ship.resources.scrap < price then None
+  else Some (set_weapons_level (set_resources ship (0, 0, -price)) new_level)

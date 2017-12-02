@@ -186,3 +186,23 @@ val get_augmentation : ship -> int -> augmentation option
 (* [get_person] returns the ith crew member
  * If wrong index/none available, returns None *)
 val get_person : ship -> int -> person option
+
+(*----------------------upgrade functions-----------------------------*)
+
+(* [upgrade_engine_level] returns a ship option after attempting to upgrade 
+ * engine level
+ * returns: Some ship with upgraded engine level or None if invalid amount of 
+ * scrap *)
+val upgrade_engine_level : ship -> ship option
+
+(* [upgrade_shield_level] returns a ship option after attempting to upgrade 
+ * shield level
+ * returns: Some ship with upgraded ship level or None if invalid amount of 
+ * scrap *)
+val upgrade_shield_level : ship -> ship option
+
+(* [upgrade_weapons_level] returns a ship option after attempting to upgrade 
+ * weapon level
+ * returns: Some ship with upgraded weapon level or None if invalid amount of 
+ * scrap *)
+val upgrade_weapons_level : ship -> ship option

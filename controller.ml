@@ -60,11 +60,11 @@ let parse_command c com =
       | Store s -> {c with screen_type=Store s}
       | _ -> failwith "No store in controller"
     )
-  | Purchase s -> 
+  | Purchase s ->
     (match c.storage with
-      | Store st -> 
+      | Store st ->
         let store = if (can_buy st c.ship s) then {
-            augmentations = List.filter (fun (a : augmentation) -> a.name <> s) 
+            augmentations = List.filter (fun (a : augmentation) -> a.name <> s)
               st.augmentations;
             weapons = List.filter (fun (w : weapon) -> w.name <> s) st.weapons;
         } else st in
@@ -79,7 +79,8 @@ let parse_command c com =
         let s = Store.init c.ship in
         {c with screen_type=Store s; star_id=star_id; storage=Store s}
       | Event ->
-        {c with screen_type=Event (Event.init); star_id=star_id}
+        let e = Event.init in
+        {c with screen_type=Event e; star_id=star_id; storage=Event e}
       | _ -> {c with screen_type=Resting; star_id=star_id}
     end
   | Choice b ->
