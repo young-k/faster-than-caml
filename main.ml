@@ -107,7 +107,7 @@ let rec loop t c =
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c ShowStartText))
+        else loop t (parse_command Controller.init ShowStartText))
   | StartScreen ->
     let result = Start_screen.get_components () in
     wrapper#remove sidebar;
