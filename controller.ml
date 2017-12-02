@@ -14,6 +14,7 @@ type command =
   | ShowStore
   | ShowStartText
   | GoToResting
+  | ShowShipConfirm
 
 type screen_type =
   | HomeScreen
@@ -24,6 +25,7 @@ type screen_type =
   | Store of store
   | Notification of Ship.resources
   | Debug
+  | ShipConfirm
 
 type storage =
   | Event of event
@@ -58,11 +60,18 @@ let parse_command c com =
       | Store s -> {c with screen_type=Store s}
       | _ -> failwith "No store in controller"
     )
-  | Purchase s ->
+  | Purchase s -> 
     (match c.storage with
-      | Store st -> {c with ship=(buy st c.ship s); screen_type=Debug}
+      | Store st -> 
+        let store = if (can_buy st c.ship s) then {
+            augmentations = List.filter (fun (a : augmentation) -> a.name <> s) 
+              st.augmentations;
+            weapons = List.filter (fun (w : weapon) -> w.name <> s) st.weapons;
+        } else st in
+        {c with ship=(Store.buy st c.ship s);screen_type=Store store}
       | _ -> failwith "No store in controller"
     )
+  | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
     begin
       match (get_event c.galaxy star_id) with

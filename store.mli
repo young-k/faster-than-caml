@@ -28,6 +28,13 @@ val get_weapons : store -> Ship.weapon list
   * returns: a new ship state after buying augmentation*)
 val buy : store -> Ship.ship -> string -> Ship.ship
 
+(* [can_buy s s' i] returns whether a ship is able to buy the given
+  * augmentation or weapon
+  * requires: [s] a store state, [s'] a valid ship state,
+    [i] an augmentation or weapon name
+  * returns: bool corresponding to if ship can buy item *)
+  val can_buy : store -> Ship.ship -> string -> bool
+
 (* [display (x,y) s s'] returns a string intended to display the store
   * requires: int [x] and [y] that correspond to the width and
   * height of the user's window, [s] a store state, [s'] a ship state
