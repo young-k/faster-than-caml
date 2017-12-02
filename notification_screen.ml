@@ -29,9 +29,11 @@ let get_components delta () =
 
   let hbox = new hbox in
   let ok_button = new button ("OK") in
-  hbox#add (new spacing ~cols:15 ());
+  hbox#add (new spacing ~cols:35 ());
   hbox#add (in_frame ok_button);
-  hbox#add (new spacing ~cols:15 ());
+  hbox#add (new spacing ~cols:35 ());
   mainbox#add ~expand:false hbox;
+
+  mainbox#add ~expand:false (new hbox);
 
   (mainbox, ok_button);
