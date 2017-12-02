@@ -18,8 +18,8 @@ type star = {
  * galaxy *)
 type galaxy = star list
 
-(* [init a] generates random stars based on an id system [a]
- * returns: generated map and the start id of the star the user starts on *)
+(* [init a] returns the generated map and the start id of the star the 
+ * user starts on *)
 val init : (galaxy * int)
 
 (* [reachable a] returns all reachable stars with their event from a current

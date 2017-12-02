@@ -16,18 +16,22 @@ type command =
   | GoToResting
   | ShowShipConfirm
   | ShowShipScreen
+  | ShowHomeScreen
+  | ShowInstructions
+  | ShowGameOver
 
 type screen_type =
   | HomeScreen
+  | Instructions
   | GalaxyScreen of (int * galaxy)
   | StartScreen
   | Resting
   | Event of event
   | Store of store
   | Notification of Ship.resources
-  | Debug
   | ShipConfirm
   | ShipScreen
+  | GameOver
 
 type storage =
   | Event of event
@@ -40,20 +44,29 @@ type controller = {
   star_id: int;
   galaxy: galaxy;
   storage: storage;
+  score: int;
+  jumps: int;
+  start_time: float;
 }
 
 let init =
   let init_galaxy = Galaxy.init in
   {
-    ship=Ship.init;
-    screen_type=HomeScreen;
-    star_id=(snd init_galaxy);
-    galaxy=(fst init_galaxy);
-    storage=None;
+    ship = Ship.init;
+    screen_type = HomeScreen;
+    star_id = (snd init_galaxy);
+    galaxy = (fst init_galaxy);
+    storage = None;
+    score = 0;
+    jumps = 0;
+    start_time = Unix.gettimeofday();
   }
 
 let parse_command c com =
   match com with
+  | ShowHomeScreen -> {c with screen_type=HomeScreen}
+  | ShowInstructions -> {c with screen_type=Instructions}
+  | ShowGameOver -> {c with screen_type=GameOver}
   | ShowMap -> {c with screen_type=GalaxyScreen (c.star_id, c.galaxy)}
   | GoToResting -> {c with screen_type=Resting}
   | ShowStartText -> {c with screen_type=StartScreen}
@@ -70,7 +83,9 @@ let parse_command c com =
               st.augmentations;
             weapons = List.filter (fun (w : weapon) -> w.name <> s) st.weapons;
         } else st in
-        {c with ship=(Store.buy st c.ship s);screen_type=Store store}
+        let new_ship = Store.buy st c.ship s in
+        let pts = (get_scrap c.ship) - (get_scrap new_ship) in 
+        {c with ship = new_ship;screen_type=Store store;score=c.score+pts}
       | _ -> failwith "No store in controller"
     )
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
@@ -78,12 +93,15 @@ let parse_command c com =
     begin
       match (get_event c.galaxy star_id) with
       | Store ->
+        print_endline (string_of_int star_id);
         let s = Store.init c.ship in
-        {c with screen_type=Store s; star_id=star_id; storage=Store s}
+        {c with screen_type=Store s; star_id=star_id; storage=Store s;
+          jumps = c.jumps+1}
       | Event ->
         let e = Event.init in
-        {c with screen_type=Event e; star_id=star_id; storage=Event e}
-      | _ -> {c with screen_type=Resting; star_id=star_id}
+        {c with screen_type=Event e; star_id=star_id; storage=Event e;
+          jumps = c.jumps+1}
+      | _ -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1}
     end
   | Choice b ->
     (match c.storage with

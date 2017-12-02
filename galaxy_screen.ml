@@ -3,6 +3,7 @@ open LTerm_widget
 open Galaxy
 
 let get_components star_id galaxy =
+  let map = new hbox in
   let mainbox = new vbox in
 
   (* Generate stars *)
@@ -11,10 +12,10 @@ let get_components star_id galaxy =
     let rec gen_row num lst =
       if num = 0 then lst
       else
-        if Random.int 25 = 0 then gen_row (num-1) ("*"::lst)
+        if Random.int 7 = 0 then gen_row (num-1) ("*"::lst)
         else gen_row (num-1) ("  "::lst)
     in
-    let row = gen_row 100 [] |> List.fold_left (^) "" in
+    let row = gen_row 30 [] |> List.fold_left (^) "" in
     let label = new label row in
     hbox#add label;
     mainbox#add hbox;
@@ -28,14 +29,18 @@ let get_components star_id galaxy =
   hbox#add label;
   mainbox#add hbox;
 
+
+  (* Find reachable stars *)
+  let reachable = reachable galaxy star_id in
+
   (* Setup "Going to: " label *)
-  let going_to = ref (-1) in (* initialize value to -1 *)
+  let going_to = ref (reachable |> List.hd |> snd) in (* initialize value to first choice *)
   let going_to_label = new label "Going to: " in
   let radio_g = new radiogroup in
   let star_changed = function
     | Some n ->
       going_to := n;
-      going_to_label#set_text ("Going to: " ^ string_of_int n)
+      going_to_label#set_text ("Going to: " ^ string_of_int !going_to)
     | None -> ()
   in
   radio_g#on_state_change star_changed;
@@ -44,9 +49,6 @@ let get_components star_id galaxy =
   let button_hbox = new hbox in (* hbox containing the radio buttons *)
   button_hbox#add (new spacing ~cols:5 ());
 
-  (* Find reachable stars *)
-  let reachable = reachable galaxy star_id in
-  going_to := (reachable |> List.hd |> snd);
   (* Default goes to first star if no other choice is pressed *)
   going_to_label#set_text ("Going to: " ^ string_of_int !going_to);
   let add_star (event_type, id) =
@@ -72,4 +74,5 @@ let get_components star_id galaxy =
 
   submit_vbox#add submit_button;
   mainbox#add submit_vbox;
-  (mainbox, (submit_button, !going_to));
+  map#add mainbox;
+  (map, (submit_button, going_to));
