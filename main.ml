@@ -16,12 +16,37 @@ let exit = ref false
 let rec loop t c =
   (* Create a thread *)
   let waiter, wakener = wait () in
-  let wrapper = new vbox in
+  let wrapper = new hbox in
 
   (* button for exiting *)
   let button = new button ~brackets:("[ "," ]") "exit" in
   button#on_click (fun () -> exit := true; (wakeup wakener) ());
-  wrapper#add ~expand:false button;
+
+  (* sidebar fixture *)
+  let ship = c.ship in
+  let resources = Ship.get_resources ship in 
+  let hull = Ship.get_hull ship in
+  let scrap = new label ("Scrap: " ^ string_of_int resources.scrap) in
+  let fuel = new label ("Fuel: " ^ string_of_int resources.fuel) in
+  let missiles = new label ("Missiles: " ^ string_of_int resources.missiles) in
+  let hull = new label ("Hull: " ^ string_of_int hull) in
+  let shield = 
+    new label ("Shield Level: " ^ string_of_int (fst ship.shield)) in
+  let crew = 
+    new label (
+      "   Crew Members: " ^ string_of_int (List.length ship.crew) ^ "   "
+    ) in
+  let sidebar = new vbox in 
+  sidebar#add ~expand:false scrap;
+  sidebar#add ~expand:false fuel;
+  sidebar#add ~expand:false missiles;
+  sidebar#add ~expand:false hull;
+  sidebar#add ~expand:false shield;
+  sidebar#add ~expand:false crew;
+  sidebar#add ~expand:false button;
+  wrapper#add ~expand:false sidebar;
+  let sidebarline = new vline in
+  wrapper#add ~expand:false sidebarline;
 
   let frame = new frame in
   frame#set wrapper;
@@ -31,7 +56,12 @@ let rec loop t c =
   match snd display with
   | HomeScreen ->
     let result = Home_screen.get_components () in
-    wrapper#add (fst result);
+    wrapper#remove sidebar;
+    wrapper#remove sidebarline;
+    let screen = new vbox in
+    screen#add ~expand:false button;
+    screen#add (fst result);
+    wrapper#add screen;
     (snd result)#on_click (wakeup wakener);
     Lwt.finalize
       (fun () -> run t frame waiter)
@@ -40,7 +70,12 @@ let rec loop t c =
         else loop t (parse_command c ShowStartText))
   | StartScreen ->
     let result = Start_screen.get_components () in
-    wrapper#add (fst result);
+    wrapper#remove sidebar;
+    wrapper#remove sidebarline;
+    let screen = new vbox in
+    screen#add ~expand:false button;
+    screen#add (fst result);
+    wrapper#add screen;
     (snd result)#on_click (wakeup wakener);
     Lwt.finalize
       (fun () -> run t frame waiter)
@@ -49,7 +84,6 @@ let rec loop t c =
         else loop t (parse_command c GoToResting))
   | Resting ->
     let result = Resting_screen.get_components button (fst display) () in
-    wrapper#remove button;
     wrapper#add (snd result);
     (fst result)#on_click (wakeup wakener);
     Lwt.finalize

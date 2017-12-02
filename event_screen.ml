@@ -13,7 +13,6 @@ let get_components e () =
   let hbox = new hbox in
   let descrp = new LTerm_widget.label (get_name e) in
 
-  mainbox#add ~expand:false (new hline);
   mainbox#add ~expand:false(new spacing ~rows:15 ());
   hbox#add descrp;
   mainbox#add ~expand:false hbox;
