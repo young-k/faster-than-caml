@@ -24,12 +24,13 @@ let get_components exit ship () =
 
   (* Generating weapons section *)
   let weapons_section = new vbox in
+  let weapons_label_box = new vbox in
   let weapons_label = new label "Weapons" in
   let weapons = new hbox in
   for i = 0 to 3 do
     match (Ship.get_weapon ship i) with
     | Some w ->
-      let some = new label "Weapon" in
+      let some = new label w.name in
       weapons#add some;
       if i<>3 then weapons#add new vline
       else ()
@@ -45,36 +46,61 @@ let get_components exit ship () =
   let systems_label = new label "Systems" in
   let systems = new hbox in
 
+  (* Used to generate display for shield/weapon systems *)
+  let rec gen_lst_display lvl pow acc = 
+    if pow<>0 then gen_lst_display (lvl-1) (pow-1) ("*"::acc) 
+    else 
+      if lvl<> 0 then gen_lst_display (lvl-1) pow ("_"::acc)
+      else acc 
+  in 
+
+  (* Takes list from gen_lst_display and generates the text *)
+  let gen_display lst = 
+    let rev_lst = List.rev lst in 
+    List.fold_left (^) "" rev_lst
+  in 
+
   let engine_system = new vbox in
-  let engine_lbl = new label "Engine" in
+  let e_level = ship.systems.engine_level in 
+  let e_power = ship.systems.engine_power in 
+  let engine_display = gen_lst_display e_level e_power [] |> gen_display in
+  let engine_lbl = new label ("Engine Level: " ^ engine_display) in
   engine_system#add engine_lbl;
   systems#add engine_system;
   systems#add ~expand:false new vline;
 
   let shield_system = new vbox in
-  let shield_lbl = new label "Shield" in
+  let s_level = ship.systems.shield_level in
+  let s_power = ship.systems.shield_power in
+  let shield_display = gen_lst_display s_level s_power [] |> gen_display in 
+  let shield_lbl = new label ("Shield: " ^ shield_display) in
   shield_system#add shield_lbl;
   systems#add shield_system;
   systems#add ~expand:false new vline;
 
   let weapons_system = new vbox in
-  let weapons_lbl = new label "Weapons" in
+  let w_level = ship.systems.weapons_level in 
+  let w_power = ship.systems.weapons_power in
+  let weapons_display = gen_lst_display w_level w_power [] |> gen_display in 
+  let weapons_lbl = new label ("Weapons: " ^ weapons_display) in
   weapons_system#add weapons_lbl;
   systems#add weapons_system;
 
+  weapons_label_box#add weapons_label;
+  weapons_label_box#add new vline;
 
-  weapons_section#add ~expand:false new hline;
-  weapons_section#add weapons_label;
+  weapons_section#add weapons_label_box;
   weapons_section#add ~expand:false new hline;
   weapons_section#add weapons;
 
-  systems_section#add ~expand:false new hline;
   systems_section#add systems_label;
   systems_section#add ~expand:false new hline;
   systems_section#add systems;
-
-  footer#add weapons_section;
-  footer#add systems_section;
+  
+  let weapons_frame = in_frame weapons_section in
+  let systems_frame = in_frame systems_section in
+  footer#add weapons_frame;
+  footer#add systems_frame;
 
 
   let vbox2 = new vbox in

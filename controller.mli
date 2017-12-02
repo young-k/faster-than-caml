@@ -32,6 +32,7 @@ type screen_type =
   | Notification of Ship.resources
   | ShipConfirm
   | ShipScreen
+  | NextGalaxy
   | GameOver of string
 
 type storage =

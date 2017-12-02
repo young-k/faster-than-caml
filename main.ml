@@ -9,6 +9,7 @@ open Start_screen
 open Store_screen
 open Ship_confirm_screen
 open Ship_screen
+open Next_galaxy_screen
 
 open Controller
 
@@ -207,6 +208,21 @@ let rec loop t c =
             ) in
           loop t (parse_command {c with ship = new_ship} ShowShipScreen)
         else loop t (parse_command c GoToResting))
+  | NextGalaxy ->
+    let result = Next_galaxy_screen.get_components () in
+    wrapper#remove sidebar;
+    wrapper#remove sidebarline;
+    let screen = new vbox in
+    screen#add ~expand:false button;
+    screen#add (fst result);
+    wrapper#add screen;
+    (snd result)#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c (Go 1)))
+  | _ -> return ()
 
 let main () =
   let controller = Controller.init in

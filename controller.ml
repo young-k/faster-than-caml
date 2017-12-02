@@ -30,6 +30,7 @@ type screen_type =
   | Notification of Ship.resources
   | ShipConfirm
   | ShipScreen
+  | NextGalaxy
   | GameOver of string
 
 type storage =
@@ -99,6 +100,9 @@ let parse_command c com =
     end
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
+    if star_id = 10 then {c with galaxy=fst Galaxy.init;screen_type=NextGalaxy; 
+      star_id=1; jumps=c.jumps+1; ship = (set_resources c.ship (-1,0,0))}
+    else  
     begin
       match (get_event c.galaxy star_id) with
       | Store ->
