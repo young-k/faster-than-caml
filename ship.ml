@@ -162,7 +162,7 @@ let equip ship inv_ind slot =
   let len = List.length ship.equipped in
   if slot < 0 || slot > 3 then failwith "Illegal weapon slot"
     else if (slot >= len && len + 1 > ship.systems.weapons_power)
-    then failwith "Not enough weapons power"
+    then ship
     else {ship with equipped = new_equipped}
 
   let unequip ship slot =
@@ -218,17 +218,17 @@ let get_person ship ind = try (Some (List.nth (ship.crew) ind))
 let upgrade_engine_level ship = 
   let new_level = ship.systems.engine_level + 1 in
   let price = new_level * 100 in
-  if ship.resources.scrap < price then None
-  else Some (set_engine_level (set_resources ship (0, 0, -price)) new_level)
+  if ship.resources.scrap < price then ship
+  else (set_engine_level (set_resources ship (0, 0, -price)) new_level)
 
 let upgrade_shield_level ship = 
   let new_level = ship.systems.shield_level + 1 in
   let price = new_level * 100 in
-  if ship.resources.scrap < price then None
-  else Some (set_shield_level (set_resources ship (0, 0, -price)) new_level)
+  if ship.resources.scrap < price then ship
+  else (set_shield_level (set_resources ship (0, 0, -price)) new_level)
 
 let upgrade_weapons_level ship = 
   let new_level = ship.systems.weapons_level + 1 in
   let price = new_level * 100 in
-  if ship.resources.scrap < price then None
-  else Some (set_weapons_level (set_resources ship (0, 0, -price)) new_level)
+  if ship.resources.scrap < price then ship
+  else (set_weapons_level (set_resources ship (0, 0, -price)) new_level)
