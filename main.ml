@@ -94,8 +94,8 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else loop t (parse_command c ShowHomeScreen))
-  | GameOver ->
-    let result = Game_over_screen.get_components () in
+  | GameOver str->
+    let result = Game_over_screen.get_components str () in
     wrapper#remove sidebar;
     wrapper#remove sidebarline;
     let screen = new vbox in
@@ -183,15 +183,30 @@ let rec loop t c =
         if !exit then return ()
         else loop t (parse_command c (GoToResting)))
   | ShipScreen ->
-    let result = Ship_screen.get_components c () in
-    wrapper#add (fst result);
-    (snd result)#on_click (wakeup wakener);
+    let (mainBox, action, d, equip, unequip, upgrade, index) = 
+      Ship_screen.get_components c () in
+    wrapper#add mainBox;
+    d#on_click (wakeup wakener);
+    action#on_click (wakeup wakener);
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
+        else if !unequip then loop t (parse_command 
+          {c with ship = (Ship.unequip c.ship !index)} ShowShipScreen)
+        else if !equip then loop t (parse_command
+          {c with ship = (Ship.equip c.ship (List.length c.ship.equipped) !index)}
+          ShowShipScreen)
+        else if !upgrade then 
+          let new_ship = 
+            (match !index with
+              | 0 -> (Ship.upgrade_shield_level c.ship)
+              | 1 -> (Ship.upgrade_engine_level c.ship)
+              | 2 -> (Ship.upgrade_weapons_level c.ship)
+              | _ -> failwith "Invalid index"
+            ) in
+          loop t (parse_command {c with ship = new_ship} ShowShipScreen)
         else loop t (parse_command c GoToResting))
-  | _ -> return ()
 
 let main () =
   let controller = Controller.init in

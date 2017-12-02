@@ -18,7 +18,6 @@ type command =
   | ShowShipScreen
   | ShowHomeScreen
   | ShowInstructions
-  | ShowGameOver
 
 type screen_type =
   | HomeScreen
@@ -31,7 +30,7 @@ type screen_type =
   | Notification of Ship.resources
   | ShipConfirm
   | ShipScreen
-  | GameOver
+  | GameOver of string
 
 type storage =
   | Event of event
@@ -63,19 +62,28 @@ let init =
   }
 
 let parse_command c com =
+  if c.jumps >= 7 then {c with screen_type=
+    GameOver "You have been caught by the federation. Rest in pieces."}
+  else if c.ship.hull <=0 then {c with screen_type=
+    GameOver "Your ship has been damaged beyond repair and has fallen apart."}
+  else if get_fuel c.ship <=0 then {c with screen_type=
+    GameOver "You have run out of fuel, with no way to escape the federaiton."}
+  else
   match com with
   | ShowHomeScreen -> {c with screen_type=HomeScreen}
   | ShowInstructions -> {c with screen_type=Instructions}
-  | ShowGameOver -> {c with screen_type=GameOver}
   | ShowMap -> {c with screen_type=GalaxyScreen (c.star_id, c.galaxy)}
   | GoToResting -> {c with screen_type=Resting}
   | ShowStartText -> {c with screen_type=StartScreen}
   | ShowStore ->
+    begin
     (match c.storage with
       | Store s -> {c with screen_type=Store s}
       | _ -> failwith "No store in controller"
     )
+    end
   | Purchase s ->
+    begin
     (match c.storage with
       | Store st ->
         let store = if (can_buy st c.ship s) then {
@@ -88,28 +96,31 @@ let parse_command c com =
         {c with ship = new_ship;screen_type=Store store;score=c.score+pts}
       | _ -> failwith "No store in controller"
     )
+    end
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
-    print_endline (string_of_int star_id);
     begin
       match (get_event c.galaxy star_id) with
       | Store ->
         print_endline (string_of_int star_id);
         let s = Store.init c.ship in
         {c with screen_type=Store s; star_id=star_id; storage=Store s;
-          jumps = c.jumps+1}
+          jumps = c.jumps+1; ship = (set_resources c.ship (-1,0,0))}
       | Event ->
         let e = Event.init in
         {c with screen_type=Event e; star_id=star_id; storage=Event e;
-          jumps = c.jumps+1}
-      | _ -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1}
+          jumps = c.jumps+1; ship = (set_resources c.ship (-1,0,0))}
+      | _ -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1; 
+        ship = (set_resources c.ship (-1,0,0))}
     end
   | Choice b ->
+    begin
     (match c.storage with
       | Event e -> {c with ship = (pick_choice c.ship e b);
           screen_type = Notification (choice_resources e b); storage = None}
       | _ -> failwith "No event in controller"
     )
+    end
   | ShowShipScreen -> {c with screen_type=ShipScreen}
   | _ -> failwith "Unimplemented"
 

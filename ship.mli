@@ -61,8 +61,10 @@ type ship = {
   resources: resources;
   (* [crew] is the list of crew members *)
   crew: person list;
-  (* [hull] the ship's hp, max hull = 30 *)
+  (* [hull] is the ship's hp *)
   hull: int;
+  (* [max_hull] is the ship's max hull, = 30 *)
+  max_hull: int;
   (* [evade] the ship's evade chance, 0 <= evade <= 100 *)
   evade: int;
   (* [equipped] represents the list of ship's equipped weapons
@@ -134,8 +136,11 @@ val set_scrap : ship -> int -> ship
  * the specified amount *)
 val damage : ship -> int -> weapon_type -> ship
 
-(* [repair] returns ship with hull increased by specified amount *)
-val repair : ship -> int -> ship
+(* [repair] returns ship with hull equal to max_hull *)
+val repair : ship -> ship
+
+(* [increase_hull] returns ship with max_hull increased by specified amount *)
+val increase_hull : ship -> int -> ship
 
 (* [get_weapon] returns [Some weapon] from the equipped slot with given index
  * if no weapon is available, returns [None] *)
@@ -143,11 +148,12 @@ val get_weapon : ship -> int -> weapon option
 
 (* [equip] equips the ith weapon from the inventory to the nth (0-3) slot
  * throws "Illegal inventory index", "Illegal weapon slot"
- * and "Not enough weapons power" *)
+ * If there is not enough weapon_power then [equip] 
+ * returns unchanged ship state *)
 val equip : ship -> int -> int -> ship
 
-(* [unequip] unequips a weapon given slot number and returns a new modified ship
- * requires: a valid ship state, an int between 0 and ship's (weapon_power-1) *)
+(* [unequip] unequips weapon given slot number and returns a new modified ship
+ * requires: valid ship state, an int between 0 and ship's (weapon_power-1) *)
 val unequip : ship -> int -> ship
 
 (* [add_weapon] returns ship with added weapon to its inventory *)
@@ -193,20 +199,20 @@ val get_person : ship -> int -> person option
 
 (*----------------------upgrade functions-----------------------------*)
 
-(* [upgrade_engine_level] returns a ship option after attempting to upgrade 
+(* [upgrade_engine_level] returns a ship after attempting to upgrade 
  * engine level
- * returns: Some ship with upgraded engine level or None if invalid amount of 
+ * returns: updated ship with upgraded weapon level or same ship if invalid amount of 
  * scrap *)
-val upgrade_engine_level : ship -> ship option
+val upgrade_engine_level : ship -> ship
 
-(* [upgrade_shield_level] returns a ship option after attempting to upgrade 
+(* [upgrade_shield_level] returns a ship after attempting to upgrade 
  * shield level
- * returns: Some ship with upgraded ship level or None if invalid amount of 
+ * returns: updated ship with upgraded weapon level or same ship if invalid amount of 
  * scrap *)
-val upgrade_shield_level : ship -> ship option
+val upgrade_shield_level : ship -> ship
 
-(* [upgrade_weapons_level] returns a ship option after attempting to upgrade 
+(* [upgrade_weapons_level] returns a ship after attempting to upgrade 
  * weapon level
- * returns: Some ship with upgraded weapon level or None if invalid amount of 
+ * returns: updated ship with upgraded weapon level or same ship if invalid amount of 
  * scrap *)
-val upgrade_weapons_level : ship -> ship option
+val upgrade_weapons_level : ship -> ship
