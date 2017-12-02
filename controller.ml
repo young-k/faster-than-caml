@@ -69,7 +69,7 @@ let parse_command c com =
       match (get_event c.galaxy star_id) with
       | Store ->
         let s = Store.init c.ship in
-        {c with screen_type=Store s; star_id=star_id}
+        {c with screen_type=Store s; star_id=star_id; storage=Store s}
       | Event ->
         {c with screen_type=Event (Event.init); star_id=star_id}
       | _ -> {c with screen_type=Resting; star_id=star_id}
