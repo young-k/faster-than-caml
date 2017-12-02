@@ -3,7 +3,7 @@ open LTerm_widget
 open Galaxy
 
 let get_components star_id galaxy =
-  let map = new hbox in 
+  let map = new hbox in
   let mainbox = new vbox in
 
   (* Generate stars *)
@@ -12,10 +12,10 @@ let get_components star_id galaxy =
     let rec gen_row num lst =
       if num = 0 then lst
       else
-        if Random.int 25 = 0 then gen_row (num-1) ("*"::lst)
+        if Random.int 7 = 0 then gen_row (num-1) ("*"::lst)
         else gen_row (num-1) ("  "::lst)
     in
-    let row = gen_row 50 [] |> List.fold_left (^) "" in
+    let row = gen_row 30 [] |> List.fold_left (^) "" in
     let label = new label row in
     hbox#add label;
     mainbox#add hbox;
@@ -32,7 +32,7 @@ let get_components star_id galaxy =
 
   (* Find reachable stars *)
   let reachable = reachable galaxy star_id in
-  
+
   (* Setup "Going to: " label *)
   let going_to = ref (reachable |> List.hd |> snd) in (* initialize value to first choice *)
   let going_to_label = new label "Going to: " in

@@ -38,6 +38,7 @@ let rec loop t c =
     new label (
       "   Crew Members: " ^ string_of_int (List.length ship.crew) ^ "   "
     ) in
+  let curr_star = new label ("Star: " ^ string_of_int c.star_id) in 
   let sidebar = new vbox in 
   sidebar#add ~expand:false scrap;
   sidebar#add ~expand:false fuel;
@@ -46,6 +47,7 @@ let rec loop t c =
   sidebar#add ~expand:false shield;
   sidebar#add ~expand:false crew;
   sidebar#add ~expand:false button;
+  sidebar#add ~expand:false curr_star;
   wrapper#add ~expand:false sidebar;
   let sidebarline = new vline in
   wrapper#add ~expand:false sidebarline;
