@@ -19,7 +19,6 @@ type command =
   | ShowShipScreen            (* Screen for details on ship & ship upgrades *)
   | ShowHomeScreen            (* Show home screen *)
   | ShowInstructions          (* Show instructions screen *)
-  | ShowGameOver              (* Show game over screen *)
 
 (* screen_type contains information about what to display on UI *)
 type screen_type =
@@ -33,7 +32,8 @@ type screen_type =
   | Notification of Ship.resources
   | ShipConfirm
   | ShipScreen
-  | GameOver
+  | NextGalaxy
+  | GameOver of string
 
 type storage =
   | Event of event

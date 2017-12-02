@@ -45,6 +45,7 @@ type ship = {
   resources: resources;
   crew: person list;
   hull: int;
+  max_hull: int;
   evade: int;
   equipped : weapon list;
   location: int;
@@ -62,6 +63,7 @@ let init = {
     skills = (3,3,3)
   }];
   hull = 30;
+  max_hull = 30;
   evade = 20;
   equipped = [{
     name = "Ion cannon";
@@ -142,7 +144,9 @@ let damage ship dmg wtype = let (shield, charge) = ship.shield in
     hull = let red = (ship.hull - (dmg - level)) in
       if red < 0 then 0 else red}
 
-let repair ship rep = {ship with hull = ship.hull + rep}
+let repair ship = {ship with hull = ship.max_hull}
+
+let increase_hull ship rep = {ship with max_hull = ship.max_hull + rep}
 
 let get_weapon ship ind = try (Some (List.nth (ship.equipped) ind))
   with _ -> None
@@ -158,7 +162,7 @@ let equip ship inv_ind slot =
   let len = List.length ship.equipped in
   if slot < 0 || slot > 3 then failwith "Illegal weapon slot"
     else if (slot >= len && len + 1 > ship.systems.weapons_power)
-    then failwith "Not enough weapons power"
+    then ship
     else {ship with equipped = new_equipped}
 
   let unequip ship slot =
@@ -214,17 +218,17 @@ let get_person ship ind = try (Some (List.nth (ship.crew) ind))
 let upgrade_engine_level ship = 
   let new_level = ship.systems.engine_level + 1 in
   let price = new_level * 100 in
-  if ship.resources.scrap < price then None
-  else Some (set_engine_level (set_resources ship (0, 0, -price)) new_level)
+  if ship.resources.scrap < price then ship
+  else (set_engine_level (set_resources ship (0, 0, -price)) new_level)
 
 let upgrade_shield_level ship = 
   let new_level = ship.systems.shield_level + 1 in
   let price = new_level * 100 in
-  if ship.resources.scrap < price then None
-  else Some (set_shield_level (set_resources ship (0, 0, -price)) new_level)
+  if ship.resources.scrap < price then ship
+  else (set_shield_level (set_resources ship (0, 0, -price)) new_level)
 
 let upgrade_weapons_level ship = 
   let new_level = ship.systems.weapons_level + 1 in
   let price = new_level * 100 in
-  if ship.resources.scrap < price then None
-  else Some (set_weapons_level (set_resources ship (0, 0, -price)) new_level)
+  if ship.resources.scrap < price then ship
+  else (set_weapons_level (set_resources ship (0, 0, -price)) new_level)
