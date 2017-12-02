@@ -14,8 +14,6 @@ let in_modal w = let f = new modal_frame in f#set w; f
 let get_components (c : controller) () =
   let text = "Ship Info: \n" ^
   "Scrap: " ^ string_of_int c.ship.resources.scrap ^ "\n" ^
-  "Fuel: " ^ string_of_int c.ship.resources.fuel ^ "\n" ^
-  "Missiles: " ^ string_of_int c.ship.resources.missiles ^ "\n" ^
   "Hull: " ^ string_of_int c.ship.hull ^ "\n" ^
   "Evade: " ^ string_of_int c.ship.evade ^ "\n" ^
   "Weapons: " ^ (List.fold_right 
@@ -23,8 +21,7 @@ let get_components (c : controller) () =
     ^ "\n" ^
   "Augmentations: " ^ (List.fold_right 
     (fun (x : Ship.augmentation) acc -> acc ^ x.name ^ "; ") 
-      c.ship.augmentations "") ^ "\n\n" ^
-  "Star: " ^ string_of_int c.star_id ^ "\n" in
+      c.ship.augmentations "") in
 
 
   let modal = new vbox in
