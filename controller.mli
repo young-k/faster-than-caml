@@ -10,15 +10,16 @@ type command =
   | Equip of (string * int)   (* Equip a weapon to a certain slot *)
   | Go of int                 (* Go to another star *)
   | Power of string           (* Get the power level of a system *)
-  | Purchase of string        (* Purchase an item (weapon/augmentation) from a store *)
+  | Purchase of string        (* Purchase an item from a store *)
   | ShowMap                   (* Displays the map *)
   | ShowStore                 (* Displays a store *) 
   | ShowStartText             (* Shows start text *)
   | GoToResting               (* Go to resting screen *)
-  | ShowShipConfirm
-  | ShowShipScreen
-  | ShowHomeScreen
-  | ShowInstructions
+  | ShowShipConfirm           (* Confirmation screen for store purchases *)
+  | ShowShipScreen            (* Screen for details on ship & ship upgrades *)
+  | ShowHomeScreen            (* Show home screen *)
+  | ShowInstructions          (* Show instructions screen *)
+  | ShowGameOver              (* Show game over screen *)
 
 (* screen_type contains information about what to display on UI *)
 type screen_type =
@@ -30,9 +31,9 @@ type screen_type =
   | Event of event
   | Store of store
   | Notification of Ship.resources
-  | Debug
   | ShipConfirm
   | ShipScreen
+  | GameOver
 
 type storage =
   | Event of event

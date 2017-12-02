@@ -75,4 +75,4 @@ let get_components star_id galaxy =
   submit_vbox#add submit_button;
   mainbox#add submit_vbox;
   map#add mainbox;
-  (map, (submit_button, !going_to));
+  (map, (submit_button, going_to));

@@ -40,7 +40,6 @@ let rec loop t c =
     new label (
       "   Crew Members: " ^ string_of_int (List.length ship.crew) ^ "   "
     ) in
-  let curr_star = new label ("Star: " ^ string_of_int c.star_id) in 
   let sidebar = new vbox in 
   sidebar#add ~expand:false score;
   sidebar#add ~expand:false jumps;
@@ -52,7 +51,6 @@ let rec loop t c =
   sidebar#add ~expand:false shield;
   sidebar#add ~expand:false crew;
   sidebar#add ~expand:false button;
-  sidebar#add ~expand:false curr_star;
   wrapper#add ~expand:false sidebar;
   let sidebarline = new vline in
   wrapper#add ~expand:false sidebarline;
@@ -96,6 +94,20 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else loop t (parse_command c ShowHomeScreen))
+  | GameOver ->
+    let result = Game_over_screen.get_components () in
+    wrapper#remove sidebar;
+    wrapper#remove sidebarline;
+    let screen = new vbox in
+    screen#add ~expand:false button;
+    screen#add (fst result);
+    wrapper#add screen;
+    (snd result)#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c ShowStartText))
   | StartScreen ->
     let result = Start_screen.get_components () in
     wrapper#remove sidebar;
@@ -149,7 +161,7 @@ let rec loop t c =
     (fun () -> run t frame waiter)
     (fun () ->
       if !exit then return ()
-      else loop t (parse_command c (Go (result |> snd |> snd))))
+      else loop t (parse_command c (Go !(result |> snd |> snd))))
   | Event event ->
     let result = Event_screen.get_components event () in
     let bool = if (snd (snd result))#text = "Yes" then true
