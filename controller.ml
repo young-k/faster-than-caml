@@ -32,6 +32,7 @@ type screen_type =
   | ShipConfirm
   | ShipScreen
   | GameOver
+  | NextGalaxy
 
 type storage =
   | Event of event
@@ -90,19 +91,22 @@ let parse_command c com =
     )
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
-    begin
-      match (get_event c.galaxy star_id) with
-      | Store ->
-        print_endline (string_of_int star_id);
-        let s = Store.init c.ship in
-        {c with screen_type=Store s; star_id=star_id; storage=Store s;
-          jumps = c.jumps+1}
-      | Event ->
-        let e = Event.init in
-        {c with screen_type=Event e; star_id=star_id; storage=Event e;
-          jumps = c.jumps+1}
-      | _ -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1}
-    end
+    if star_id = 10 then {c with galaxy=fst Galaxy.init;screen_type=NextGalaxy; 
+                                 star_id=1; jumps=c.jumps+1}
+    else
+      begin
+        match (get_event c.galaxy star_id) with
+        | Store ->
+          print_endline (string_of_int star_id);
+          let s = Store.init c.ship in
+          {c with screen_type=Store s; star_id=star_id; storage=Store s;
+            jumps = c.jumps+1}
+        | Event ->
+          let e = Event.init in
+          {c with screen_type=Event e; star_id=star_id; storage=Event e;
+            jumps = c.jumps+1}
+        | _ -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1}
+      end
   | Choice b ->
     (match c.storage with
       | Event e -> {c with ship = (pick_choice c.ship e b);

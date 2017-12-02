@@ -34,6 +34,7 @@ type screen_type =
   | ShipConfirm
   | ShipScreen
   | GameOver
+  | NextGalaxy
 
 type storage =
   | Event of event
