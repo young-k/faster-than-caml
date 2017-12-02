@@ -7,7 +7,6 @@ open Store
 type command =
   | Attack of (int * string)  (* Choose a weapon in slot to attack a room *)
   | Choice of bool            (* Choosing an option (y/n) for events *)
-  | CloseMap                  (* Gets rid of the display of the map *)
   | Equip of (string * int)   (* Equip a weapon to a certain slot *)
   | Go of int                 (* Go to another star *)
   | Power of string           (* Get the power level of a system *)
@@ -15,7 +14,7 @@ type command =
   | ShowMap                   (* Displays the map *)
   | ShowStore                 (* Displays a store *) 
   | ShowStartText             (* Shows start text *)
-  | CloseStartText            (* Closes start text *)
+  | GoToResting               (* Go to resting screen *)
   | ShowShipConfirm
 
 (* screen_type contains information about what to display on UI *)
@@ -26,6 +25,8 @@ type screen_type =
   | Resting
   | Event of event
   | Store of store
+  | Notification of Ship.resources
+  | Debug
   | ShipConfirm
 
 type storage =

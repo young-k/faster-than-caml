@@ -56,7 +56,7 @@ type ship = {
 
 let init = {
   (* Starting resources *)
-  resources = {fuel = 5; missiles = 0; scrap = 0;};
+  resources = {fuel = 5; missiles = 1; scrap = 100;};
   crew = [{
     name = "O Camel";
     skills = (3,3,3)

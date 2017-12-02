@@ -24,5 +24,9 @@ val pick_choice: ship -> event -> bool -> ship
 (* [choice_description e b] returns string of choice description *)
 val choice_description: event -> bool -> string
 
+(* [choice_resources e b] returns Ship.resources of choice resource 
+ * consequences *)
+val choice_resources: event -> bool -> Ship.resources
+
 (* [get_name e] returns the string name of event *)
 val get_name: event -> string

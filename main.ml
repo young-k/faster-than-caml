@@ -5,7 +5,7 @@ open LTerm_widget
 open Home_screen
 open Start_screen
 open Store_screen
-open Debug_screen
+open Ship_confirm_screen
 open Galaxy_screen
 
 open Controller
@@ -46,7 +46,7 @@ let rec loop t c =
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c CloseStartText))
+        else loop t (parse_command c GoToResting))
   | Resting ->
     let result = Resting_screen.get_components button (fst display) () in
     wrapper#remove button;
@@ -71,7 +71,7 @@ let rec loop t c =
           loop t (parse_command {c with storage = Store s} (Purchase (snd(fst result))#text))
         else loop t (parse_command {c with storage = Store s} ShowStore))
   | ShipConfirm ->
-    let result = Debug_screen.get_components c () in
+    let result = Ship_confirm_screen.get_components c () in
     wrapper#add (fst result);
     (snd result)#on_click (wakeup wakener);
     Lwt.finalize
@@ -99,6 +99,15 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else loop t (parse_command c (Choice bool)))
+  | Notification rsc ->
+    let result = Notification_screen.get_components rsc () in
+    wrapper#add (fst result);
+    (snd result)#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c (GoToResting)))
   | _ -> return ()
 
 let main () =

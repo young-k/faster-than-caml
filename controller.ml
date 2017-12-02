@@ -6,7 +6,6 @@ open Store
 type command =
   | Attack of (int * string)
   | Choice of bool
-  | CloseMap
   | Equip of (string * int)
   | Go of int
   | Power of string
@@ -14,7 +13,7 @@ type command =
   | ShowMap
   | ShowStore
   | ShowStartText
-  | CloseStartText
+  | GoToResting
   | ShowShipConfirm
 
 type screen_type =
@@ -24,6 +23,8 @@ type screen_type =
   | Resting
   | Event of event
   | Store of store
+  | Notification of Ship.resources
+  | Debug
   | ShipConfirm
 
 type storage =
@@ -52,9 +53,8 @@ let init =
 let parse_command c com =
   match com with
   | ShowMap -> {c with screen_type=GalaxyScreen (c.star_id, c.galaxy)}
-  | CloseMap -> {c with screen_type=Resting}
+  | GoToResting -> {c with screen_type=Resting}
   | ShowStartText -> {c with screen_type=StartScreen}
-  | CloseStartText -> {c with screen_type=Resting}
   | ShowStore ->
     (match c.storage with
       | Store s -> {c with screen_type=Store s}
@@ -85,7 +85,7 @@ let parse_command c com =
   | Choice b ->
     (match c.storage with
       | Event e -> {c with ship = (pick_choice c.ship e b);
-          screen_type = Resting; storage = None}
+          screen_type = Notification (choice_resources e b); storage = None}
       | _ -> failwith "No event in controller"
     )
   | _ -> failwith "Unimplemented"
