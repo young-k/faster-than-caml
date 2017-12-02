@@ -30,7 +30,7 @@ let get_components exit ship () =
   for i = 0 to 3 do
     match (Ship.get_weapon ship i) with
     | Some w ->
-      let some = new label "Weapon" in
+      let some = new label w.name in
       weapons#add some;
       if i<>3 then weapons#add new vline
       else ()
@@ -82,7 +82,7 @@ let get_components exit ship () =
   let w_level = ship.systems.weapons_level in 
   let w_power = ship.systems.weapons_power in
   let weapons_display = gen_lst_display w_level w_power [] |> gen_display in 
-  let weapons_lbl = new label ("Weapons: " ^ weapons_display ) in
+  let weapons_lbl = new label ("Weapons: " ^ weapons_display) in
   weapons_system#add weapons_lbl;
   systems#add weapons_system;
 
