@@ -17,13 +17,19 @@ let get_components () =
   let logo = new LTerm_widget.label (text ^ "\n\nCreated by [we need a team name]") in
   mainbox#add logo;
 
-  (* button code: refactor this *)
   let hbox = new hbox in
   let start_button = new button ("START") in
-  hbox#add (new spacing ~cols:15 ());
+  hbox#add (new spacing ~cols:21 ());
   hbox#add (in_frame start_button);
-  hbox#add (new spacing ~cols:15 ());
+  hbox#add (new spacing ~cols:21 ());
+
+  let hbox2 = new hbox in
+  let instructions= new button ("INSTRUCTIONS") in
+  hbox2#add (new spacing ~cols:25 ());
+  hbox2#add (in_frame instructions);
+  hbox2#add (new spacing ~cols:25 ());
 
   mainbox#add ~expand:false hbox;
+  mainbox#add ~expand:false hbox2;
   mainbox#add (new spacing ~rows:1 ());
   (mainbox, start_button);

@@ -15,9 +15,13 @@ type command =
   | ShowStartText
   | GoToResting
   | ShowShipConfirm
+  | ShowShipScreen
+  | ShowHomeScreen
+  | ShowInstructions
 
 type screen_type =
   | HomeScreen
+  | Instructions
   | GalaxyScreen of (int * galaxy)
   | StartScreen
   | Resting
@@ -26,6 +30,7 @@ type screen_type =
   | Notification of Ship.resources
   | Debug
   | ShipConfirm
+  | ShipScreen
 
 type storage =
   | Event of event
@@ -56,6 +61,7 @@ let init =
 
 let parse_command c com =
   match com with
+  | ShowHomeScreen -> {c with screen_type=Instructions}
   | ShowMap -> {c with screen_type=GalaxyScreen (c.star_id, c.galaxy)}
   | GoToResting -> {c with screen_type=Resting}
   | ShowStartText -> {c with screen_type=StartScreen}
@@ -95,6 +101,7 @@ let parse_command c com =
           screen_type = Notification (choice_resources e b); storage = None}
       | _ -> failwith "No event in controller"
     )
+  | ShowShipScreen -> {c with screen_type=ShipScreen}
   | _ -> failwith "Unimplemented"
 
 

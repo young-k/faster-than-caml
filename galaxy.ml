@@ -12,18 +12,27 @@ let rec random_nums r n acc =
   else random_nums r (n-1) ((Random.int r)+1::acc)
 
 let init =
-  let rec create a n acc =
-    if a = n then (({id = a; event = End; reachable = []})::acc, 1)
-    else let _ = Random.self_init () in 
-      let e = match Random.int 4 with
-      | 0 -> Store
-      | 1 -> Nothing
-      | 2 -> Event
-      | _ -> Combat
-      in let reach = random_nums n ((Random.int 6)+1) [a+1]
-      in let filtered = List.filter (fun x -> x <> a) reach
-      in create (a+1) n (({id = a; event = e; reachable = filtered})::acc)
-  in create 1 10 []
+  let _ = Random.self_init () in 
+  let random_event () = 
+    match Random.int 4 with
+    | 0 -> Store
+    | 1 -> Nothing
+    | 2 -> Event
+    | _ -> Combat in
+  let ret = [
+    {id = 1; event = End; reachable = [2;3]};
+    {id = 2; event = End; reachable = [1;2;4;5]};
+    {id = 3; event = End; reachable = [1;2;5;6]};
+    {id = 4; event = End; reachable = [2;7;8]};
+    {id = 5; event = End; reachable = [2;3;7;9]};
+    {id = 6; event = End; reachable = [3;8;9]};
+    {id = 7; event = End; reachable = [4;5;10]};
+    {id = 8; event = End; reachable = [4;6;10]};
+    {id = 9; event = End; reachable = [5;6;10]};
+  ] in
+  let ret = List.map (fun x -> {x with event=random_event()}) ret in
+  let ret = ret @ [{id = 10; event = End; reachable = []}] in
+  (ret, 1)
 
 let find_star m id = List.find (fun s -> s.id = id) m
 

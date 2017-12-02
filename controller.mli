@@ -16,10 +16,14 @@ type command =
   | ShowStartText             (* Shows start text *)
   | GoToResting               (* Go to resting screen *)
   | ShowShipConfirm
+  | ShowShipScreen
+  | ShowHomeScreen
+  | ShowInstructions
 
 (* screen_type contains information about what to display on UI *)
 type screen_type =
   | HomeScreen
+  | Instructions
   | GalaxyScreen of (int * galaxy) (* star, galaxy *)
   | StartScreen
   | Resting
@@ -28,6 +32,7 @@ type screen_type =
   | Notification of Ship.resources
   | Debug
   | ShipConfirm
+  | ShipScreen
 
 type storage =
   | Event of event

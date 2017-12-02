@@ -146,6 +146,10 @@ val get_weapon : ship -> int -> weapon option
  * and "Not enough weapons power" *)
 val equip : ship -> int -> int -> ship
 
+(* [unequip] unequips a weapon given slot number and returns a new modified ship
+ * requires: a valid ship state, an int between 0 and ship's (weapon_power-1) *)
+val unequip : ship -> int -> ship
+
 (* [add_weapon] returns ship with added weapon to its inventory *)
 val add_weapon : ship -> weapon -> ship
 

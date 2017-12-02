@@ -12,27 +12,7 @@ let ship_ascii = "\194\160\194\160\194\160\194\160\194\160\194\160\194\160\194\1
 let get_components exit ship () =
   let mainbox = new hbox in
 
-  let resources = Ship.get_resources ship in 
-  let hull = Ship.get_hull ship in
-  let scrap = new label ("Scrap: " ^ string_of_int resources.scrap) in
-  let fuel = new label ("Fuel: " ^ string_of_int resources.fuel) in
-  let missiles = new label ("Missiles: " ^ string_of_int resources.missiles) in
-  let hull = new label ("Hull: " ^ string_of_int hull) in
-  let shield = 
-    new label ("Shield Level: " ^ string_of_int (fst ship.shield)) in
-  let crew = 
-    new label (
-      "   Crew Members: " ^ string_of_int (List.length ship.crew) ^ "   "
-    ) in
-
   let vbox = new vbox in 
-  vbox#add ~expand:false scrap;
-  vbox#add ~expand:false fuel;
-  vbox#add ~expand:false missiles;
-  vbox#add ~expand:false hull;
-  vbox#add ~expand:false shield;
-  vbox#add ~expand:false crew;
-  vbox#add ~expand:false exit;
 
   let mapbox = new hbox in
   let map = new button ("JUMP") in
@@ -98,6 +78,5 @@ let get_components exit ship () =
   vbox2#add ~expand:false footer;
 
   mainbox#add ~expand:false vbox;
-  mainbox#add ~expand:false new vline;
   mainbox#add vbox2;
   (map, mainbox);

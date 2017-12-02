@@ -2,11 +2,13 @@ open Lwt
 open Lwt_react
 open LTerm_widget
 
+open Galaxy_screen
 open Home_screen
+open Instruction_screen    
 open Start_screen
 open Store_screen
 open Ship_confirm_screen
-open Galaxy_screen
+open Ship_screen
 
 open Controller
 
@@ -71,6 +73,20 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else loop t (parse_command c ShowStartText))
+  | Instructions ->
+    let result = Instruction_screen.get_components () in
+    wrapper#remove sidebar;
+    wrapper#remove sidebarline;
+    let screen = new vbox in
+    screen#add ~expand:false button;
+    screen#add (fst result);
+    wrapper#add screen;
+    (snd result)#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c ShowHomeScreen))
   | StartScreen ->
     let result = Start_screen.get_components () in
     wrapper#remove sidebar;
@@ -145,6 +161,15 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else loop t (parse_command c (GoToResting)))
+  | ShipScreen ->
+    let result = Ship_screen.get_components c () in
+    wrapper#add (fst result);
+    (snd result)#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c GoToResting))
   | _ -> return ()
 
 let main () =
