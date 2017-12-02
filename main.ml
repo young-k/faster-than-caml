@@ -36,7 +36,7 @@ let rec loop t c =
   let missiles = new label ("Missiles: " ^ string_of_int resources.missiles) in
   let hull = new label ("Hull: " ^ string_of_int hull) in
   let shield = 
-    new label ("Shield Level: " ^ string_of_int (fst ship.shield)) in
+    new label ("Shield Level: " ^ string_of_int (ship.shield.layers)) in
   let crew = 
     new label (
       "   Crew Members: " ^ string_of_int (List.length ship.crew) ^ "   "
@@ -108,7 +108,7 @@ let rec loop t c =
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c ShowStartText))
+        else loop t (parse_command Controller.init ShowStartText))
   | StartScreen ->
     let result = Start_screen.get_components () in
     wrapper#remove sidebar;

@@ -68,7 +68,7 @@ let parse_command c com =
   else if c.ship.hull <=0 then {c with screen_type=
     GameOver "Your ship has been damaged beyond repair and has fallen apart."}
   else if get_fuel c.ship <=0 then {c with screen_type=
-    GameOver "You have run out of fuel, with no way to escape the federaiton."}
+    GameOver "You have run out of fuel, with no way to escape the federation."}
   else
   match com with
   | ShowHomeScreen -> {c with screen_type=HomeScreen}

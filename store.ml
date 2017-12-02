@@ -82,7 +82,7 @@ let apply_augmentation (s : Ship.ship) (a : augmentation) =
                         (fun weap -> {weap with damage = weap.damage + a.stat})
                         s.inventory in {s with inventory = inv}
   | CoolDown -> let inv = List.map
-                          (fun weap -> {weap with
+                          (fun (weap:weapon) -> {weap with
                                         capacity = max 0 (weap.capacity - a.stat);
                                         charge = min weap.charge
                                                 (max 0 (weap.capacity - a.stat))
