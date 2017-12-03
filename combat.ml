@@ -21,6 +21,7 @@ type combat_event = {
 type outcome = Nothing | Input of string | Text of string | Winner of ship_type
 
 let init p =
+  (* TODO tweak the init for enemy *)
   {player=p; enemy=p; turn_count=0; incoming=[]}
 
 (* [weapon_outcome s fw b] is the tuple (text, ship [s]) after ship [s] dodges
