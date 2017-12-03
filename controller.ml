@@ -18,6 +18,7 @@ type command =
   | ShowShipScreen
   | ShowHomeScreen
   | ShowInstructions
+  | ShowCombat
 
 type screen_type =
   | HomeScreen
@@ -32,6 +33,7 @@ type screen_type =
   | ShipScreen
   | NextGalaxy
   | GameOver of string
+  | Combat
 
 type storage =
   | Event of event
@@ -131,6 +133,7 @@ let parse_command c com =
     )
     end
   | ShowShipScreen -> {c with screen_type=ShipScreen}
+  | ShowCombat -> {c with screen_type=Combat}
   | _ -> failwith "Unimplemented"
 
 

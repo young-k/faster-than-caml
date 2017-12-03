@@ -132,6 +132,15 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else loop t (parse_command c ShowMap))
+  | Combat ->
+    let result = Combat_screen.get_components button (fst display) () in
+    wrapper#add (snd result);
+    (fst result)#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c ShowMap))
   | Store s ->
     let (mainBox, item, b, d, quit) = Store_screen.get_components {c with storage = Store s} () in
     wrapper#add mainBox;
