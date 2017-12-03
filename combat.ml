@@ -18,7 +18,7 @@ type combat_event = {
   incoming: fired_weapon list
 }
 
-type outcome = Nothing | Input | Text of string | Winner of ship_type
+type outcome = Nothing | Input of string | Text of string | Winner of ship_type
 
 let init p =
   {player=p; enemy=p; turn_count=0; incoming=[]}
@@ -56,6 +56,10 @@ let step c =
   let new_player = fst (snd new_ships) in
   let new_enemy = snd (snd new_ships) in
   let new_incoming = List.filter (fun fw -> fw.turns<>0) incoming in
+
+  (* TODO: check new_enemy if they need to fire *)
+  (* TODO: check new_player if they need to fire anything *)
+
   match text with
   | "" -> (c, Nothing)
   | _ ->
