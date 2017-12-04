@@ -93,12 +93,12 @@ let init = {
   }];
   augmentations = [];
   systems = {
-  shield_level = 1;
-  shield_power = 1;
-  engine_level = 1;
-  engine_power = 1;
-  weapons_level = 1;
-  weapons_power = 1;
+    shield_level = 1;
+    shield_power = 1;
+    engine_level = 1;
+    engine_power = 1;
+    weapons_level = 1;
+    weapons_power = 1;
   }
 
 }
@@ -123,8 +123,8 @@ let get_resources ship = ship.resources
 
 let set_resources ship (da, db, dc) =
   {ship with resources = {fuel = ship.resources.fuel + da;
-   missiles = ship.resources.missiles + db;
-   scrap = ship.resources.scrap + dc;}
+                          missiles = ship.resources.missiles + db;
+                          scrap = ship.resources.scrap + dc;}
   }
 
 let get_fuel ship = ship.resources.fuel
@@ -144,29 +144,30 @@ let set_scrap ship i =
 
 (*----------------------weapon/hull functions----------------------*)
 
-let damage ship dmg wtype = let sh = ship.shield in
+let damage ship dmg wtype = 
+  let sh = ship.shield in
   let level = sh.layers in
   if level >= dmg && wtype != Missile then
-  {ship with shield = {sh with layers = sh.layers - dmg}}
+    {ship with shield = {sh with layers = sh.layers - dmg}}
   else if wtype = Missile then
-  {ship with hull = let red = (ship.hull - dmg) in
-      if red < 0 then 0 else red}
+    {ship with hull = let red = (ship.hull - dmg) in
+                 if red < 0 then 0 else red}
   else {ship with shield = {sh with layers = 0};
-    hull = let red = (ship.hull - (dmg - level)) in
-      if red < 0 then 0 else red}
+                  hull = let red = (ship.hull - (dmg - level)) in
+                    if red < 0 then 0 else red}
 
 let repair_all_hull ship = 
   let cost = 9 * (ship.max_hull - ship.hull) * 3 / 10 in
   {ship with 
-    hull = ship.max_hull;
-    resources = {ship.resources with scrap = ship.resources.scrap - cost}
+   hull = ship.max_hull;
+   resources = {ship.resources with scrap = ship.resources.scrap - cost}
   }
 
 let repair_hull ship n =
   let cost = n * 3 in
   {ship with
-    hull = ship.hull + n;
-    resources = {ship.resources with scrap = ship.resources.scrap - cost}
+   hull = ship.hull + n;
+   resources = {ship.resources with scrap = ship.resources.scrap - cost}
   }
 
 let increase_hull ship rep = {ship with max_hull = ship.max_hull + rep}
@@ -176,12 +177,12 @@ let get_weapon ship ind = try (Some (List.nth (ship.equipped) ind))
 
 let equip ship inv_ind slot =
   let inv = List.filter (fun i -> not (List.mem i ship.equipped)) 
-    ship.inventory in
+      ship.inventory in
   let w = List.nth_opt inv slot in
   match w with
   | Some weap ->
     {ship with
-      equipped = weap::ship.equipped
+     equipped = weap::ship.equipped
     }
   | None -> ship
 
@@ -190,8 +191,8 @@ let unequip ship slot =
   match w with
   | Some weap -> 
     {ship with 
-      equipped = 
-        (List.filter (fun (weapon : weapon) -> weap.name <> weapon.name) 
+     equipped = 
+       (List.filter (fun (weapon : weapon) -> weap.name <> weapon.name) 
           ship.equipped)
     }
   | None -> ship
@@ -238,9 +239,9 @@ let set_weapons_level ship n =
   {ship with systems = {ship.systems with weapons_level = n}}
 
 let repair_systems ship = {ship with systems = {ship.systems with
-  shield_power = ship.systems.shield_level;
-  engine_power = ship.systems.engine_level;
-  weapons_power = ship.systems.weapons_level;}}
+                                                shield_power = ship.systems.shield_level;
+                                                engine_power = ship.systems.engine_level;
+                                                weapons_power = ship.systems.weapons_level;}}
 
 (*----------------------augmentation functions---------------------*)
 
