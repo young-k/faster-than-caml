@@ -16,10 +16,10 @@ let rec random_nums r n acc =
 let init =
   let _ = Random.self_init () in
   let random_event () =
-    match Random.int 4 with
+    match Random.int 8 with
     | 0 -> Store
-    | 1 -> Nothing
-    | 2 -> Event
+    | 1 | 2 -> Nothing
+    | 3 | 4 -> Event
     | _ -> Combat in
   let ret = [
     {id = 2; event = End; reachable = [1;3;4;5]};
