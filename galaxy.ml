@@ -22,7 +22,7 @@ let init =
     | 2 -> Event
     | _ -> Combat in
   let ret = [
-    {id = 2; event = End; reachable = [1;2;4;5]};
+    {id = 2; event = End; reachable = [1;3;4;5]};
     {id = 3; event = End; reachable = [1;2;5;6]};
     {id = 4; event = End; reachable = [2;7;8]};
     {id = 5; event = End; reachable = [2;3;7;9]};

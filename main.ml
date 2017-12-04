@@ -30,7 +30,7 @@ let rec loop t c =
   let jumps = new label ("Jumps: " ^ string_of_int c.jumps) in
   let star = new label ("Current star: " ^ string_of_int c.star_id) in
   let galaxy = 
-    new label ("   Galaxies traversed: " ^ string_of_int c.galaxies ^ "   ") in
+    new label ("  Galaxies traversed: " ^ string_of_int c.galaxies ^ "  ") in
   let ship = c.ship in
   let resources = Ship.get_resources ship in 
   let hull = Ship.get_hull ship in
