@@ -64,12 +64,17 @@ let init =
     start_time = Unix.gettimeofday();
   }
 
+let is_purchase com =
+  match com with
+  | Purchase _ -> true
+  | _ -> false
+
 let parse_command c com =
   if c.jumps >= 7 then {c with screen_type=
     GameOver "You have been caught by the federation. Rest in pieces."}
-  else if c.ship.hull <=0 then {c with screen_type=
+  else if c.ship.hull <=0 && not (is_purchase com) then {c with screen_type=
     GameOver "Your ship has been damaged beyond repair and has fallen apart."}
-  else if get_fuel c.ship <=0 then {c with screen_type=
+  else if get_fuel c.ship <=0 && not (is_purchase com) then {c with screen_type=
     GameOver "You have run out of fuel, with no way to escape the federation."}
   else
   match com with
@@ -108,7 +113,7 @@ let parse_command c com =
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
     if star_id = 10 then {c with galaxy=fst Galaxy.init;screen_type=NextGalaxy; 
-      star_id=1; jumps=c.jumps+1; ship = (set_resources c.ship (-1,0,0))}
+      star_id=1; jumps=0; ship = (set_resources c.ship (-1,0,0))}
     else  
     begin
       match (get_event c.galaxy star_id) with
