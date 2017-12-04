@@ -80,8 +80,6 @@ type ship = {
   (* [equipped] represents the list of ship's equipped weapons
    * index of weapon represents slot, index = 0-3 *)
   equipped : weapon list;
-  (* [location] represents int id of ship's current location *)
-  location: int;
   (* [shield] is the ship's shield *)
   shield: shield;
   (* [inventory] is the list of all the weapons a ship owns *)
@@ -97,13 +95,6 @@ type ship = {
 val init : ship
 
 (*----------------------basic get/set functions--------------------*)
-
-(* [get_location] returns int id of location *)
-val get_location : ship -> int
-
-(* [set_location] returns ship with new location
- * requires [str] is valid location id *)
-val set_location : ship -> int -> ship
 
 (* [evade] returns int for evasion chance based on ship stats *)
 val evade : ship -> int
@@ -155,6 +146,9 @@ val repair_all_hull : ship -> ship
  * with appropiate scrap deducted *)
  val repair_hull : ship -> int -> ship
 
+(* [repair] takes in an int and returns ship with hull increased by that amount *)
+val repair : ship -> int -> ship
+
 (* [increase_hull] returns ship with max_hull increased by specified amount *)
 val increase_hull : ship -> int -> ship
 
@@ -177,6 +171,14 @@ val add_weapon : ship -> weapon -> ship
 
 (* [charge_weapons] returns ship with all equipped weapons charged by 1 *)
 val charge_weapons : ship -> ship
+
+(* [weapon_ready] returns boolean of whether the ith equipped weapon is 
+ * ready to fire *)
+val weapon_ready : ship -> int -> bool
+
+(* [step] returns ship stepped by one game tick *)
+val step : ship -> ship
+
 (*----------------------system functions---------------------------*)
 
 (* [set_shield_power] returns ship with specified shield system power *)
