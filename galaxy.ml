@@ -1,4 +1,4 @@
-type event_type = Store | Nothing | Event | Combat | End
+type event_type = Start | Store | Nothing | Event | Combat | End
 
 type star = {
   id : int;
@@ -22,7 +22,6 @@ let init =
     | 2 -> Event
     | _ -> Combat in
   let ret = [
-    {id = 1; event = End; reachable = [2;3]};
     {id = 2; event = End; reachable = [1;2;4;5]};
     {id = 3; event = End; reachable = [1;2;5;6]};
     {id = 4; event = End; reachable = [2;7;8]};
@@ -33,7 +32,10 @@ let init =
     {id = 9; event = End; reachable = [5;6;10]};
   ] in
   let ret = List.map (fun x -> {x with event=random_event()}) ret in
-  let ret = ret @ [{id = 10; event = End; reachable = []}] in
+  (* add ids 1 & 10; edge cases *)
+  let ret = 
+    [{id = 1; event = Start; reachable = [2;3]}] @ ret  
+    @ [{id = 10; event = End; reachable = []}] in
   (ret, 1)
 
 let find_star m id = List.find (fun s -> s.id = id) m
