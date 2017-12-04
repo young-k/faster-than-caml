@@ -122,21 +122,26 @@ let parse_command c com =
     else
     begin
       match (get_event c.galaxy star_id) with
+      | Start -> 
+        {c with screen_type=Resting; star_id=star_id; jumps=c.jumps+1;
+                       ship=(set_resources c.ship (-1,0,0))}
       | Store ->
         let s = Store.init c.ship in
         {c with screen_type=Store s; star_id=star_id; storage=Store s;
-          jumps = c.jumps+1; ship = (set_resources c.ship (-1,0,0))}
+          jumps=c.jumps+1; ship=(set_resources c.ship (-1,0,0))}
       | Event ->
         let e = Event.init in
         {c with screen_type=Event e; star_id=star_id; storage=Event e;
-          jumps = c.jumps+1; ship = (set_resources c.ship (-1,0,0))}
+          jumps=c.jumps+1; ship=(set_resources c.ship (-1,0,0))}
       | Combat ->
         {c with screen_type=Combat; star_id=star_id}
-      | Nothing -> {c with screen_type=Nothing; 
-                           star_id=star_id; jumps = c.jumps+1;
-                           ship = (set_resources c.ship (-1,0,0))}
-      | End -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1;
-                       ship = (set_resources c.ship (-1,0,0))}
+      | Nothing -> 
+        {c with screen_type=Nothing; 
+                star_id=star_id; jumps=c.jumps+1;
+                ship=(set_resources c.ship (-1,0,0))}
+      | End -> 
+        {c with screen_type=Resting; star_id=star_id; jumps=c.jumps+1;
+                ship=(set_resources c.ship (-1,0,0))}
     end
   | Choice b ->
     begin

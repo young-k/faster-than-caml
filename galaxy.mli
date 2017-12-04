@@ -3,7 +3,7 @@
 
 (* [event_type] is the different type of events that each point in the
  * galaxy could have *)
-type event_type = Store | Nothing | Event | Combat | End
+type event_type = Start | Store | Nothing | Event | Combat | End
 
 (* [star] has fields [id], [event], [reachable] where [id] is the star's id, 
  * [event] is the [event_type] that this star contains, and [reachable] is a 
