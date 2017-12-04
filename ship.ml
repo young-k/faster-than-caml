@@ -170,26 +170,23 @@ let get_weapon ship ind = try (Some (List.nth (ship.equipped) ind))
   with _ -> None
 
 let equip ship inv_ind slot =
-  let rec replace lst i weap acc = match lst with
-    | [] -> List.rev_append acc (weap::[])
-    | h::t -> if i = slot then List.rev_append acc (weap::t)
-      else replace t (i+1) weap (h::acc) in
-  let w = (try (List.nth ship.inventory inv_ind)
-    with _ -> failwith "Illegal inventory index") in
-  let new_equipped = replace ship.equipped 0 w [] in
-  let len = List.length ship.equipped in
-  if slot < 0 || slot > 3 then failwith "Illegal weapon slot"
-    else if (slot >= len && len + 1 > ship.systems.weapons_power)
-    then ship
-    else {ship with equipped = new_equipped}
+  let inv = List.filter (fun i -> not (List.mem i ship.equipped)) 
+    ship.inventory in
+  let w = List.nth_opt inv slot in
+  match w with
+  | Some weap ->
+    {ship with
+      equipped = weap::ship.equipped
+    }
+  | None -> ship
 
 let unequip ship slot =
-  let w = List.nth_opt ship.inventory slot in
+  let w = List.nth_opt ship.equipped slot in
   match w with
   | Some weap -> 
     {ship with 
       equipped = 
-        (List.filter (fun (w : weapon) -> w.name <> weap.name) ship.equipped)
+        (List.filter (fun (weapon : weapon) -> weap.name <> weapon.name) ship.equipped)
     }
   | None -> ship
 

@@ -16,7 +16,7 @@ let get_components exit ship () =
 
   let mapbox = new hbox in
   let map = new button ("JUMP") in
-  let ship_screen = new button ("SHIP SCREEN") in
+  let ship_screen = new button ("SHIP") in
   mapbox#add (new spacing ~cols:30 ());
   mapbox#add (in_frame map);
   mapbox#add (in_frame ship_screen);
