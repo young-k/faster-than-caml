@@ -36,6 +36,7 @@ type screen_type =
   | NextGalaxy
   | GameOver of string
   | Combat
+  | Nothing
 
 type storage =
   | Event of event

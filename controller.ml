@@ -34,6 +34,7 @@ type screen_type =
   | NextGalaxy
   | GameOver of string
   | Combat
+  | Nothing
 
 type storage =
   | Event of event
@@ -128,16 +129,19 @@ let parse_command c com =
           jumps = c.jumps+1; ship = (set_resources c.ship (-1,0,0))}
       | Combat ->
         {c with screen_type=Combat; star_id=star_id}
-      | _ -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1;
-        ship = (set_resources c.ship (-1,0,0))}
+      | Nothing -> {c with screen_type=Nothing; 
+                           star_id=star_id; jumps = c.jumps+1;
+                           ship = (set_resources c.ship (-1,0,0))}
+      | End -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1;
+                       ship = (set_resources c.ship (-1,0,0))}
     end
   | Choice b ->
     begin
-    (match c.storage with
-      | Event e -> {c with ship = (pick_choice c.ship e b);
-          screen_type = Notification (choice_resources e b); storage = None}
-      | _ -> failwith "No event in controller"
-    )
+      (match c.storage with
+       | Event e -> {c with ship = (pick_choice c.ship e b);
+                            screen_type = Notification (choice_resources e b); storage = None}
+       | _ -> failwith "No event in controller"
+      )
     end
   | ShowShipScreen -> {c with screen_type=ShipScreen}
   | ShowCombat -> {c with screen_type=Combat}
