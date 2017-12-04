@@ -54,7 +54,7 @@ type controller = {
 }
 
 let init =
-  let init_galaxy = Galaxy.init in
+  let init_galaxy = Galaxy.init () in
   {
     ship = Ship.init;
     screen_type = HomeScreen;
@@ -119,7 +119,7 @@ let parse_command c com =
     end
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
-    if star_id = 10 then {c with galaxy=fst Galaxy.init;screen_type=NextGalaxy; 
+    if star_id = 10 then {c with galaxy= (fst (Galaxy.init ()));screen_type=NextGalaxy; 
       star_id=1; jumps=(-1); galaxies = c.galaxies+1}
     else
     begin
