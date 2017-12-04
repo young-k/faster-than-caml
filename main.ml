@@ -2,17 +2,16 @@ open Lwt
 open Lwt_react
 open LTerm_widget
 
+open Controller
+
 open Galaxy_screen
 open Home_screen
 open Instruction_screen    
-open Next_galaxy_screen
-open Store_screen
 open Resting_screen
+open Store_screen
 open Ship_confirm_screen
 open Ship_screen
 open Text_screen
-
-open Controller
 
 let exit = ref false
 
@@ -238,7 +237,7 @@ let rec loop t c =
           loop t (parse_command {c with ship = new_ship} ShowShipScreen)
         else loop t (parse_command c GoToResting))
   | NextGalaxy ->
-    let result = Next_galaxy_screen.get_components () in
+    let result = Text_screen.get_components 2 () in
     wrapper#remove sidebar;
     wrapper#remove sidebarline;
     let screen = new vbox in
