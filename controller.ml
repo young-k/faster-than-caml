@@ -132,7 +132,7 @@ let parse_command c com =
         {c with screen_type=Store s; star_id=star_id; storage=Store s;
           jumps=c.jumps+1; ship=(set_resources c.ship (-1,0,0))}
       | Event ->
-        let e = Event.init in
+        let e = Event.init () in
         {c with screen_type=Event e; star_id=star_id; storage=Event e;
           jumps=c.jumps+1; ship=(set_resources c.ship (-1,0,0))}
       | Combat ->

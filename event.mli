@@ -15,7 +15,7 @@ type event = {
 }
 
 (* [init] randomly generates an event from game data *)
-val init : event
+val init : unit -> event
 
 (* [pick_choice s e b] applies consequences of choice to ship and returns the
    resulting ship. *)
