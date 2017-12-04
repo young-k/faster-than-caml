@@ -13,13 +13,13 @@ let get_components c () =
   let mainBox = new vbox in
   let label = new label "_" in
   let item = new label "_" in
-  let b = new button ~brackets:("[ "," ]") "Buy" in
+  let b = new button "Buy" in
   let quit = ref false in
   let d = new button "Done" in
   d#on_click (fun () -> quit := true);
+  mainBox#add d;
   mainBox#add label;
   mainBox#add b;
-  mainBox#add d;
 
   for i = 0 to 1 do
     let hbox = new hbox in
@@ -93,10 +93,30 @@ let get_components c () =
   let mbutton = new button ("Missiles: " ^ string_of_int s.missiles ^ " available") in
     mbutton#on_click (fun () -> label#set_text ("Missile" ^ fst mtext); 
                                 item#set_text(snd mtext));
+  let h1text = 
+    if c.ship.resources.scrap < 3 
+      then ("\nYou do not have enough scrap", "_")
+    else ("\nCost: 3", "1 Hull") in
+  let h1button = new button("Repair 1 Hull") in
+    h1button#on_click (fun () -> label#set_text (h1button#label ^ (fst h1text));
+                                 item#set_text (snd h1text););
+  let hcost = 9 * (c.ship.max_hull - c.ship.hull) * 3 / 10 in
+  let htext =
+    if c.ship.resources.scrap < hcost
+      then ("\nYou do not have enough scrap", "_")
+    else ("\nCost: " ^ string_of_int hcost, "All Hull") in
+  let hbutton = new button("Repair all Hull") in
+    hbutton#on_click (fun () -> label#set_text (hbutton#label ^ (fst htext));
+                                item#set_text (snd h1text););
+
   let rlab = new label "Resources" in
   box#add fbutton;
   box#add ~expand:false (new vline);
   box#add mbutton;
+  box#add ~expand:false (new vline);
+  box#add h1button;
+  box#add ~expand:false (new vline);
+  box#add hbutton;
   mainBox#add ~expand:false (new hline);
   mainBox#add ~expand:false rlab;
   mainBox#add ~expand:false (new hline);

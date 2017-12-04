@@ -12,7 +12,7 @@ let get_components c () =
   let mainBox = new vbox in
   let d = new button "Done" in
   let description = new label "" in
-  let action = new button ~brackets:("[ "," ]") 
+  let action = new button
     "Click here to unequip/equip or upgrade after selecting an item or system" in
   let unequip = ref false in
   let equip = ref false in
