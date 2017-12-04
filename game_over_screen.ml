@@ -8,6 +8,15 @@ let text = "                            Game Over!                         \n" ^
            "                            ==========                         \n" 
 
 
+let write_score lst = try
+  let ch = open_out "./game_data/scoreboard.txt" in
+  let foo = fun str line -> let ls = (String.split_on_char ' ' line) in
+    str^(List.nth ls ((List.length ls)-1))^"\n" in
+  let file = List.fold_left foo "" lst in
+  output_string ch file; flush ch
+with
+| _ -> failwith "Core game data missing: scoreboard.txt"
+
 (* [in_frame w] is w wrapped in a frame *)
 let in_frame w = let f = new frame in f#set w; f 
 let in_modal w = let f = new modal_frame in f#set w; f 
@@ -44,6 +53,7 @@ let get_components str pscore () =
     scbd#add ~expand:false (new LTerm_widget.label str);
   done;
   modal#add ~expand:false scbd;
+  write_score scores;
 
   mainbox#add (new spacing ~rows:7 ());
   mainbox#add ~expand:false (in_frame modal); 

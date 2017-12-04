@@ -49,7 +49,7 @@ let get_lines_from_f f num =
 
 let rec insert_player n pscore lst = if n = 11 then [] else
   match lst with
-  | [] -> []
+  | [] -> if n <10 && pscore > 0 then ((string_of_int n)^": "^(string_of_int pscore))::[] else []
   | h::t -> if pscore > h then if h = 0 then
       ((string_of_int n)^": "^(string_of_int pscore))::(insert_player (n+1) (-1) t)
       else ((string_of_int n)^": "^(string_of_int pscore))::(insert_player (n+1) (-1) lst)
@@ -65,4 +65,4 @@ let rec read_score ch lst =
 
 let get_scores pscore = let channel = try open_in "./game_data/scoreboard.txt" 
     with _ -> failwith "Core game data missing: scoreboard.txt." in
-  read_score channel [] |> insert_player 1 pscore
+  read_score channel [] |> List.rev |> insert_player 1 pscore
