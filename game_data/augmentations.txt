@@ -1,17 +1,17 @@
 # Augmentations
 # name cost aug_type stat description
 
-Increase Damage I;50;Damage;1;Increase damage done by all weapons by 1
-Decrease Cool Down I;50;CoolDown;1;Decrease cool down of all weapons by 1
-Increase Evade I;50;Evade;5;Increase evade of ship by 5
-Increase Hull I;50;Hull;10;Increase hull of ship by 10
+Increase Damage I;75;Damage;1;Increase damage done by all weapons by 1
+Decrease Cool Down I;75;CoolDown;1;Decrease cool down of all weapons by 1
+Increase Evade I;75;Evade;5;Increase evade of ship by 5
+Increase Hull I;75;Hull;3;Increase max hull of ship by 3
 
-Increase Damage II;100;Damage;2;Increase damage done by all weapons by 2
-Decrease Cool Down II;100;CoolDown;2;Decrease cool down of all weapons by 2
-Increase Evade II;100;Evade;10;Increase evade of ship by 10
-Increase Hull II;100;Hull;20;Increase hull of ship by 20
+Increase Damage II;120;Damage;2;Increase damage done by all weapons by 2
+Decrease Cool Down II;120;CoolDown;2;Decrease cool down of all weapons by 2
+Increase Evade II;120;Evade;10;Increase evade of ship by 10
+Increase Hull II;120;Hull;5;Increase max hull of ship by 5
 
-Increase Damage III;150;Damage;3;Increase damage done by all weapons by 3
-Decrease Cool Down III;150;CoolDown;3;Decrease cool down of all weapons by 3
-Increase Evade III;150;Evade;150;15;Increase evade of ship by 15
-Increase Hull III;150;Hull;30;Increase hull of ship by 30
+Increase Damage III;200;Damage;3;Increase damage done by all weapons by 3
+Decrease Cool Down III;200;CoolDown;3;Decrease cool down of all weapons by 3
+Increase Evade III;200;Evade;150;15;Increase evade of ship by 15
+Increase Hull III;200;Hull;7;Increase max hull of ship by 7
