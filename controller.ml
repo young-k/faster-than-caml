@@ -96,7 +96,7 @@ let parse_command c com =
       | Store st ->
         let f_count = if s = "Fuel" then 1 else 0 in
         let m_count = if s = "Missile" then 1 else 0 in
-        let store = if (can_buy st c.ship s) then 
+        let store = if (can_buy st c.ship s) then
         {
             augmentations = List.filter (fun (a : augmentation) -> a.name <> s)
               st.augmentations;
@@ -105,16 +105,16 @@ let parse_command c com =
             fuel = st.fuel - f_count;
         } else st in
         let new_ship = Store.buy st c.ship s in
-        let pts = (get_scrap c.ship) - (get_scrap new_ship) in 
+        let pts = (get_scrap c.ship) - (get_scrap new_ship) in
         {c with ship = new_ship;screen_type=Store store;score=c.score+pts}
       | _ -> failwith "No store in controller"
     )
     end
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
-    if star_id = 10 then {c with galaxy=fst Galaxy.init;screen_type=NextGalaxy; 
+    if star_id = 10 then {c with galaxy=fst Galaxy.init;screen_type=NextGalaxy;
       star_id=1; jumps=(-1)}
-    else  
+    else
     begin
       match (get_event c.galaxy star_id) with
       | Store ->
@@ -126,7 +126,9 @@ let parse_command c com =
         let e = Event.init in
         {c with screen_type=Event e; star_id=star_id; storage=Event e;
           jumps = c.jumps+1; ship = (set_resources c.ship (-1,0,0))}
-      | _ -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1; 
+      | Combat ->
+        {c with screen_type=Combat; star_id=star_id}
+      | _ -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1;
         ship = (set_resources c.ship (-1,0,0))}
     end
   | Choice b ->
