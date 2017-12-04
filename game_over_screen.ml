@@ -34,12 +34,16 @@ let get_components str pscore () =
   modal#add (new spacing ~rows:1 ());
   modal#add ~expand:false hbox;
   
+  modal#add (new spacing ~rows:3 ());
+  modal#add ~expand:false (new LTerm_widget.label "Scoreboard");
+
+  let scbd = new vbox in
   let scores = get_scores pscore in
   for i = 0 to (List.length scores)-1 do
     let str = List.nth scores i in
-    modal#add ~expand:false (new LTerm_widget.label str);
+    scbd#add ~expand:false (new LTerm_widget.label str);
   done;
-  modal#add ~expand:false (new LTerm_widget.label (string_of_int (List.length scores)));
+  modal#add ~expand:false scbd;
 
   mainbox#add (new spacing ~rows:7 ());
   mainbox#add ~expand:false (in_frame modal); 
