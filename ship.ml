@@ -156,7 +156,7 @@ let damage ship dmg wtype = let sh = ship.shield in
       if red < 0 then 0 else red}
 
 let repair_all_hull ship = 
-  let cost = (ship.max_hull - ship.hull) * 3 * 9 / 10 in
+  let cost = 9 * (ship.max_hull - ship.hull) * 3 / 10 in
   {ship with 
     hull = ship.max_hull;
     resources = {ship.resources with scrap = ship.resources.scrap - cost}
@@ -208,6 +208,13 @@ let charge_weapons ship =
 let weapon_ready ship slot = match get_weapon ship slot with
   | None -> false
   | Some weap -> weap.charge = weap.capacity
+
+let fire_weapon ship slot = let rec filter n (lst:weapon list) = match lst with
+    | [] -> []
+    | h::t -> if n = slot then {h with charge = 0}::t
+        else h::(filter (n+1) t)
+  in
+  {ship with equipped = filter 0 ship.equipped}
 
 let step ship = charge_shield ship |> charge_weapons
 
