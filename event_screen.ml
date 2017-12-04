@@ -19,10 +19,10 @@ let get_components e () =
   mainbox#add ~expand:false (new hline);
   mainbox#add ~expand:false(new spacing ~rows:1 ());
 
-  let result_string = (new label "Yes") in
+  let result_string = ref "Yes" in
   let group_string = new radiogroup in
   let callback_string = function
-    | Some s -> result_string#set_text (s)
+    | Some s -> result_string := s
     | None -> ()
   in
   group_string#on_state_change callback_string;

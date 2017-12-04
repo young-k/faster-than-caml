@@ -28,7 +28,6 @@ let rec loop t c =
   (* sidebar fixture *)
   let score = new label ("Score: " ^ string_of_int c.score) in
   let jumps = new label ("Jumps: " ^ string_of_int c.jumps) in
-  let star = new label ("Current star: " ^ string_of_int c.star_id) in
   let galaxy = 
     new label ("  Galaxies traversed: " ^ string_of_int c.galaxies ^ "  ") in
   let ship = c.ship in
@@ -45,7 +44,6 @@ let rec loop t c =
   let sidebar = new vbox in 
   sidebar#add ~expand:false score;
   sidebar#add ~expand:false jumps;
-  sidebar#add ~expand:false star;
   sidebar#add ~expand:false galaxy;
   sidebar#add ~expand:false new hline;
   sidebar#add ~expand:false scrap;
@@ -200,15 +198,13 @@ let rec loop t c =
       else loop t (parse_command c (Go !(result |> snd |> snd))))
   | Event event ->
     let result = Event_screen.get_components event () in
-    let bool = if (snd (snd result))#text = "Yes" then true
-      else false in
     wrapper#add (fst result);
     (fst (snd result))#on_click (wakeup wakener);
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c (Choice bool)))
+        else loop t (parse_command c (Choice (!(result |> snd |> snd)="Yes"))))
   | Notification (rsc, fol) ->
     let result = Notification_screen.get_components rsc fol () in
     wrapper#add (fst result);
