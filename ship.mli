@@ -147,8 +147,13 @@ val set_scrap : ship -> int -> ship
  * the specified amount *)
 val damage : ship -> int -> weapon_type -> ship
 
-(* [repair] returns ship with hull equal to max_hull *)
-val repair : ship -> ship
+(* [repair_all_hull] returns ship with hull equal to max_hull
+ * with appropiate scrap deducted *)
+val repair_all_hull : ship -> ship
+
+(* [repair_hull] returns ship with hull increased by the int given
+ * with appropiate scrap deducted *)
+ val repair_hull : ship -> int -> ship
 
 (* [increase_hull] returns ship with max_hull increased by specified amount *)
 val increase_hull : ship -> int -> ship

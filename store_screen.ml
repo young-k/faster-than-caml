@@ -96,6 +96,8 @@ let get_components c () =
   let h1text = 
     if c.ship.resources.scrap < 3 
       then ("\nYou do not have enough scrap", "_")
+    else if c.ship.hull >= c.ship.max_hull
+      then ("\nHull already at max", "_")
     else ("\nCost: 3", "1 Hull") in
   let h1button = new button("Repair 1 Hull") in
     h1button#on_click (fun () -> label#set_text (h1button#label ^ (fst h1text));
@@ -104,6 +106,8 @@ let get_components c () =
   let htext =
     if c.ship.resources.scrap < hcost
       then ("\nYou do not have enough scrap", "_")
+    else if c.ship.hull >= c.ship.max_hull
+      then ("\nHull already at max", "_")
     else ("\nCost: " ^ string_of_int hcost, "All Hull") in
   let hbutton = new button("Repair all Hull") in
     hbutton#on_click (fun () -> label#set_text (hbutton#label ^ (fst htext));

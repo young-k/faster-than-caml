@@ -162,7 +162,19 @@ let damage ship dmg wtype = let sh = ship.shield in
     hull = let red = (ship.hull - (dmg - level)) in
       if red < 0 then 0 else red}
 
-let repair ship = {ship with hull = ship.max_hull}
+let repair_all_hull ship = 
+  let cost = (ship.max_hull - ship.hull) * 3 * 9 / 10 in
+  {ship with 
+    hull = ship.max_hull;
+    resources = {ship.resources with scrap = ship.resources.scrap - cost}
+  }
+
+let repair_hull ship n =
+  let cost = n * 3 in
+  {ship with
+    hull = ship.hull + n;
+    resources = {ship.resources with scrap = ship.resources.scrap - cost}
+  }
 
 let increase_hull ship rep = {ship with max_hull = ship.max_hull + rep}
 
@@ -186,7 +198,8 @@ let unequip ship slot =
   | Some weap -> 
     {ship with 
       equipped = 
-        (List.filter (fun (weapon : weapon) -> weap.name <> weapon.name) ship.equipped)
+        (List.filter (fun (weapon : weapon) -> weap.name <> weapon.name) 
+          ship.equipped)
     }
   | None -> ship
 
