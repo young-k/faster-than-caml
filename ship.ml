@@ -116,7 +116,7 @@ let evade ship = ship.evade
 
 let get_hull ship = ship.hull
 
-let charge_shield ship = 
+let charge_shield ship =
   if ship.shield.layers = ship.systems.shield_power then ship
   else if ship.shield.charge = ship.shield.capacity then
     {ship with shield = {layers = ship.shield.layers+1;
@@ -192,10 +192,10 @@ let unequip ship slot =
 
 let add_weapon ship weapon = {ship with inventory = weapon::ship.inventory}
 
-let charge_weapons ship = 
-  let increase (weap:weapon) = 
+let charge_weapons ship =
+  let increase (weap:weapon) =
     if weap.charge = weap.capacity then weap
-    else {weap with charge = weap.charge+1} 
+    else {weap with charge = weap.charge+1}
   in
   {ship with equipped = List.map increase ship.equipped}
 
@@ -237,19 +237,19 @@ let get_person ship ind = try (Some (List.nth (ship.crew) ind))
   with _ -> None
 
 (*----------------------upgrade functions-----------------------------*)
-let upgrade_engine_level ship = 
+let upgrade_engine_level ship =
   let new_level = ship.systems.engine_level + 1 in
   let price = new_level * 100 in
   if ship.resources.scrap < price then ship
   else (set_engine_level (set_resources ship (0, 0, -price)) new_level)
 
-let upgrade_shield_level ship = 
+let upgrade_shield_level ship =
   let new_level = ship.systems.shield_level + 1 in
   let price = new_level * 100 in
   if ship.resources.scrap < price then ship
   else (set_shield_level (set_resources ship (0, 0, -price)) new_level)
 
-let upgrade_weapons_level ship = 
+let upgrade_weapons_level ship =
   let new_level = ship.systems.weapons_level + 1 in
   let price = new_level * 100 in
   if ship.resources.scrap < price then ship

@@ -55,7 +55,7 @@ let init =
   let init_galaxy = Galaxy.init in
   {
     ship = Ship.init;
-    screen_type = HomeScreen;
+    screen_type = Combat;
     star_id = (snd init_galaxy);
     galaxy = (fst init_galaxy);
     storage = None;
