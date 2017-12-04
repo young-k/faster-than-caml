@@ -113,7 +113,7 @@ let parse_command c com =
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
     if star_id = 10 then {c with galaxy=fst Galaxy.init;screen_type=NextGalaxy; 
-      star_id=1; jumps=0; ship = (set_resources c.ship (-1,0,0))}
+      star_id=1; jumps=(-1)}
     else  
     begin
       match (get_event c.galaxy star_id) with

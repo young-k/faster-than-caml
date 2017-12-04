@@ -142,7 +142,8 @@ let rec loop t c =
         if !exit then return ()
         else loop t (parse_command c ShowMap))
   | Store s ->
-    let (mainBox, item, b, d, quit) = Store_screen.get_components {c with storage = Store s} () in
+    let (mainBox, item, b, d, quit) = Store_screen.get_components 
+      {c with storage = Store s} () in
     wrapper#add mainBox;
     b#on_click (wakeup wakener);
     d#on_click (wakeup wakener);
