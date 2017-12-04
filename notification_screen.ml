@@ -17,7 +17,6 @@ let get_components delta followup () =
     (string_of_int (delta.missiles))^" Missiles.") in
 
   let hbox = new hbox in
-  mainbox#add ~expand:false (new hline);
   mainbox#add ~expand:false(new spacing ~rows:15 ());
   hbox#add descrp;
   mainbox#add ~expand:false followup_label;
