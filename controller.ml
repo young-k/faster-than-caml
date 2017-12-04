@@ -28,7 +28,7 @@ type screen_type =
   | Resting
   | Event of event
   | Store of store
-  | Notification of Ship.resources
+  | Notification of (Ship.resources * string)
   | ShipConfirm
   | ShipScreen
   | NextGalaxy
@@ -54,7 +54,7 @@ type controller = {
 }
 
 let init =
-  let init_galaxy = Galaxy.init in
+  let init_galaxy = Galaxy.init () in
   {
     ship = Ship.init;
     screen_type = HomeScreen;
@@ -119,7 +119,7 @@ let parse_command c com =
     end
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
-    if star_id = 10 then {c with galaxy=fst Galaxy.init;screen_type=NextGalaxy; 
+    if star_id = 10 then {c with galaxy= (fst (Galaxy.init ()));screen_type=NextGalaxy; 
       star_id=1; jumps=(-1); galaxies = c.galaxies+1}
     else
     begin
@@ -132,7 +132,7 @@ let parse_command c com =
         {c with screen_type=Store s; star_id=star_id; storage=Store s;
           jumps=c.jumps+1; ship=(set_resources c.ship (-1,0,0))}
       | Event ->
-        let e = Event.init in
+        let e = Event.init () in
         {c with screen_type=Event e; star_id=star_id; storage=Event e;
           jumps=c.jumps+1; ship=(set_resources c.ship (-1,0,0))}
       | Combat ->
@@ -149,8 +149,11 @@ let parse_command c com =
   | Choice b ->
     begin
       (match c.storage with
-       | Event e -> {c with ship = (pick_choice c.ship e b);
-                            screen_type = Notification (choice_resources e b); storage = None}
+       | Event e -> 
+        {c with 
+          ship = (pick_choice c.ship e b);
+          screen_type = Notification ((get_resources e b), (get_followup e b)); 
+          storage = None;}
        | _ -> failwith "No event in controller"
       )
     end
