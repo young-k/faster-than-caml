@@ -11,3 +11,8 @@ Heavy Laser;65;4;13;13;Laser
 Pegasus;60;4;20;20;Missile
 Hull Laser;75;5;15;15;Laser
 Breach;80;5;22;22;Missile
+Chain Burst Laser;90;5;10;10;Laser
+Chain Vulcan Laser;100;6;17;17;Laser
+Swarm;90;6;20;20;Missile
+‘O’ltimate Camel;150;10;25;25;Missile
+Falcon Laser;75;4;10;10;Laser
