@@ -169,9 +169,6 @@ let repair_hull ship n =
     resources = {ship.resources with scrap = ship.resources.scrap - cost}
   }
 
-let repair ship hp = if ship.hull+hp >= ship.max_hull then repair ship
-  else {ship with hull = ship.hull+hp}
-
 let increase_hull ship rep = {ship with max_hull = ship.max_hull + rep}
 
 let get_weapon ship ind = try (Some (List.nth (ship.equipped) ind))
