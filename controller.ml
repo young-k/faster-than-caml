@@ -55,7 +55,7 @@ let init =
   let init_galaxy = Galaxy.init in
   {
     ship = Ship.init;
-    screen_type = Combat;
+    screen_type = HomeScreen;
     star_id = (snd init_galaxy);
     galaxy = (fst init_galaxy);
     storage = None;
@@ -91,8 +91,9 @@ let parse_command c com =
     )
     end
   | Attack ind ->
-      failwith "Unimplemented"
+      (*TEMP:*)
       (* TODO: Fill in combat logic *)
+      {c with screen_type=Resting;}
   | Purchase s ->
     begin
     (match c.storage with
@@ -129,7 +130,8 @@ let parse_command c com =
         {c with screen_type=Event e; star_id=star_id; storage=Event e;
           jumps = c.jumps+1; ship = (set_resources c.ship (-1,0,0))}
       | Combat ->
-        {c with screen_type=Combat; star_id=star_id}
+        {c with screen_type=Combat; star_id=star_id; jumps = c.jumps + 1;
+          ship = (set_resources c.ship (-1,0,0))}
       | _ -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1;
         ship = (set_resources c.ship (-1,0,0))}
     end
