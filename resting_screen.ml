@@ -2,6 +2,7 @@ open Char
 open Lwt
 open Lwt_react
 open LTerm_widget
+open Ship
 
 (* [in_frame w] is w wrapped in a frame *)
 let in_frame w = let f = new frame in f#set w; f
@@ -16,7 +17,7 @@ let get_components exit ship () =
 
   let mapbox = new hbox in
   let map = new button ("JUMP") in
-  let ship_screen = new button ("SHIP SCREEN") in
+  let ship_screen = new button ("SHIP") in
   mapbox#add (new spacing ~cols:30 ());
   mapbox#add (in_frame map);
   mapbox#add (in_frame ship_screen);
@@ -29,17 +30,17 @@ let get_components exit ship () =
   let weapons_label_box = new vbox in
   let weapons_label = new label "Weapons" in
   let weapons = new hbox in
-  for i = 0 to 3 do
+  for i = 0 to (ship.systems.weapons_level-1) do
     match (Ship.get_weapon ship i) with
     | Some w ->
       let some = new label w.name in
       weapons#add some;
-      if i<>3 then weapons#add new vline
+      if i<>(ship.systems.weapons_level-1) then weapons#add new vline
       else ()
     | None ->
       let none = new label "None" in
       weapons#add none;
-      if i<>3 then weapons#add new vline
+      if i<>(ship.systems.weapons_level-1) then weapons#add new vline
       else ()
   done;
 

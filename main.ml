@@ -5,12 +5,12 @@ open LTerm_widget
 open Galaxy_screen
 open Home_screen
 open Instruction_screen    
-open Start_screen
+open Next_galaxy_screen
 open Store_screen
+open Resting_screen
 open Ship_confirm_screen
 open Ship_screen
-open Next_galaxy_screen
-open Resting_screen
+open Text_screen
 
 open Controller
 
@@ -115,7 +115,21 @@ let rec loop t c =
         if !exit then return ()
         else loop t (parse_command Controller.init ShowStartText))
   | StartScreen ->
-    let result = Start_screen.get_components () in
+    let result = Text_screen.get_components 0 () in
+    wrapper#remove sidebar;
+    wrapper#remove sidebarline;
+    let screen = new vbox in
+    screen#add ~expand:false button;
+    screen#add (fst result);
+    wrapper#add screen;
+    (snd result)#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c GoToResting))
+  | Nothing ->
+    let result = Text_screen.get_components 1 () in
     wrapper#remove sidebar;
     wrapper#remove sidebarline;
     let screen = new vbox in
@@ -142,13 +156,14 @@ let rec loop t c =
         else loop t (parse_command c ShowMap))
   | Combat ->
     let result = Combat_screen.get_components button (fst display) () in
-    wrapper#add (snd result);
-    (fst result)#on_click (wakeup wakener);
+    wrapper#add (result |> fst |> snd);
+    (result |> fst |> fst)#on_click (wakeup wakener);
+    let weapon_index = !(snd result) in
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c ShowMap))
+        else loop t (parse_command c (Attack weapon_index)))
   | Store s ->
     let (mainBox, item, b, d, quit) = Store_screen.get_components 
       {c with storage = Store s} () in
@@ -206,7 +221,7 @@ let rec loop t c =
       Ship_screen.get_components c () in
     wrapper#add mainBox;
     d#on_click (fun () -> equip := false; unequip := false; upgrade := false; wakeup wakener ());
-    action#on_click (wakeup wakener);
+    action#on_click (fun () -> if !unequip || !equip || !upgrade then wakeup wakener ());
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->

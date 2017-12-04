@@ -11,7 +11,9 @@ let get_components c () =
   let systems = c.ship.systems in
   let mainBox = new vbox in
   let d = new button "Done" in
-  let action = new button ~brackets:("[ "," ]") "_" in
+  let description = new label "" in
+  let action = new button
+    "Click here to unequip/equip or upgrade after selecting an item or system" in
   let unequip = ref false in
   let equip = ref false in
   let upgrade = ref false in
@@ -23,13 +25,16 @@ let get_components c () =
   for i = 0 to (systems.weapons_power-1) do
     let text = 
       (match List.nth_opt equipped i with
-        | None -> "Empty"
-        | Some e -> e.name
+        | None -> ("Empty", "Empty")
+        | Some e -> (e.name, e.name ^ "\nCost: " ^ string_of_int e.cost 
+                    ^ "\nDamage: " ^ string_of_int e.damage ^ "\nCapacity: "
+                    ^ string_of_int e.capacity)
       ) in
-    let button i = new button text in
+    let button i = new button (fst text) in
       let b = button i in
         b#on_click (fun () -> index := i; unequip := true; equip := false;
-                              upgrade := false; action#set_label "Unequip");
+                              upgrade := false; action#set_label "Unequip";
+                              description#set_text (snd text));
       ehbox#add b;
       ehbox#add ~expand:false (new vline);
   done;
@@ -44,13 +49,20 @@ let get_components c () =
   for i = 0 to (List.length inventory)-1 do
     let text = 
       (match List.nth_opt inventory i with
-        | None -> "Empty"
-        | Some e -> e.name
+        | None -> ("Empty", "Empty")
+        | Some e -> (e.name, e.name ^ "\nCost: " ^ string_of_int e.cost 
+                     ^ "\nDamage: " ^ string_of_int e.damage ^ "\nCapacity: "
+                     ^ string_of_int e.capacity)
       ) in
-    let button i = new button text in
+    let button i = new button (fst text) in
       let b = button i in
-        b#on_click (fun () -> index := i; unequip := false; equip := true;
-                              upgrade := false; action#set_label "Equip");
+        b#on_click (fun () -> index := i; unequip := false; upgrade := false;
+                              description#set_text (snd text) ;
+                              if List.length equipped < systems.weapons_power then
+                                (equip := true; action#set_label "Equip";)
+                              else 
+                                (equip := false; action#set_label "No slots available";)
+                   );
       ihbox#add b;
       ihbox#add ~expand:false (new vline);
   done;
@@ -62,31 +74,40 @@ let get_components c () =
   let sBox = new vbox in
   let sLabel = new label "Systems" in
   let shbox = new hbox in
+  let shield_cost = (systems.shield_level + 1) * 100 in
   let shield_text = 
-    if (systems.shield_level + 1) * 100 > c.ship.resources.scrap then 
+    if shield_cost > c.ship.resources.scrap then 
       "You do not have enough scrap" 
-    else "Upgrade Shield Level" in
-  let shield = new button ("Shield level " ^ (string_of_int systems.shield_level)) in
+    else "Upgrade Shield Level\nCost: " ^ string_of_int shield_cost in
+  let shield = new button ("Shield level " ^ string_of_int systems.shield_level) in
     shield#on_click (fun () -> index := 0; unequip := false; equip := false;
-                               upgrade := true; action#set_label shield_text);
+                               upgrade := true; action#set_label shield_text;
+                               description#set_text (shield#label ^ "\nCost: " 
+                                ^ string_of_int shield_cost));
     shbox#add shield;
     shbox#add ~expand:false (new vline);
+  let engine_cost = (systems.engine_level + 1) * 100 in
   let engine_text = 
-    if (systems.engine_level + 1) * 100 > c.ship.resources.scrap then 
+    if engine_cost > c.ship.resources.scrap then 
       "You do not have enough scrap" 
     else "Upgrade Engine Level" in
-  let engine = new button ("Engine level " ^ (string_of_int systems.engine_level)) in
+  let engine = new button ("Engine level " ^ string_of_int systems.engine_level) in
     engine#on_click (fun () -> index := 1; unequip := false; equip := false;
-                               upgrade := true; action#set_label engine_text);
+                               upgrade := true; action#set_label engine_text;
+                               description#set_text (engine#label ^ "\nCost: " 
+                                ^ string_of_int engine_cost));
     shbox#add engine;
     shbox#add ~expand:false (new vline);
+  let weapon_cost = (systems.weapons_level + 1) * 100 in
   let weapon_text = 
-    if (systems.weapons_level + 1) * 100 > c.ship.resources.scrap then 
+    if weapon_cost > c.ship.resources.scrap then 
       "You do not have enough scrap" 
-    else "Upgrade Weapons Level" in
-  let weapons = new button ("Weapons level " ^ (string_of_int systems.weapons_level)) in
+    else "Upgrade Weapons Level\nCost: " ^ string_of_int weapon_cost in
+  let weapons = new button ("Weapons level " ^ string_of_int systems.weapons_level) in
     weapons#on_click (fun () -> index := 2; unequip := false; equip := false;
-                                upgrade := true; action#set_label weapon_text);
+                                upgrade := true; action#set_label weapon_text;
+                                description#set_text (weapons#label ^ "\nCost: " 
+                                  ^ string_of_int weapon_cost));
     shbox#add weapons;
     shbox#add ~expand:false (new vline);
   sBox#add ~expand:false sLabel;
@@ -94,7 +115,8 @@ let get_components c () =
   sBox#add shbox;
 
   mainBox#add d;
-  mainBox#add action;
+  mainBox#add description;
+  mainBox#add ~expand:false action;
   mainBox#add ~expand:false (new hline);
   mainBox#add eBox;
   mainBox#add iBox;

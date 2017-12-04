@@ -4,7 +4,7 @@ open Event
 open Store
 
 type command =
-  | Attack of (int * string)
+  | Attack of int 
   | Choice of bool
   | Equip of (string * int)
   | Go of int
@@ -34,6 +34,7 @@ type screen_type =
   | NextGalaxy
   | GameOver of string
   | Combat
+  | Nothing
 
 type storage =
   | Event of event
@@ -92,13 +93,17 @@ let parse_command c com =
       | _ -> failwith "No store in controller"
     )
     end
+  | Attack ind ->
+      (*TEMP:*)
+      (* TODO: Fill in combat logic *)
+      {c with screen_type=Resting;}
   | Purchase s ->
     begin
     (match c.storage with
       | Store st ->
         let f_count = if s = "Fuel" then 1 else 0 in
         let m_count = if s = "Missile" then 1 else 0 in
-        let store = if (can_buy st c.ship s) then 
+        let store = if (can_buy st c.ship s) then
         {
             augmentations = List.filter (fun (a : augmentation) -> a.name <> s)
               st.augmentations;
@@ -107,7 +112,7 @@ let parse_command c com =
             fuel = st.fuel - f_count;
         } else st in
         let new_ship = Store.buy st c.ship s in
-        let pts = (get_scrap c.ship) - (get_scrap new_ship) in 
+        let pts = (get_scrap c.ship) - (get_scrap new_ship) in
         {c with ship = new_ship;screen_type=Store store;score=c.score+pts}
       | _ -> failwith "No store in controller"
     )
@@ -116,28 +121,37 @@ let parse_command c com =
   | Go star_id ->
     if star_id = 10 then {c with galaxy=fst Galaxy.init;screen_type=NextGalaxy; 
       star_id=1; jumps=(-1); galaxies = c.galaxies+1}
-    else  
+    else
     begin
       match (get_event c.galaxy star_id) with
+      | Start -> 
+        {c with screen_type=Resting; star_id=star_id; jumps=c.jumps+1;
+                       ship=(set_resources c.ship (-1,0,0))}
       | Store ->
-        print_endline (string_of_int star_id);
         let s = Store.init c.ship in
         {c with screen_type=Store s; star_id=star_id; storage=Store s;
-          jumps = c.jumps+1; ship = (set_resources c.ship (-1,0,0))}
+          jumps=c.jumps+1; ship=(set_resources c.ship (-1,0,0))}
       | Event ->
         let e = Event.init in
         {c with screen_type=Event e; star_id=star_id; storage=Event e;
-          jumps = c.jumps+1; ship = (set_resources c.ship (-1,0,0))}
-      | _ -> {c with screen_type=Resting; star_id=star_id; jumps = c.jumps+1; 
-        ship = (set_resources c.ship (-1,0,0))}
+          jumps=c.jumps+1; ship=(set_resources c.ship (-1,0,0))}
+      | Combat ->
+        {c with screen_type=Combat; star_id=star_id}
+      | Nothing -> 
+        {c with screen_type=Nothing; 
+                star_id=star_id; jumps=c.jumps+1;
+                ship=(set_resources c.ship (-1,0,0))}
+      | End -> 
+        {c with screen_type=Resting; star_id=star_id; jumps=c.jumps+1;
+                ship=(set_resources c.ship (-1,0,0))}
     end
   | Choice b ->
     begin
-    (match c.storage with
-      | Event e -> {c with ship = (pick_choice c.ship e b);
-          screen_type = Notification (choice_resources e b); storage = None}
-      | _ -> failwith "No event in controller"
-    )
+      (match c.storage with
+       | Event e -> {c with ship = (pick_choice c.ship e b);
+                            screen_type = Notification (choice_resources e b); storage = None}
+       | _ -> failwith "No event in controller"
+      )
     end
   | ShowShipScreen -> {c with screen_type=ShipScreen}
   | ShowCombat -> {c with screen_type=Combat}

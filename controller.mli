@@ -5,7 +5,7 @@ open Event
 open Store
 
 type command =
-  | Attack of (int * string)  (* Choose a weapon in slot to attack a room *)
+  | Attack of int             (* Choose a weapon in slot to attack a room *)
   | Choice of bool            (* Choosing an option (y/n) for events *)
   | Equip of (string * int)   (* Equip a weapon to a certain slot *)
   | Go of int                 (* Go to another star *)
@@ -36,6 +36,7 @@ type screen_type =
   | NextGalaxy
   | GameOver of string
   | Combat
+  | Nothing
 
 type storage =
   | Event of event

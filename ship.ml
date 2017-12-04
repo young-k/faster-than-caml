@@ -109,7 +109,7 @@ let evade ship = ship.evade
 
 let get_hull ship = ship.hull
 
-let charge_shield ship = 
+let charge_shield ship =
   if ship.shield.layers = ship.systems.shield_power then ship
   else if ship.shield.charge = ship.shield.capacity then
     {ship with shield = {layers = ship.shield.layers+1;
@@ -166,35 +166,32 @@ let get_weapon ship ind = try (Some (List.nth (ship.equipped) ind))
   with _ -> None
 
 let equip ship inv_ind slot =
-  let rec replace lst i weap acc = match lst with
-    | [] -> List.rev_append acc (weap::[])
-    | h::t -> if i = slot then List.rev_append acc (weap::t)
-      else replace t (i+1) weap (h::acc) in
-  let w = (try (List.nth ship.inventory inv_ind)
-    with _ -> failwith "Illegal inventory index") in
-  let new_equipped = replace ship.equipped 0 w [] in
-  let len = List.length ship.equipped in
-  if slot < 0 || slot > 3 then failwith "Illegal weapon slot"
-    else if (slot >= len && len + 1 > ship.systems.weapons_power)
-    then ship
-    else {ship with equipped = new_equipped}
+  let inv = List.filter (fun i -> not (List.mem i ship.equipped)) 
+    ship.inventory in
+  let w = List.nth_opt inv slot in
+  match w with
+  | Some weap ->
+    {ship with
+      equipped = weap::ship.equipped
+    }
+  | None -> ship
 
 let unequip ship slot =
-  let w = List.nth_opt ship.inventory slot in
+  let w = List.nth_opt ship.equipped slot in
   match w with
   | Some weap -> 
     {ship with 
       equipped = 
-        (List.filter (fun (w : weapon) -> w.name <> weap.name) ship.equipped)
+        (List.filter (fun (weapon : weapon) -> weap.name <> weapon.name) ship.equipped)
     }
   | None -> ship
 
 let add_weapon ship weapon = {ship with inventory = weapon::ship.inventory}
 
-let charge_weapons ship = 
-  let increase (weap:weapon) = 
+let charge_weapons ship =
+  let increase (weap:weapon) =
     if weap.charge = weap.capacity then weap
-    else {weap with charge = weap.charge+1} 
+    else {weap with charge = weap.charge+1}
   in
   {ship with equipped = List.map increase ship.equipped}
 
@@ -242,19 +239,19 @@ let get_person ship ind = try (Some (List.nth (ship.crew) ind))
   with _ -> None
 
 (*----------------------upgrade functions-----------------------------*)
-let upgrade_engine_level ship = 
+let upgrade_engine_level ship =
   let new_level = ship.systems.engine_level + 1 in
   let price = new_level * 100 in
   if ship.resources.scrap < price then ship
   else (set_engine_level (set_resources ship (0, 0, -price)) new_level)
 
-let upgrade_shield_level ship = 
+let upgrade_shield_level ship =
   let new_level = ship.systems.shield_level + 1 in
   let price = new_level * 100 in
   if ship.resources.scrap < price then ship
   else (set_shield_level (set_resources ship (0, 0, -price)) new_level)
 
-let upgrade_weapons_level ship = 
+let upgrade_weapons_level ship =
   let new_level = ship.systems.weapons_level + 1 in
   let price = new_level * 100 in
   if ship.resources.scrap < price then ship

@@ -20,15 +20,47 @@ type combat_event = {
 
 type outcome = Nothing | Input of string | Text of string | Winner of ship_type
 
+(* [num_weapons i] returns the number of weapons for an enemy ship if
+ * the player has [i] weapons. The number is generated fairly, but 
+ * randomly, depending on [i]. *)
+let num_weapons i = 
+  let _ = Random.self_init () in
+  if i=1 then match Random.int 2 with
+    | 0 -> 1
+    | _ -> 2
+  else if i=2 then match Random.int 5 with
+    | 0 -> 1
+    | 1 -> 3
+    | _ -> 2
+  else if i=3 then match Random.int 5 with
+    | 0 -> 2
+    | 1 -> 4
+    | _ -> 3
+  else match Random.int 2 with
+    | 0 -> 3
+    | 1 -> 4
+
 let init p =
-  (* TODO tweak the init for enemy *)
-  {player=p; enemy=p; turn_count=0; incoming=[]}
+  let _ = Random.self_init () in
+  let pnum_weapons = List.length p.equipped in (* num player weapons *)
+  let enum_weapons = num_weapons pnum_weapons in (* enemy num weapons *)
+  let e_weapons = ref [] in
+  for i=0 to 3 do
+    let weapon = Parser.get_lines_from_f "./game_data/weapons.txt" 1 in
+    e_weapons := e_weapons @ [Store.parse_weapon weapon];
+  done;
+  let e_hull = Random.int 4 + 5 in
+  {player=p; 
+   enemy={p with equipped=e_weapons; hull=e_hull; max_hull=e_hull}; 
+   turn_count=0; 
+   incoming=[]}
 
 (* [weapon_outcome s fw b] is the tuple (text, ship [s]) after ship [s] dodges
  * or is hit by fired_weapon [fw]. If [b] is true, then [s] is the player, and
  * if [b] is false, then [s] is the enemy. The returned text depends on whether
  * the dodge was successful or not. *)
 let weapon_outcome s fw b =
+  let _ = Random.self_init () in
   match (b, Random.int 100 < Ship.evade s) with
   | (true, true) -> ("Player succesfully dodged " ^ fw.name, s)
   | (true, false) ->
