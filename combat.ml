@@ -18,7 +18,7 @@ type combat_event = {
   incoming: fired_weapon list
 }
 
-type outcome = Nothing | Input of string | Text of string | Winner of ship_type
+type outcome = Nothing | Input of int | Text of string | Winner of ship_type
 
 (* [num_weapons i] returns the number of weapons for an enemy ship if
  * the player has [i] weapons. The number is generated fairly, but 
@@ -51,7 +51,8 @@ let init p =
   done;
   let e_hull = Random.int 4 + 5 in
   {player=p; 
-   enemy={p with equipped=e_weapons; hull=e_hull; max_hull=e_hull}; 
+   enemy={p with equipped=e_weapons; 
+                 hull=e_hull; max_hull=e_hull}; 
    turn_count=0; 
    incoming=[]}
 
@@ -68,6 +69,26 @@ let weapon_outcome s fw b =
   | (false, true) -> ("Enemy succesfully dodged " ^ fw.name, s)
   | (false, false) ->
     ("Enemy was hit by " ^ fw.name, Ship.damage s fw.damage fw.w_type)
+
+(* [fire_weapons s] fires all weapons that are ready for s, and returns 
+ * s, and a list of weapons that will be appended to incoming. *)
+let fire_weapons s = 
+  let ship = ref s in
+  let lst = ref [] in
+  for i=0 to 3 do
+    if weapon_ready new_enemy i then 
+      ship := fire_weapon ship i;
+      let weapon = get_weapon s i in 
+      lst := !lst @ [{ 
+          turns=3;
+          ship_target=Player;
+          room_target=0;
+          name=weapon.name;
+          w_type=weapon.w_type;
+          damage=weapon.damage;
+        }];
+  done;
+  (ship, lst)
 
 let step c =
   let incoming =
@@ -86,11 +107,14 @@ let step c =
       ("", (c.player, c.enemy))
       firing in
   let text = fst new_ships in
-  let new_player = fst (snd new_ships) in
-  let new_enemy = snd (snd new_ships) in
+  let new_player = Ship.step (fst (snd new_ships)) in
+  let new_enemy = Ship.step (snd (snd new_ships)) in
   let new_incoming = List.filter (fun fw -> fw.turns<>0) incoming in
 
-  (* TODO: check new_enemy if they need to fire *)
+  let outcome = fire_weapons new_enemy in
+  let new_enemy = (fst outcome) in
+  let new_incoming = new_incoming @ [snd outcome] in
+
   (* TODO: check new_player if they need to fire anything *)
 
   match text with
