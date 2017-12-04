@@ -1,14 +1,18 @@
-# Format is: "-event-;-choice1-;change to fuel1;change to missiles1;change to scraps1;-choice2-;change to fuel2; change to missiles2;change to scraps2"
+# Format is: "-event-;-choice1-;-follow up 1-;change to fuel1;change to missiles1;change to scraps1;-choice2-;-follow up 2-;change to fuel2; change to missiles2;change to scraps2"
 
 # Lines beginning with "#" are treated as comments and are not considered.
 # Blank lines are also skipped.
 
 # Sample event:
-#event1;choice1;1;2;3;choice2;4;5;6
+#event1;choice1;follow_up_description1;1;2;3;choice2;follow_up_description2;4;5;6
 
-A ship without life forms is nearby. Shall we investigate?;Yes;1;1;100;No;0;0;0
-You see a stranded ship without fuel. Do you go to help?;Let's go help them;0;2;70;Let's leave before they see us;0;0;0
-A mining colony is in distress from a disease. Do you go in to help?;Yes;0;1;90;No;0;0;0
-You see a research station being attacked by pirates. Do you interfere?;Yes;-1;1;0;No;0;0;0
-Two space ships are about to explode. Which one do you save?;The one with more people!;0;1;100;The one with more missiles!;0;2;50
-You find a ships fleeing from giant alien spiders! What do you do?;Get rid of the spiders;0;0;100;Leave the spiders alone;0;0;0
+#Fuel is 3 scrap, missiles is 7
+#Total event cost of around 40
+#can't lose scrap
+
+A ship without life forms is nearby. Shall we investigate?;Yes;You found some abandoned resources!;1;1;20;No;You leave the ship;0;0;0
+You see a stranded ship without fuel. Do you go to help?;Let's go help them;They thank you by giving you resources;0;2;20;Let's leave before they see us;You abandon the ship;0;0;0
+A mining colony is in distress from a disease. Do you go in to help?;Yes;The colony rewards you for your efforts.;1;1;30;No;You leave the colony behind;0;0;0
+You see a research station being attacked by pirates. Do you interfere?;Yes;You successfully stopped the attack!;-1;1;0;No;You abandon the researchers;0;0;0
+Two space ships are about to explode. Which one do you save?;The one with more people!;The people reward you with scrap.;0;1;30;The one with more missiles!;You find 2 missiles and scrap!;0;2;20
+You find a ships fleeing from giant alien spiders! What do you do?;Get rid of the spiders;You succeed in taking them down!;0;0;40;Leave the spiders alone;You run away from the spiders.;0;0;0

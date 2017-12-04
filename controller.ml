@@ -28,7 +28,7 @@ type screen_type =
   | Resting
   | Event of event
   | Store of store
-  | Notification of Ship.resources
+  | Notification of (Ship.resources * string)
   | ShipConfirm
   | ShipScreen
   | NextGalaxy
@@ -149,8 +149,11 @@ let parse_command c com =
   | Choice b ->
     begin
       (match c.storage with
-       | Event e -> {c with ship = (pick_choice c.ship e b);
-                            screen_type = Notification (choice_resources e b); storage = None}
+       | Event e -> 
+        {c with 
+          ship = (pick_choice c.ship e b);
+          screen_type = Notification ((get_resources e b), (get_followup e b)); 
+          storage = None;}
        | _ -> failwith "No event in controller"
       )
     end

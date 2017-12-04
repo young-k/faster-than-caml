@@ -5,6 +5,7 @@ open Parser
 type choice = {
   description: string;
   delta_resources: Ship.resources;
+  follow_up: string;
 }
 
 type event = {
@@ -20,17 +21,17 @@ let init =
     try
       begin
         match (String.split_on_char ';' h) with
-        | a::b::c::d::e::f::g::h::i::[] ->
-          let c = int_of_string c in
+        | a::b::c::d::e::f::g::h::i::j::k::[] ->
           let d = int_of_string d in
           let e = int_of_string e in
-          let g = int_of_string g in
-          let h = int_of_string h in
+          let f = int_of_string f in
           let i = int_of_string i in
-          let delt1 = {fuel=c; missiles=d; scrap=e} in
-          let delt2 = {fuel=g; missiles=h; scrap=i} in
-          let choice1 = {description=b; delta_resources=delt1} in
-          let choice2 = {description=f; delta_resources=delt2} in
+          let j = int_of_string j in
+          let k = int_of_string k in
+          let delt1 = {fuel=d; missiles=e; scrap=f} in
+          let delt2 = {fuel=i; missiles=j; scrap=k} in
+          let choice1 = {description=b; delta_resources=delt1; follow_up=c} in
+          let choice2 = {description=g; delta_resources=delt2; follow_up=h} in
           {name=a; fst_choice=choice1; snd_choice=choice2}
         | _ -> failwith "Line does not contain number of necessary components"
       end
@@ -59,12 +60,16 @@ let pick_choice s e b =
     } in
   {s with resources=updated_resources}
 
-let choice_description e b =
+let get_description e b =
   if b then e.fst_choice.description
   else e.snd_choice.description
 
-let choice_resources e b =
+let get_resources e b =
   if b then e.fst_choice.delta_resources
   else e.snd_choice.delta_resources
+
+let get_followup e b =
+  if b then e.fst_choice.follow_up
+  else e.snd_choice.follow_up
 
 let get_name e = e.name

@@ -108,9 +108,9 @@ let event_tests = [
   "init_snd_choice_scrap" >::
     (fun _ -> assert_equal true
       ((string_of_int e.fst_choice.delta_resources.scrap)<>""));
-  "init_choice_description" >::
+  "init_get_description" >::
     (fun _ -> assert_equal
-        e.fst_choice.description (choice_description e true));
+        e.fst_choice.description (get_description e true));
   "init_get_name" >:: (fun _ -> assert_equal e.name (get_name e));
 ]
 

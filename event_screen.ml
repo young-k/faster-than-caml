@@ -5,7 +5,7 @@ open LTerm_widget
 open Event
 
 (* [in_frame w] is w wrapped in a frame *)
-let in_frame w = let f = new frame in f#set w; f 
+let in_frame w = let f = new frame in f#set w; f
 
 let get_components e () =
   let mainbox = new vbox in
@@ -29,13 +29,13 @@ let get_components e () =
 
   let hbox = new hbox in
   hbox#add ~expand:false (new spacing ~cols:60 ());
-  hbox#add (new radiobutton group_string (choice_description e true) "Yes");
+  hbox#add (new radiobutton group_string (get_description e true) "Yes");
   (*hbox#add (new spacing ~cols:20 ());*)
   mainbox#add ~expand:false hbox;
 
   let hbox = new hbox in
   hbox#add ~expand:false (new spacing ~cols:60 ());
-  hbox#add (new radiobutton group_string (choice_description e false) "No");
+  hbox#add (new radiobutton group_string (get_description e false) "No");
   (*hbox#add (new spacing ~cols:20 ());*)
   mainbox#add ~expand:false hbox;
   mainbox#add ~expand:false(new spacing ~rows:1 ());

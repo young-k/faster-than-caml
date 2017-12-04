@@ -30,7 +30,7 @@ type screen_type =
   | Resting
   | Event of event
   | Store of store
-  | Notification of Ship.resources
+  | Notification of (Ship.resources * string) (* string is follow_up desc *)
   | ShipConfirm
   | ShipScreen
   | NextGalaxy

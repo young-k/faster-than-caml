@@ -207,8 +207,8 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else loop t (parse_command c (Choice bool)))
-  | Notification rsc ->
-    let result = Notification_screen.get_components rsc () in
+  | Notification (rsc, fol) ->
+    let result = Notification_screen.get_components rsc fol () in
     wrapper#add (fst result);
     (snd result)#on_click (wakeup wakener);
     Lwt.finalize

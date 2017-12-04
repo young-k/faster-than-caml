@@ -107,7 +107,7 @@ let get_components exit ship () =
       let fire_clicked = selected_weapon := i in
       let fire_button = new button "FIRE" in
       fire_button#on_click (fun () -> fire_clicked);
-      let fire_frame = in_frame fire_button in 
+      let fire_frame = in_frame fire_button in
       vbox#add some;
       vbox#add fire_frame;
       weapons#add vbox;
@@ -123,7 +123,7 @@ let get_components exit ship () =
   weapons_section#add ~expand:false new hline;
   weapons_section#add weapons;
 
-  let systems_frame = in_frame systems_section in 
+  let systems_frame = in_frame systems_section in
   let weapons_frame = in_frame weapons_section in
 
   footer_left#add systems_frame;

@@ -5,6 +5,7 @@ open Ship
 type choice = {
   description: string;
   delta_resources: Ship.resources;
+  follow_up: string;
 }
 
 (* [event] contains a name, choice 1, and choice 2) *)
@@ -21,12 +22,16 @@ val init : event
    resulting ship. *)
 val pick_choice: ship -> event -> bool -> ship
 
-(* [choice_description e b] returns string of choice description *)
-val choice_description: event -> bool -> string
+(* [get_description e b] returns string of choice description *)
+val get_description: event -> bool -> string
 
-(* [choice_resources e b] returns Ship.resources of choice resource 
+(* [get_resources e b] returns Ship.resources of choice resource 
  * consequences *)
-val choice_resources: event -> bool -> Ship.resources
+val get_resources: event -> bool -> Ship.resources
+
+(* [get_followup e b] returns the followup description of choosing
+ * boolean b on event e. *)
+val get_followup: event -> bool -> string
 
 (* [get_name e] returns the string name of event *)
 val get_name: event -> string
