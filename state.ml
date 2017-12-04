@@ -12,8 +12,8 @@ let ship_to_string s =
   let resources = (s_of_i s.resources.fuel) ^ " " ^ 
     (s_of_i s.resources.missiles) ^ " " ^ (s_of_i s.resources.scrap) in
   let persons = List.fold_left 
-    (fun acc (p:person) -> acc ^ p.name ^ "." ^ skills_to_string p.skills ^ ";") "" 
-      s.crew in
+    (fun acc (p:person) -> acc ^ p.name ^ "." ^ skills_to_string p.skills ^ ";") 
+      "" s.crew in
   let hull = s_of_i s.hull in
   let max_hull = s_of_i s.max_hull in
   let evade = s_of_i s.evade in
@@ -23,11 +23,12 @@ let ship_to_string s =
     ^ s_of_i s.shield.capacity in
   let inventory = List.fold_left (fun acc (w:weapon) -> acc ^ w.name ^ ";") 
     "" s.inventory in
-  let augmentations = List.fold_left (fun acc (a:augmentation) -> acc ^ a.name ^ ";") 
-    "" s.augmentations in
-  let systems = s_of_i s.systems.shield_level ^ " " ^ s_of_i s.systems.shield_power ^ " "
-    ^ s_of_i s.systems.engine_level ^ " " ^ s_of_i s.systems.engine_power ^ " "
-    ^ s_of_i s.systems.weapons_level ^ " " ^ s_of_i s.systems.weapons_power in
+  let augmentations = List.fold_left (fun acc (a:augmentation) -> acc ^ 
+    a.name ^ ";") "" s.augmentations in
+  let systems = s_of_i s.systems.shield_level ^ " " ^ 
+    s_of_i s.systems.shield_power ^ " " ^ s_of_i s.systems.engine_level ^ " " ^ 
+    s_of_i s.systems.engine_power ^ " " ^ s_of_i s.systems.weapons_level ^ " " ^ 
+    s_of_i s.systems.weapons_power in
   resources ^ "\n" ^ persons ^ "\n" ^ hull ^ "\n" ^ max_hull ^ "\n" ^ evade ^
     "\n" ^ equipped ^ "\n" ^ shield ^ "\n" ^ inventory ^ "\n" ^ augmentations ^  
     "\n" ^ systems
@@ -35,8 +36,8 @@ let ship_to_string s =
 let store_to_string (s : store) = 
   let weapons = List.fold_left (fun acc (w:weapon) -> acc ^ w.name ^ ".") 
   "" s.weapons in
-  let augmentations = List.fold_left (fun acc (a:augmentation) -> acc ^ a.name ^ ".") 
-  "" s.augmentations |> String.trim in
+  let augmentations = List.fold_left (fun acc (a:augmentation) -> acc ^ a.name 
+    ^ ".") "" s.augmentations |> String.trim in
   weapons ^ ";" ^ augmentations ^ ";" ^ s_of_i s.fuel ^ ";" ^ s_of_i s.missiles
 
 let event_type_to_string = function
@@ -48,10 +49,10 @@ let event_type_to_string = function
   | End -> "End"
 
 let galaxy_to_string g =
-  let reachable_to_string r = List.fold_right (fun i acc -> acc ^ " " ^ s_of_i i) 
-    r "" in
-  let lst = List.map (fun s -> s_of_i s.id ^ " " ^ event_type_to_string s.event ^ 
-    reachable_to_string   s.reachable) g in
+  let reachable_to_string r = List.fold_right (fun i acc -> acc ^ " " ^ s_of_i 
+    i) r "" in
+  let lst = List.map (fun s -> s_of_i s.id ^ " " ^ event_type_to_string s.event 
+    ^ reachable_to_string   s.reachable) g in
   List.fold_left (fun acc x -> acc ^ x ^ ";") "" lst
 
 let screen_type_to_string = function
@@ -62,8 +63,8 @@ let screen_type_to_string = function
   | Resting -> "Resting"
   | Event e -> "Event " ^ e.name
   | Store s -> "Store " ^ store_to_string s
-  | Notification (r, s) -> "Notification " ^ s_of_i r.fuel ^ " " ^ s_of_i r.missiles
-                            ^ " " ^ s_of_i r.scrap ^ " " ^ s
+  | Notification (r, s) -> "Notification " ^ s_of_i r.fuel ^ " " ^ s_of_i 
+                            r.missiles ^ " " ^ s_of_i r.scrap ^ " " ^ s
   | ShipConfirm -> "ShipConfirm"
   | ShipScreen -> "ShipScreen"
   | NextGalaxy -> "NextGalaxy"
@@ -148,7 +149,8 @@ let get_ship lst =
   let augmentations = 
     let a = List.nth lst 8 |> String.split_on_char ';' |> 
       List.filter (fun s -> s <> "") in
-      List.filter (fun (g:augmentation) -> List.mem g.name a) all_augmentations in
+      List.filter (fun (g:augmentation) -> List.mem g.name a) all_augmentations 
+      in
   let systems = 
     let s = List.nth lst 9 |> String.split_on_char ' ' |>
             List.map (fun i -> int_of_string i) in
@@ -229,7 +231,8 @@ let get_ship lst =
     let augmentations = 
       let a = List.nth st 1 |> String.split_on_char '.' |> 
         List.filter (fun s -> s <> "") in
-        List.filter (fun (g:augmentation) -> List.mem g.name a) all_augmentations in
+        List.filter (fun (g:augmentation) -> List.mem g.name a) 
+          all_augmentations in
     {
       weapons = weapons;
       augmentations = augmentations;
