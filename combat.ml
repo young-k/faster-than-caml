@@ -38,20 +38,38 @@ let num_weapons i =
     | _ -> 3
   else match Random.int 2 with
     | 0 -> 3
-    | 1 -> 4
+    | _ -> 4
+
+let parse_weapon s : weapon =
+  let w = String.split_on_char ';' s in
+  let typ = (match (List.nth w 5) with
+    | "Ion" -> Ion
+    | "Laser" -> Laser
+    | "Beam" -> Beam
+    | "Missile" -> Missile
+    | _ -> failwith "Invalid weapon type!"
+  ) in
+  {
+    name = List.nth w 0;
+    cost = List.nth w 1 |> int_of_string;
+    damage = List.nth w 2 |> int_of_string;
+    capacity = List.nth w 3 |> int_of_string;
+    charge = 0;
+    wtype = typ;
+  }
 
 let init p =
-  let _ = Random.self_init () in
+  fun () -> let _ = Random.self_init () in
   let pnum_weapons = List.length p.equipped in (* num player weapons *)
   let enum_weapons = num_weapons pnum_weapons in (* enemy num weapons *)
   let e_weapons = ref [] in
-  for i=0 to 3 do
+  for i=0 to enum_weapons do
     let weapon = Parser.get_lines_from_f "./game_data/weapons.txt" 1 in
-    e_weapons := e_weapons @ [Store.parse_weapon weapon];
+    e_weapons := !e_weapons @ [parse_weapon (List.hd weapon)];
   done;
   let e_hull = Random.int 4 + 5 in
   {player=p; 
-   enemy={p with equipped=e_weapons; 
+   enemy={p with equipped=(!e_weapons); 
                  hull=e_hull; max_hull=e_hull}; 
    turn_count=0; 
    incoming=[]}
@@ -73,22 +91,28 @@ let weapon_outcome s fw b =
 (* [fire_weapons s] fires all weapons that are ready for s, and returns 
  * s, and a list of weapons that will be appended to incoming. *)
 let fire_weapons s = 
-  let ship = ref s in
-  let lst = ref [] in
-  for i=0 to 3 do
-    if weapon_ready new_enemy i then 
-      ship := fire_weapon ship i;
-      let weapon = get_weapon s i in 
-      lst := !lst @ [{ 
-          turns=3;
-          ship_target=Player;
-          room_target=0;
-          name=weapon.name;
-          w_type=weapon.w_type;
-          damage=weapon.damage;
-        }];
-  done;
-  (ship, lst)
+  let iterator = [0;1;2;3] in
+  List.fold_left 
+    (fun a i ->
+       let s = fst a in
+       let lst = snd a in
+       match get_weapon s i with
+       | Some weapon ->
+         if weapon_ready s i then
+           let ship = Ship.fire_weapon s i in
+           let elem = {
+             turns=3;
+             ship_target=Player;
+             room_target=0;
+             name=weapon.name;
+             w_type=weapon.wtype;
+             damage=weapon.damage;
+           } in
+           (ship, elem::lst)
+         else (s, lst)
+      | None -> (s, lst))
+    (s, [])
+    iterator
 
 let step c =
   let incoming =
@@ -113,12 +137,17 @@ let step c =
 
   let outcome = fire_weapons new_enemy in
   let new_enemy = (fst outcome) in
-  let new_incoming = new_incoming @ [snd outcome] in
+  let new_incoming = new_incoming @ (snd outcome) in
 
   (* TODO: check new_player if they need to fire anything *)
 
   match text with
-  | "" -> (c, Nothing)
+  | "" -> 
+    ({c with
+        incoming=new_incoming;
+        player=new_player;
+        enemy=new_enemy},
+    Nothing) 
   | _ ->
     ({c with
         incoming=new_incoming;

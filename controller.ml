@@ -1,3 +1,4 @@
+open Combat
 open Ship
 open Galaxy
 open Event
@@ -18,7 +19,6 @@ type command =
   | ShowShipScreen
   | ShowHomeScreen
   | ShowInstructions
-  | ShowCombat
 
 type screen_type =
   | HomeScreen
@@ -33,7 +33,7 @@ type screen_type =
   | ShipScreen
   | NextGalaxy
   | GameOver of string
-  | Combat
+  | Combat of combat_event
   | Nothing
 
 type storage =
@@ -136,7 +136,8 @@ let parse_command c com =
         {c with screen_type=Event e; star_id=star_id; storage=Event e;
           jumps=c.jumps+1; ship=(set_resources c.ship (-1,0,0))}
       | Combat ->
-        {c with screen_type=Combat; star_id=star_id; jumps=c.jumps+1;
+        let combat = Combat.init c.ship () in 
+        {c with screen_type=Combat combat; star_id=star_id; jumps=c.jumps+1;
           ship=(set_resources c.ship (-1,0,0))}
       | Nothing ->
         {c with screen_type=Nothing;
@@ -158,7 +159,6 @@ let parse_command c com =
       )
     end
   | ShowShipScreen -> {c with screen_type=ShipScreen}
-  | ShowCombat -> {c with screen_type=Combat}
   | _ -> failwith "Unimplemented"
 
 
