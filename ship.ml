@@ -54,7 +54,6 @@ type ship = {
   max_hull: int;
   evade: int;
   equipped : weapon list;
-  location: int;
   shield: shield;
   inventory : weapon list;
   augmentations : augmentation list;
@@ -79,8 +78,6 @@ let init = {
     charge = 0;
     wtype = Ion;
   }];
-  (* placeholder location *)
-  location = 0;
   shield = {
     layers = 1;
     charge = 0;
@@ -107,10 +104,6 @@ let init = {
 }
 
 (*----------------------basic get/set functions--------------------*)
-
-let get_location ship = ship.location
-
-let set_location ship id = {ship with location = id}
 
 let evade ship = ship.evade
 
@@ -164,6 +157,9 @@ let damage ship dmg wtype = let sh = ship.shield in
 
 let repair ship = {ship with hull = ship.max_hull}
 
+let repair ship hp = if ship.hull+hp >= ship.max_hull then repair ship
+  else {ship with hull = ship.hull+hp}
+
 let increase_hull ship rep = {ship with max_hull = ship.max_hull + rep}
 
 let get_weapon ship ind = try (Some (List.nth (ship.equipped) ind))
@@ -201,6 +197,12 @@ let charge_weapons ship =
     else {weap with charge = weap.charge+1} 
   in
   {ship with equipped = List.map increase ship.equipped}
+
+let weapon_ready ship slot = match get_weapon ship slot with
+  | None -> false
+  | Some weap -> weap.charge = weap.capacity
+
+let step ship = charge_shield ship |> charge_weapons
 
 (*----------------------system functions---------------------------*)
 let set_shield_power ship n =

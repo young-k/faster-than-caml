@@ -5,3 +5,8 @@
    [f] does not contain [num] valid lines, then the list returned will
    just contain all valid lines. *)
 val get_lines_from_f: string -> int -> string list
+
+(* [get_scores] takes in an int and returns a string list of the lines of the
+ * scoreboard. If the player scores higher than a score on the scoreboard, then
+ * the player score is added *)
+val get_scores : int -> string list

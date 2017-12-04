@@ -50,6 +50,7 @@ type controller = {
   storage: storage; (* storing either an event or a store *)
   score: int;       (* score is the sum of scrap spent and damage dealt *)
   jumps: int;       (* number of jumps player has made so far *)
+  galaxies: int;    (* number of galaxies player has reached *)
   start_time: float;(* starting time of game in seconds. For game ticks*)
 }
 

@@ -30,6 +30,7 @@ let rec loop t c =
   let score = new label ("Score: " ^ string_of_int c.score) in
   let jumps = new label ("Jumps: " ^ string_of_int c.jumps) in
   let star = new label ("Current star: " ^ string_of_int c.star_id) in
+  let galaxy = new label ("Galaxies traversed: " ^ string_of_int c.galaxies) in
   let ship = c.ship in
   let resources = Ship.get_resources ship in 
   let hull = Ship.get_hull ship in
@@ -47,6 +48,7 @@ let rec loop t c =
   sidebar#add ~expand:false score;
   sidebar#add ~expand:false jumps;
   sidebar#add ~expand:false star;
+  sidebar#add ~expand:false galaxy;
   sidebar#add ~expand:false new hline;
   sidebar#add ~expand:false scrap;
   sidebar#add ~expand:false fuel;
@@ -99,7 +101,7 @@ let rec loop t c =
         if !exit then return ()
         else loop t (parse_command c ShowHomeScreen))
   | GameOver str->
-    let result = Game_over_screen.get_components str () in
+    let result = Game_over_screen.get_components str c.score () in
     wrapper#remove sidebar;
     wrapper#remove sidebarline;
     let screen = new vbox in
