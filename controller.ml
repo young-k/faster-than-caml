@@ -4,7 +4,7 @@ open Event
 open Store
 
 type command =
-  | Attack of (int * string)
+  | Attack of int 
   | Choice of bool
   | Equip of (string * int)
   | Go of int
@@ -90,6 +90,9 @@ let parse_command c com =
       | _ -> failwith "No store in controller"
     )
     end
+  | Attack ind ->
+      failwith "Unimplemented"
+      (* TODO: Fill in combat logic *)
   | Purchase s ->
     begin
     (match c.storage with
@@ -118,7 +121,6 @@ let parse_command c com =
     begin
       match (get_event c.galaxy star_id) with
       | Store ->
-        print_endline (string_of_int star_id);
         let s = Store.init c.ship in
         {c with screen_type=Store s; star_id=star_id; storage=Store s;
           jumps = c.jumps+1; ship = (set_resources c.ship (-1,0,0))}

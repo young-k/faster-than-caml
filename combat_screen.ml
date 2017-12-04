@@ -104,10 +104,11 @@ let get_components exit ship () =
     | Some w ->
       let vbox = new vbox in
       let some = new label w.name in
+      let fire_clicked = selected_weapon := i in
       let fire_button = new button "FIRE" in
+      fire_button#on_click (fun () -> fire_clicked);
       let fire_frame = in_frame fire_button in 
       vbox#add some;
-      vbox#add (new spacing ~rows:3 ());
       vbox#add fire_frame;
       weapons#add vbox;
       weapons#add ~expand:false new vline;
@@ -143,4 +144,4 @@ let get_components exit ship () =
   footer#add footer_right;
 
   mainbox#add footer;
-  (map, mainbox);
+  ((map, mainbox), selected_weapon);
