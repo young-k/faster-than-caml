@@ -18,6 +18,7 @@ type command =
   | ShowShipScreen
   | ShowHomeScreen
   | ShowInstructions
+  | ShowCombat
 
 type screen_type =
   | HomeScreen
@@ -32,6 +33,7 @@ type screen_type =
   | ShipScreen
   | NextGalaxy
   | GameOver of string
+  | Combat
 
 type storage =
   | Event of event
@@ -62,12 +64,17 @@ let init =
     start_time = Unix.gettimeofday();
   }
 
+let is_purchase com =
+  match com with
+  | Purchase _ -> true
+  | _ -> false
+
 let parse_command c com =
   if c.jumps >= 7 then {c with screen_type=
     GameOver "You have been caught by the federation. Rest in pieces."}
-  else if c.ship.hull <=0 then {c with screen_type=
+  else if c.ship.hull <=0 && not (is_purchase com) then {c with screen_type=
     GameOver "Your ship has been damaged beyond repair and has fallen apart."}
-  else if get_fuel c.ship <=0 then {c with screen_type=
+  else if get_fuel c.ship <=0 && not (is_purchase com) then {c with screen_type=
     GameOver "You have run out of fuel, with no way to escape the federation."}
   else
   match com with
@@ -87,10 +94,15 @@ let parse_command c com =
     begin
     (match c.storage with
       | Store st ->
-        let store = if (can_buy st c.ship s) then {
+        let f_count = if s = "Fuel" then 1 else 0 in
+        let m_count = if s = "Missile" then 1 else 0 in
+        let store = if (can_buy st c.ship s) then 
+        {
             augmentations = List.filter (fun (a : augmentation) -> a.name <> s)
               st.augmentations;
             weapons = List.filter (fun (w : weapon) -> w.name <> s) st.weapons;
+            missiles = st.missiles - m_count;
+            fuel = st.fuel - f_count;
         } else st in
         let new_ship = Store.buy st c.ship s in
         let pts = (get_scrap c.ship) - (get_scrap new_ship) in 
@@ -101,7 +113,7 @@ let parse_command c com =
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
     if star_id = 10 then {c with galaxy=fst Galaxy.init;screen_type=NextGalaxy; 
-      star_id=1; jumps=c.jumps+1; ship = (set_resources c.ship (-1,0,0))}
+      star_id=1; jumps=(-1)}
     else  
     begin
       match (get_event c.galaxy star_id) with
@@ -126,6 +138,7 @@ let parse_command c com =
     )
     end
   | ShowShipScreen -> {c with screen_type=ShipScreen}
+  | ShowCombat -> {c with screen_type=Combat}
   | _ -> failwith "Unimplemented"
 
 

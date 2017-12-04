@@ -2,6 +2,9 @@ open Lwt
 open LTerm_widget
 open Galaxy
 
+(* [in_frame w] is w wrapped in a frame *)
+let in_frame w = let f = new frame in f#set w; f
+
 let get_components star_id galaxy =
   let map = new hbox in
   let mainbox = new vbox in
@@ -33,7 +36,7 @@ let get_components star_id galaxy =
   (* Find reachable stars *)
   let reachable = reachable galaxy star_id in
 
-  (* Setup "Going to: " label *)
+  (* Setup radio group for buttons *)
   let going_to = ref (reachable |> List.hd |> snd) in (* initialize value to first choice *)
   let radio_g = new radiogroup in
   let star_changed = function
@@ -44,7 +47,7 @@ let get_components star_id galaxy =
   radio_g#on_state_change star_changed;
 
   let button_hbox = new hbox in (* hbox containing the radio buttons *)
-  button_hbox#add (new spacing ~cols:5 ());
+  button_hbox#add (new spacing ~cols:5 ()); 
 
   (* Default goes to first star if no other choice is pressed *)
   let add_star (event_type, id) =
@@ -59,9 +62,8 @@ let get_components star_id galaxy =
   (* Generate button for stars *)
   let _ = List.map (add_star) reachable in
 
-  button_hbox#add (new spacing ~cols:5 ());
 
-  mainbox#add button_hbox;
+  mainbox#add button_hbox; 
   mainbox#add (new hline);
 
   (* Setup Submit button *)

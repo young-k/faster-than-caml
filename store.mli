@@ -5,7 +5,13 @@
 type store = {
   weapons : Ship.weapon list;
   augmentations : Ship.augmentation list;
+  fuel : int;
+  missiles : int;
 }
+
+val fuel_cost : int
+
+val missile_cost : int
 
 (* [init s] generates weapons and augmentations from a .txt file
  * and returns a store without weapons and augmentations that the given ship

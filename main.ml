@@ -132,18 +132,28 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else loop t (parse_command c ShowMap))
-  | Store s ->
-    let result = Store_screen.get_components {c with storage = Store s} () in
-    wrapper#add (fst (fst result));
-    (fst(snd result))#on_click (wakeup wakener);
-    (fst(snd (snd result)))#on_click (wakeup wakener);
+  | Combat ->
+    let result = Combat_screen.get_components button (fst display) () in
+    wrapper#add (snd result);
+    (fst result)#on_click (wakeup wakener);
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else if !(snd (snd (snd result))) then loop t (parse_command c ShowShipConfirm)
-        else if (snd(fst result))#text <> "_" then 
-          loop t (parse_command {c with storage = Store s} (Purchase (snd(fst result))#text))
+        else loop t (parse_command c ShowMap))
+  | Store s ->
+    let (mainBox, item, b, d, quit) = Store_screen.get_components 
+      {c with storage = Store s} () in
+    wrapper#add mainBox;
+    b#on_click (wakeup wakener);
+    d#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else if !quit then loop t (parse_command c ShowShipConfirm)
+        else if item#text <> "_" then 
+          loop t (parse_command {c with storage = Store s} (Purchase item#text))
         else loop t (parse_command {c with storage = Store s} ShowStore))
   | ShipConfirm ->
     let result = Ship_confirm_screen.get_components c () in
@@ -222,7 +232,6 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else loop t (parse_command c (Go 1)))
-  | _ -> return ()
 
 let main () =
   let controller = Controller.init in
