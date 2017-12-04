@@ -15,7 +15,7 @@ let get_components star_id galaxy =
     let rec gen_row num lst =
       if num = 0 then lst
       else
-        if Random.int 7 = 0 then gen_row (num-1) ("*"::lst)
+        if Random.int 5 = 0 then gen_row (num-1) ("  *  "::lst)
         else gen_row (num-1) ("  "::lst)
     in
     let row = gen_row 30 [] |> List.fold_left (^) "" in
