@@ -1,5 +1,5 @@
 5 1 100
-O Camel 3 3 3;
+O Camel.3.3.3;
 30
 30
 20
@@ -10,9 +10,9 @@ Ion cannon;
 1 1 1 1 1 1
 Resting
 1
-1 Start 3 2;2 Combat 5 4 3 1;3 Event 6 5 2 1;4 Event 8 7 2;5 Event 9 7 3 2;6 Event 9 8 3;7 Nothing 10 5 4;8 Nothing 10 6 4;9 Nothing 10 6 5;10 End;
+1 Start 3 2;2 Combat 5 4 3 1;3 Nothing 6 5 2 1;4 Store 8 7 2;5 Store 9 7 3 2;6 Nothing 9 8 3;7 Combat 10 5 4;8 Nothing 10 6 4;9 Nothing 10 6 5;10 End;
 None
 0
 0
 0
-1512365887.99
+1512368037.11

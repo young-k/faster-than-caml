@@ -28,10 +28,7 @@ let parse_weapon s : weapon =
     wtype = typ;
   }
 
-(* [parse_augmentations s] generates an augmentation by parsing a string [s]
- * with format "name;cost;aug_type;stat;description"
- * requires: [s] valid string following format *)
-let parse_augmentations s : augmentation =
+let parse_augmentation s : augmentation =
   let w = String.split_on_char ';' s in
     let typ = (match (List.nth w 2) with
     | "Damage" -> Damage
@@ -51,7 +48,7 @@ let parse_augmentations s : augmentation =
 let init (s : ship) =
   let aug_strings = Parser.get_lines_from_f "./game_data/augmentations.txt" 3 in
   let weaps_strings = Parser.get_lines_from_f "./game_data/weapons.txt" 3 in
-  let augs = List.fold_left (fun acc x -> let aug = parse_augmentations x in
+  let augs = List.fold_left (fun acc x -> let aug = parse_augmentation x in
                              if List.mem aug s.augmentations then acc
                              else aug::acc) [] aug_strings in
   let weaps = List.fold_left (fun acc x -> let weap = parse_weapon x in

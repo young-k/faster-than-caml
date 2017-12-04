@@ -13,6 +13,16 @@ val fuel_cost : int
 
 val missile_cost : int
 
+(* [parse_weapon s] generates a weapon by parsing a string [s] with format
+ * "name;cost;damage;capacity;charge;wtype"
+ * requires: [s] valid string following format *)
+ val parse_weapon : string -> Ship.weapon
+
+(* [parse_augmentations s] generates an augmentation by parsing a string [s]
+ * with format "name;cost;aug_type;stat;description"
+ * requires: [s] valid string following format *)
+val parse_augmentation : string -> Ship.augmentation
+
 (* [init s] generates weapons and augmentations from a .txt file
  * and returns a store without weapons and augmentations that the given ship
  * state already has
@@ -22,11 +32,6 @@ val init : Ship.ship -> store
 (* [get_augmentations s] returns a list of all augmentation of a store
   * requires: [s] a store state *)
 val get_augmentations : store -> Ship.augmentation list
-
-(* [parse_weapon s] generates a weapon by parsing a string [s] with format
- * "name;cost;damage;capacity;charge;wtype"
- * requires: [s] valid string following format *)
-val parse_weapon : string -> Ship.weapon
 
 (* [get_weapons s] returns a list of all weapons of a store
   * requires: [s] a store state *)
@@ -44,7 +49,7 @@ val buy : store -> Ship.ship -> string -> Ship.ship
   * requires: [s] a store state, [s'] a valid ship state,
     [i] an augmentation or weapon name
   * returns: bool corresponding to if ship can buy item *)
-  val can_buy : store -> Ship.ship -> string -> bool
+val can_buy : store -> Ship.ship -> string -> bool
 
 (* [display (x,y) s s'] returns a string intended to display the store
   * requires: int [x] and [y] that correspond to the width and
