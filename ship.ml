@@ -209,6 +209,13 @@ let weapon_ready ship slot = match get_weapon ship slot with
   | None -> false
   | Some weap -> weap.charge = weap.capacity
 
+let fire_weapon ship slot = let rec filter n (lst:weapon list) = match lst with
+    | [] -> []
+    | h::t -> if n = slot then {h with charge = 0}::t
+        else h::(filter (n+1) t)
+  in
+  {ship with equipped = filter 0 ship.equipped}
+
 let step ship = charge_shield ship |> charge_weapons
 
 (*----------------------system functions---------------------------*)

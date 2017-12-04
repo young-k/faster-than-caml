@@ -173,6 +173,9 @@ val charge_weapons : ship -> ship
  * ready to fire *)
 val weapon_ready : ship -> int -> bool
 
+(* [fire_weapon] sets the charge of the ith equipped weapon to 0 *)
+val fire_weapon : ship -> int -> ship
+
 (* [step] returns ship stepped by one game tick *)
 val step : ship -> ship
 
