@@ -16,9 +16,11 @@ let get_components exit ship () =
 
   let mapbox = new hbox in
   let map = new button ("JUMP") in
-  mapbox#add (new spacing ~cols:40 ());
+  let ship_screen = new button ("SHIP SCREEN") in
+  mapbox#add (new spacing ~cols:30 ());
   mapbox#add (in_frame map);
-  mapbox#add (new spacing ~cols:40 ());
+  mapbox#add (in_frame ship_screen);
+  mapbox#add (new spacing ~cols:30 ());
 
   let footer = new hbox in
 
@@ -111,4 +113,4 @@ let get_components exit ship () =
 
   mainbox#add ~expand:false vbox;
   mainbox#add vbox2;
-  (map, mainbox);
+  (map, ship_screen, mainbox);
