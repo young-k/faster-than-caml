@@ -3,6 +3,7 @@ open Ship
 open Galaxy
 open Event
 open Store
+open Combat
 
 type command =
   | Attack of int             (* Choose a weapon in slot to attack a room *)
@@ -19,7 +20,6 @@ type command =
   | ShowShipScreen            (* Screen for details on ship & ship upgrades *)
   | ShowHomeScreen            (* Show home screen *)
   | ShowInstructions          (* Show instructions screen *)
-  | ShowCombat                (* Show combat screen *) 
 
 (* screen_type contains information about what to display on UI *)
 type screen_type =
@@ -35,7 +35,7 @@ type screen_type =
   | ShipScreen
   | NextGalaxy
   | GameOver of string
-  | Combat
+  | Combat of combat_event
   | Nothing
 
 type storage =

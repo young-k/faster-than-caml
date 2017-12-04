@@ -23,6 +23,11 @@ val init : Ship.ship -> store
   * requires: [s] a store state *)
 val get_augmentations : store -> Ship.augmentation list
 
+(* [parse_weapon s] generates a weapon by parsing a string [s] with format
+ * "name;cost;damage;capacity;charge;wtype"
+ * requires: [s] valid string following format *)
+val parse_weapon : string -> Ship.weapon
+
 (* [get_weapons s] returns a list of all weapons of a store
   * requires: [s] a store state *)
 val get_weapons : store -> Ship.weapon list
