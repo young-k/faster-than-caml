@@ -46,16 +46,22 @@ let parse_augmentation s : augmentation =
   }
 
 let init (s : ship) =
-  let aug_strings = Parser.get_lines_from_f "./game_data/augmentations.txt" 3 in
-  let weaps_strings = Parser.get_lines_from_f "./game_data/weapons.txt" 3 in
-  let augs = List.fold_left (fun acc x -> let aug = parse_augmentation x in
-                             if List.mem aug s.augmentations then acc
-                             else aug::acc) [] aug_strings in
-  let weaps = List.fold_left (fun acc x -> let weap = parse_weapon x in
-                              if List.mem weap.name 
-                                (List.map (fun (s:weapon) -> s.name) s.inventory) 
-                                then acc
-                              else weap::acc) [] weaps_strings in
+  let rec gen_augs n lst =
+    if n = 0 then lst
+    else 
+      let str = Parser.get_lines_from_f "./game_data/augmentations.txt" 1 in
+      let aug = parse_augmentation (List.hd str) in
+      if List.mem aug lst then gen_augs n lst
+      else gen_augs (n-1) (aug::lst) in
+  let rec gen_weaps n lst =
+    if n = 0 then lst
+    else 
+      let str = Parser.get_lines_from_f "./game_data/weapons.txt" 1 in
+      let weap = parse_weapon (List.hd str) in
+      if List.mem weap lst then gen_weaps n lst
+      else gen_weaps (n-1) (weap::lst) in
+  let augs = gen_augs 3 [] in
+  let weaps = gen_weaps 3 [] in
   {
     weapons = weaps;
     augmentations = augs;

@@ -15,9 +15,11 @@ let test_galaxy = [{id = 10; event = End; reachable = []};
                     {id = 2; event = Combat; reachable = [0; 1; 3; 4]};
                     {id = 1; event = Store; reachable = [2]}]
 
+let random_galaxy = Galaxy.init () |> fst
+
 let galaxy_tests = [
-  "init" >:: (fun _ -> assert_equal 10 (List.length (fst Galaxy.init)));
-  "start_star" >:: (fun _ -> assert_equal 1 (snd Galaxy.init));
+  "init" >:: (fun _ -> assert_equal 10 (List.length random_galaxy));
+  "start_star" >:: (fun _ -> assert_equal 1 (snd (Galaxy.init ())));
 
   "reachable" >:: (fun _ -> assert_equal [(Some Store, 4); (None, 5);
                                           (None, 8); (Some Store, 9)]
@@ -30,7 +32,7 @@ let galaxy_tests = [
   "get_event_end" >:: (fun _ -> assert_equal End (get_event test_galaxy 10));
 
   "get_end" >:: (fun _ -> assert_equal 10 (get_end test_galaxy));
-  "get_end_random" >:: (fun _ -> assert_equal 10 (get_end (fst Galaxy.init)));
+  "get_end_random" >:: (fun _ -> assert_equal 10 (get_end random_galaxy));
 ]
 
 let store = Store.init Ship.init
@@ -56,8 +58,12 @@ let test_aug =
 
 let new_store : store = {
   weapons = test_weapon::store.weapons;
-  augmentations = test_aug::store.augmentations
+  augmentations = test_aug::store.augmentations;
+  fuel = 5;
+  missiles = 5;
 }
+
+let ship_with_no_scrap = {Ship.init with resources={fuel = 0; missiles = 0; scrap = 0}}
 
 let ship_with_weap = (buy new_store (Ship.init) "Test Weapon")
 let ship_with_aug = (buy new_store ship_with_weap "Test Augmentation")
@@ -74,10 +80,12 @@ let store_tests = [
 
   "buy_weap_no_scrap" >::
     (fun _ -> assert_equal 1
-      ((buy store (Ship.init) "Basic Laser").inventory |> List.length));
+      ((buy store (ship_with_no_scrap) (List.hd store.weapons).name).inventory 
+        |> List.length));
   "buy_aug_no_scrap" >::
     (fun _ -> assert_equal 0
-      ((buy store (Ship.init) "Increase Damage I").augmentations
+      ((buy store (ship_with_no_scrap) 
+        (List.hd store.augmentations).name).augmentations
         |> List.length));
 
   "buy_weap" >::
@@ -91,7 +99,7 @@ let store_tests = [
                               ship_with_aug.inventory));
 ]
 
-let e = Event.init
+let e = Event.init ()
 
 let event_tests = [
   "init_name" >:: (fun _ -> assert_equal true (e.name<>""));
@@ -115,11 +123,11 @@ let event_tests = [
 ]
 
 let ship = Ship.init
-let init_rcs = {fuel = 5; missiles = 0; scrap = 0;}
-let new_rcs = {fuel = 4; missiles = 2; scrap = 3;}
-let new_rcs1 = {fuel = 6; missiles = 0; scrap = 0;}
-let new_rcs2 = {fuel = 5; missiles = 2; scrap = 0;}
-let new_rcs3 = {fuel = 5; missiles = 0; scrap = 3;}
+let init_rcs = {fuel = 5; missiles = 1; scrap = 100;}
+let new_rcs = {fuel = 4; missiles = 3; scrap = 103;}
+let new_rcs1 = {fuel = 6; missiles = 1; scrap = 100;}
+let new_rcs2 = {fuel = 5; missiles = 2; scrap = 100;}
+let new_rcs3 = {fuel = 5; missiles = 1; scrap = 3;}
 let ion = {
     name = "Ion cannon";
     cost = 10;
@@ -151,36 +159,33 @@ let dude = {
 }
 
 let ship_tests = [
-  "get_loc" >:: (fun _ -> assert_equal 0 (get_location ship));
-  "set_loc" >:: (fun _ -> assert_equal 1 (set_location ship 1|>get_location));
   "evade" >:: (fun _ -> assert_equal 20 (evade ship));
   "get_hull" >:: (fun _ -> assert_equal 30 (get_hull ship));
 
 (*----------------------resources get/set functions----------------*)
 
-  "get_resources" >:: (fun _ -> assert_equal init_rcs (get_resources ship));
+  "get_resources" >:: (fun _ -> assert_equal init_rcs (Ship.get_resources ship));
   "set_resources" >:: (fun _ -> assert_equal {ship with resources = new_rcs}
     (set_resources ship (-1,2,3)));
   "get_fuel" >:: (fun _ -> assert_equal 5 (get_fuel ship));
   "set_fuel" >:: (fun _ -> assert_equal {ship with resources = new_rcs1}
     (set_fuel ship 6));
-  "get_missiles" >:: (fun _ -> assert_equal 0 (get_missiles ship));
+  "get_missiles" >:: (fun _ -> assert_equal 1 (get_missiles ship));
   "set_missiles" >:: (fun _ -> assert_equal {ship with resources = new_rcs2}
     (set_missiles ship 2));
-  "get_scrap" >:: (fun _ -> assert_equal 0 (get_scrap ship));
+  "get_scrap" >:: (fun _ -> assert_equal 100 (get_scrap ship));
   "set_scrap" >:: (fun _ -> assert_equal {ship with resources = new_rcs3}
     (set_scrap ship 3));
 
 (*----------------------weapon/hull functions----------------------*)
 
-  "damage0" >:: (fun _ -> assert_equal {ship with shield = (0,5)}
+  (* "damage0" >:: (fun _ -> assert_equal {ship with shield = (0,5)}
     (damage ship 1 Laser));
   "damage1" >:: (fun _ -> assert_equal {ship with shield = (0,5); hull = 28}
-    (damage ship 3 Laser));
+    (damage ship 3 Laser)); *)
   "damage2" >:: (fun _ -> assert_equal {ship with hull = 29}
     (damage ship 1 Missile));
-  "repair" >:: (fun _ -> assert_equal {ship with hull = 31}
-    (repair ship 1));
+  "repair" >:: (fun _ -> assert_equal 31 (repair_hull ship 1).hull);
   "get_weapon0" >:: (fun _ -> assert_equal (Some ion)
     (get_weapon ship 0));
   "get_weapon1" >:: (fun _ -> assert_equal None
@@ -189,7 +194,7 @@ let ship_tests = [
     {ship with inventory = weap::ship.inventory}
     (add_weapon ship weap));
   "equip" >:: (fun _ -> assert_equal
-    {ship with inventory = weap::ship.inventory; equipped = weap::[]}
+    {ship with inventory = weap::ship.inventory; equipped = weap::ship.equipped}
     (equip (add_weapon ship weap) 0 0));
 
 (*----------------------system functions---------------------------*)
