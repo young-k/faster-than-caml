@@ -3,6 +3,7 @@ open Lwt_react
 open LTerm_widget
 
 open Controller
+open State
 
 open Galaxy_screen
 open Home_screen
