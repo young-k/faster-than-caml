@@ -1,0 +1,18 @@
+fuel missiles scrap (ints)
+person:string 1:int 1:int 1:int;person:string 1:int 1:int 1:int;...
+hull:int
+max_hull:int
+evade:int
+weapon_name;weapon_name;weapon_name;weapon_name;...(strings)
+layers charge capacity (ints)
+weapon_name;weapon_name;...(strings)
+augmentation_name;augmentation_name;augmentation_name;...(strings)
+shield_level shield_power engine_level engine_power weapons_level weapons_power (ints)
+screen_type:string
+star_id:int
+id:int event:string reachable:int reachable:int reachable:int...; id:int event:string reachable:int reachable:int reachable:int...;
+Event:string event_name:string or Store:string weapon:string weapon:string...;augmentation:string...;fuel:int; missiles:int; or None:string
+score:int
+jumps:int
+galaxies:int
+start_time:float

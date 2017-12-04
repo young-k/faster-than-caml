@@ -3,6 +3,7 @@ open Lwt_react
 open LTerm_widget
 
 open Controller
+open State
 
 open Galaxy_screen
 open Home_screen
@@ -150,16 +151,19 @@ let rec loop t c =
         if !exit then return ()
         else if !show_ship then loop t (parse_command c ShowShipScreen)
         else loop t (parse_command c ShowMap))
-  | Combat ->
-    let result = Combat_screen.get_components button (fst display) () in
+  | Combat combat ->
+    let result = 
+      Combat_screen.get_components combat button (fst display) () in
     wrapper#add (result |> fst |> snd);
     (result |> fst |> fst)#on_click (wakeup wakener);
-    let weapon_index = !(snd result) in
+    let weapon_index = !(result |> snd |> fst) in
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c (Attack weapon_index)))
+        else loop t (parse_command c GoToResting))
+        (* 
+        else loop t (parse_command c (Attack weapon_index))) *)
   | Store s ->
     let (mainBox, item, b, d, quit) = Store_screen.get_components 
       {c with storage = Store s} () in
