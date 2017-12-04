@@ -11,7 +11,6 @@ let in_modal w = let f = new modal_frame in f#set w; f
 
 (* [step t c] is the tuple (text, combat_event) after stepping once. *)
 let step t c =
-  print_endline "hello";
   match Combat.step c with
   | (c, Text s) -> (t ^ "\n" ^ s, c)
   | (c, _) -> (t, c)
@@ -155,10 +154,9 @@ let get_components combat exit ship () =
 
   let combat = ref combat in
   let text = ref "" in
-  ignore (Lwt_engine.on_timer 1.0 true 
+  ignore (Lwt_engine.on_timer 0.15 true 
             (fun _ -> 
                let res = step (!text) (!combat) in
-               print_endline (!text);
                combat := (snd res);
                text := (fst res);
                text_label#set_text (!text)));
