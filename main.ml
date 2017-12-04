@@ -2,17 +2,16 @@ open Lwt
 open Lwt_react
 open LTerm_widget
 
+open Controller
+
 open Galaxy_screen
 open Home_screen
 open Instruction_screen    
-open Next_galaxy_screen
-open Store_screen
 open Resting_screen
+open Store_screen
 open Ship_confirm_screen
 open Ship_screen
 open Text_screen
-
-open Controller
 
 let exit = ref false
 
@@ -30,7 +29,8 @@ let rec loop t c =
   let score = new label ("Score: " ^ string_of_int c.score) in
   let jumps = new label ("Jumps: " ^ string_of_int c.jumps) in
   let star = new label ("Current star: " ^ string_of_int c.star_id) in
-  let galaxy = new label ("Galaxies traversed: " ^ string_of_int c.galaxies) in
+  let galaxy = 
+    new label ("  Galaxies traversed: " ^ string_of_int c.galaxies ^ "  ") in
   let ship = c.ship in
   let resources = Ship.get_resources ship in 
   let hull = Ship.get_hull ship in
@@ -41,9 +41,7 @@ let rec loop t c =
   let shield = 
     new label ("Shield Level: " ^ string_of_int (ship.shield.layers)) in
   let crew = 
-    new label (
-      "   Crew Members: " ^ string_of_int (List.length ship.crew) ^ "   "
-    ) in
+    new label ("Crew Members: " ^ string_of_int (List.length ship.crew)) in
   let sidebar = new vbox in 
   sidebar#add ~expand:false score;
   sidebar#add ~expand:false jumps;
@@ -175,6 +173,7 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else if !quit then loop t (parse_command c ShowShipConfirm)
+        (* else if item#text = "1 Hull" then loop t (parse_command {c with ship = }) *)
         else if item#text <> "_" then 
           loop t (parse_command {c with storage = Store s} (Purchase item#text))
         else loop t (parse_command {c with storage = Store s} ShowStore))
@@ -242,7 +241,7 @@ let rec loop t c =
           loop t (parse_command {c with ship = new_ship} ShowShipScreen)
         else loop t (parse_command c GoToResting))
   | NextGalaxy ->
-    let result = Next_galaxy_screen.get_components () in
+    let result = Text_screen.get_components 2 () in
     wrapper#remove sidebar;
     wrapper#remove sidebarline;
     let screen = new vbox in

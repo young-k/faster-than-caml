@@ -76,7 +76,7 @@ let get_weapons (st : store) = st.weapons
  * requires: [s] a ship, [a] an augmentation *)
 let apply_augmentation (s : Ship.ship) (a : augmentation) =
   match a.aug_type with
-  | Hull -> {s with hull = s.hull + a.stat}
+  | Hull -> {s with max_hull = s.max_hull + a.stat}
   | Evade -> {s with evade = s.evade + a.stat}
   | Damage -> let inv = List.map
                         (fun weap -> {weap with damage = weap.damage + a.stat})
