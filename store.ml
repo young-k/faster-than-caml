@@ -10,9 +10,6 @@ type store = {
 let fuel_cost = 3
 let missile_cost = 7
 
-(* [parse_weapon s] generates a weapon by parsing a string [s] with format
- * "name;cost;damage;capacity;charge;wtype"
- * requires: [s] valid string following format *)
 let parse_weapon s : weapon =
   let w = String.split_on_char ';' s in
   let typ = (match (List.nth w 5) with

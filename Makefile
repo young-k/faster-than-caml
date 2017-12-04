@@ -13,4 +13,4 @@ test:
 
 # For utop testing
 modules:
-	ocamlbuild -use-ocamlfind ship.cmo parser.cmo
+	ocamlbuild -use-ocamlfind ship.cmo parser.cmo combat.cmo store.cmo
