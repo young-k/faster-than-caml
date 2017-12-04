@@ -63,25 +63,37 @@ let rec loop t c =
 
   let display = get_display c in
 
+  let _ = 
+    match snd display with
+    | HomeScreen -> ()
+    | _ -> State.save_game c in
+
   match snd display with
   | HomeScreen ->
-    let result = Home_screen.get_components () in
+    let (mainbox, start_button, load_button, instructions) = 
+      Home_screen.get_components () in
     wrapper#remove sidebar;
     wrapper#remove sidebarline;
     let screen = new vbox in
     screen#add ~expand:false button;
-    screen#add (fst result);
+    screen#add mainbox;
     wrapper#add screen;
     let continue = ref true in
-    (fst (snd result))#on_click (fun () -> 
-        continue := true; (wakeup wakener) ());
-    (snd (snd result))#on_click (fun () -> 
-        continue := false; (wakeup wakener) ());
+    let load = ref false in
+    start_button#on_click (fun () -> 
+        continue := true; load := false; (wakeup wakener) ());
+    instructions#on_click (fun () -> 
+        continue := false; load := false; (wakeup wakener) ());
+    load_button#on_click (fun () ->
+        continue := false; load := true; (wakeup wakener) ());
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
         else if !continue then loop t (parse_command c ShowStartText)
+        else if !load then 
+          let new_c = load_game () in
+          loop t (parse_command new_c ShowCurrentScreen)
         else loop t (parse_command c ShowInstructions))
   | Instructions ->
     let result = Instruction_screen.get_components () in
@@ -264,7 +276,7 @@ let main () =
   Lazy.force LTerm.stdout >>= fun term ->
   LTerm.enable_mouse term >>= fun () ->
   Lwt.finalize
-    (fun () -> loop term controller)
+    (fun () -> loop term (controller))
     (fun () -> LTerm.disable_mouse term)
 
 let () = Lwt_main.run (main ())

@@ -1,6 +1,4 @@
 
-type state = Controller.controller
+val save_game : Controller.controller -> unit
 
-val save_game : state -> unit
-
-val load_game : state
+val load_game : unit -> Controller.controller

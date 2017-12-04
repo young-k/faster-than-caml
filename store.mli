@@ -37,6 +37,11 @@ val get_augmentations : store -> Ship.augmentation list
   * requires: [s] a store state *)
 val get_weapons : store -> Ship.weapon list
 
+(* [apply_augmentation s a] generates a new ship after applying augmentation [a]
+ * to ship [s]
+ * requires: [s] a ship, [a] an augmentation *)
+val apply_augmentation : Ship.ship -> Ship.augmentation -> Ship.ship
+
 (* [buy s s' i] returns a new ship state after buying an
   * augmentation or weapon
   * requires: [s] a store state, [s'] a valid ship state,

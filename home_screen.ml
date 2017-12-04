@@ -23,6 +23,12 @@ let get_components () =
   hbox#add (in_frame start_button);
   hbox#add (new spacing ~cols:21 ());
 
+  let hbox3 = new hbox in
+  let load_button = new button ("LOAD GAME") in
+  hbox3#add (new spacing ~cols:25 ());
+  hbox3#add (in_frame load_button);
+  hbox3#add (new spacing ~cols:25 ());
+
   let hbox2 = new hbox in
   let instructions= new button ("INSTRUCTIONS") in
   hbox2#add (new spacing ~cols:25 ());
@@ -30,6 +36,7 @@ let get_components () =
   hbox2#add (new spacing ~cols:25 ());
 
   mainbox#add ~expand:false hbox;
+  mainbox#add ~expand:false hbox3;
   mainbox#add ~expand:false hbox2;
   mainbox#add (new spacing ~rows:1 ());
-  (mainbox, (start_button, instructions));
+  (mainbox, start_button, load_button, instructions);

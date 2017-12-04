@@ -19,6 +19,7 @@ type command =
   | ShowShipScreen
   | ShowHomeScreen
   | ShowInstructions
+  | ShowCurrentScreen
 
 type screen_type =
   | HomeScreen
@@ -159,6 +160,7 @@ let parse_command c com =
       )
     end
   | ShowShipScreen -> {c with screen_type=ShipScreen}
+  | ShowCurrentScreen -> c
   | _ -> failwith "Unimplemented"
 
 

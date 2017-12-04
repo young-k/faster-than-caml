@@ -65,9 +65,6 @@ let get_augmentations (st : store) = st.augmentations
 
 let get_weapons (st : store) = st.weapons
 
-(* [apply_augmentation s a] generates a new ship after applying augmentation [a]
- * to ship [s]
- * requires: [s] a ship, [a] an augmentation *)
 let apply_augmentation (s : Ship.ship) (a : augmentation) =
   match a.aug_type with
   | Hull -> {s with max_hull = s.max_hull + a.stat}
