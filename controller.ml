@@ -96,7 +96,7 @@ let parse_command c com =
   | Attack ind ->
       (*TEMP:*)
       (* TODO: Fill in combat logic *)
-      {c with screen_type=Resting;}
+      {c with screen_type=GalaxyScreen (c.star_id, c.galaxy);}
   | Purchase s ->
     begin
     (match c.storage with
