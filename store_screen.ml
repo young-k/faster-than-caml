@@ -111,7 +111,7 @@ let get_components c () =
     else ("\nCost: " ^ string_of_int hcost, "All Hull") in
   let hbutton = new button("Repair all Hull") in
     hbutton#on_click (fun () -> label#set_text (hbutton#label ^ (fst htext));
-                                item#set_text (snd h1text););
+                                item#set_text (snd htext););
 
   let rlab = new label "Resources" in
   box#add fbutton;

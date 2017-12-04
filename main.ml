@@ -174,7 +174,10 @@ let rec loop t c =
       (fun () ->
         if !exit then return ()
         else if !quit then loop t (parse_command c ShowShipConfirm)
-        (* else if item#text = "1 Hull" then loop t (parse_command {c with ship = }) *)
+        else if item#text = "1 Hull" then loop t (parse_command 
+          {c with ship = Ship.repair_hull c.ship 1} ShowStore) 
+        else if item#text = "All Hull" then loop t (parse_command 
+          {c with ship = Ship.repair_all_hull c.ship} ShowStore)
         else if item#text <> "_" then 
           loop t (parse_command {c with storage = Store s} (Purchase item#text))
         else loop t (parse_command {c with storage = Store s} ShowStore))

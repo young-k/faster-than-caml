@@ -156,7 +156,7 @@ let damage ship dmg wtype = let sh = ship.shield in
       if red < 0 then 0 else red}
 
 let repair_all_hull ship = 
-  let cost = (ship.max_hull - ship.hull) * 3 * 9 / 10 in
+  let cost = 9 * (ship.max_hull - ship.hull) * 3 / 10 in
   {ship with 
     hull = ship.max_hull;
     resources = {ship.resources with scrap = ship.resources.scrap - cost}
