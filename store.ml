@@ -52,7 +52,9 @@ let init (s : ship) =
                              if List.mem aug s.augmentations then acc
                              else aug::acc) [] aug_strings in
   let weaps = List.fold_left (fun acc x -> let weap = parse_weapon x in
-                              if List.mem weap s.inventory then acc
+                              if List.mem weap.name 
+                                (List.map (fun (s:weapon) -> s.name) s.inventory) 
+                                then acc
                               else weap::acc) [] weaps_strings in
   {
     weapons = weaps;
@@ -71,7 +73,11 @@ let apply_augmentation (s : Ship.ship) (a : augmentation) =
   | Evade -> {s with evade = s.evade + a.stat}
   | Damage -> let inv = List.map
                         (fun weap -> {weap with damage = weap.damage + a.stat})
-                        s.inventory in {s with inventory = inv}
+                        s.inventory in 
+              let equipped = List.map
+                            (fun weap -> {weap with damage = weap.damage + a.stat})
+                            s.equipped in
+                            {s with inventory = inv; equipped = equipped}
   | CoolDown -> let inv = List.map
                           (fun (weap:weapon) -> {weap with
                                         capacity = max 0 (weap.capacity - a.stat);
@@ -79,7 +85,15 @@ let apply_augmentation (s : Ship.ship) (a : augmentation) =
                                                 (max 0 (weap.capacity - a.stat))
                                         }
                           )
-                          s.inventory in {s with inventory = inv}
+                          s.inventory in
+                let equipped = List.map
+                          (fun (weap:weapon) -> {weap with
+                                        capacity = max 0 (weap.capacity - a.stat);
+                                        charge = min weap.charge
+                                                (max 0 (weap.capacity - a.stat))
+                                        }
+                          )
+                          s.equipped in {s with inventory = inv; equipped = equipped}
 
 let buy st (s : Ship.ship) i =
   if i = "Fuel" then
