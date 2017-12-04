@@ -13,25 +13,39 @@ let empty_text =
   "distance with a few orbiting planets in nearby space     \n" ^
   " is your only companionship.                                "
 
+let next_galaxy_text = 
+  "Congratulations on completing this galaxy. \n" ^
+  "Time to move on to the next one! \n" ^
+  "Quickly before the pursuing Rebel fleet can catch up!" 
+
+let default_btext = "Continue..."
+let next_galaxy_btext = "Jump to next galaxy."
+
 (* [in_frame w] is w wrapped in a frame *)
 let in_frame w = let f = new frame in f#set w; f 
 
 let in_modal w = let f = new modal_frame in f#set w; f 
 
+(* [get_text i] gets the modal text and button text for a given screen.
+ * 0: start_screen
+ * 1: nothing screen
+ * 2: next galaxy screen *)
 let get_text i = 
-  if i=0 then start_text
-  else empty_text
+  if i=0 then (start_text, default_btext)
+  else if i=1 then (empty_text, default_btext)
+  else (next_galaxy_text, next_galaxy_btext)
 
 let get_components i () =
   let modal = new vbox in
   let mainbox = new vbox in
   let surroundbox = new hbox in 
 
-  let logo = new LTerm_widget.label (get_text i) in
+  let texts = get_text i in
 
-  (* button code: refactor this *)
+  let logo = new LTerm_widget.label (fst texts) in
+
   let hbox = new hbox in
-  let button = new button ("Continue...") in
+  let button = new button (snd texts) in
   hbox#add (new spacing ~cols:15 ());
   hbox#add (in_frame button);
   hbox#add (new spacing ~cols:15 ());

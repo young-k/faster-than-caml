@@ -49,6 +49,7 @@ type controller = {
   storage: storage;
   score: int;
   jumps: int;
+  galaxies: int;
   start_time: float;
 }
 
@@ -62,6 +63,7 @@ let init =
     storage = None;
     score = 0;
     jumps = 0;
+    galaxies = 0;
     start_time = Unix.gettimeofday();
   }
 
@@ -117,8 +119,8 @@ let parse_command c com =
     end
   | ShowShipConfirm -> {c with screen_type=ShipConfirm}
   | Go star_id ->
-    if star_id = 10 then {c with galaxy=fst Galaxy.init;screen_type=NextGalaxy;
-      star_id=1; jumps=(-1)}
+    if star_id = 10 then {c with galaxy=fst Galaxy.init;screen_type=NextGalaxy; 
+      star_id=1; jumps=(-1); galaxies = c.galaxies+1}
     else
     begin
       match (get_event c.galaxy star_id) with
