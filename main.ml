@@ -5,12 +5,12 @@ open LTerm_widget
 open Galaxy_screen
 open Home_screen
 open Instruction_screen    
-open Start_screen
+open Next_galaxy_screen
 open Store_screen
+open Resting_screen
 open Ship_confirm_screen
 open Ship_screen
-open Next_galaxy_screen
-open Resting_screen
+open Text_screen
 
 open Controller
 
@@ -111,7 +111,21 @@ let rec loop t c =
         if !exit then return ()
         else loop t (parse_command Controller.init ShowStartText))
   | StartScreen ->
-    let result = Start_screen.get_components () in
+    let result = Text_screen.get_components 0 () in
+    wrapper#remove sidebar;
+    wrapper#remove sidebarline;
+    let screen = new vbox in
+    screen#add ~expand:false button;
+    screen#add (fst result);
+    wrapper#add screen;
+    (snd result)#on_click (wakeup wakener);
+    Lwt.finalize
+      (fun () -> run t frame waiter)
+      (fun () ->
+        if !exit then return ()
+        else loop t (parse_command c GoToResting))
+  | Nothing ->
+    let result = Text_screen.get_components 1 () in
     wrapper#remove sidebar;
     wrapper#remove sidebarline;
     let screen = new vbox in
