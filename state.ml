@@ -7,13 +7,13 @@ type state = controller
 
 let s_of_i = string_of_int
 
-let skills_to_string (x, y, z) = s_of_i x ^ " " ^ s_of_i y ^ " " ^ s_of_i z
+let skills_to_string (x, y, z) = s_of_i x ^ "." ^ s_of_i y ^ "." ^ s_of_i z
 
 let ship_to_string s = 
   let resources = (s_of_i s.resources.fuel) ^ " " ^ 
     (s_of_i s.resources.missiles) ^ " " ^ (s_of_i s.resources.scrap) in
   let persons = List.fold_left 
-    (fun acc p -> acc ^ p.name ^ " " ^ skills_to_string p.skills ^ ";") "" 
+    (fun acc p -> acc ^ p.name ^ "." ^ skills_to_string p.skills ^ ";") "" 
       s.crew in
   let hull = s_of_i s.hull in
   let max_hull = s_of_i s.max_hull in
@@ -69,7 +69,7 @@ let screen_type_to_string = function
   | ShipScreen -> "ShipScreen"
   | NextGalaxy -> "NextGalaxy"
   | GameOver s -> "GameOver " ^ s
-  | Combat -> "Combat"
+  | Combat c -> "Combat"
   | Nothing -> "Nothing"
 
 let storage_to_string (s : storage) =
