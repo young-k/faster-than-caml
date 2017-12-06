@@ -42,7 +42,7 @@ let get_components combat exit ship () =
   ascii_box#add ship_box;
   ascii_box#add enemy_box;
 
-  mainbox#add mapbox;
+  mainbox#add ~expand:false mapbox;
   mainbox#add ascii_box;
 
   (* Setup footer section *)
@@ -110,19 +110,23 @@ let get_components combat exit ship () =
     match (Ship.get_weapon ship i) with
     | Some w ->
       let vbox = new vbox in
+      let label_box = new hbox in 
       let some = new label w.name in
       let fire_clicked = selected_weapon := i in
       let fire_button = new button "FIRE" in
       fire_button#on_click (fun () -> fire_clicked);
       let fire_frame = in_frame fire_button in
-      vbox#add some;
-      vbox#add fire_frame;
+      label_box#add ~expand:false some;
+      vbox#add ~expand:false label_box;
+      vbox#add ~expand:false fire_frame;
       weapons#add vbox;
       weapons#add ~expand:false new vline;
     | None ->
+      let vbox = new vbox in
       let none = new label "None" in
-      weapons#add none;
-      if i<>3 then weapons#add new vline
+      vbox#add none;
+      weapons#add vbox;
+      if i<>3 then weapons#add ~expand:false new vline
       else ()
   done;
 
