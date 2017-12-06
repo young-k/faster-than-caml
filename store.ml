@@ -158,5 +158,3 @@ let buy st (s : Ship.ship) i =
         | Some w, _ -> s.resources.scrap >= w.cost
         | _, Some a -> s.resources.scrap >= a.cost
         | _ -> failwith ("Item not found: " ^ i)
-
-let display (x, y) s st = failwith "Unimplemented"

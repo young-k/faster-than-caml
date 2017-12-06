@@ -39,10 +39,3 @@ val get_event : galaxy -> int -> event_type
  * requires: map
  * returns: the id of the last star *)
 val get_end : galaxy -> int
-
-(* [display (x,y) m] returns a string intended to display the map
- * requires: int [x] and [y] that correspond to the width and height of the 
- * user's window, a map [m]
- * returns: string that is a visual representation of the map *)
-val display : (int * int) -> galaxy -> string
-

@@ -78,6 +78,10 @@ let store_tests = [
   "get_weapons" >::
     (fun _ -> assert_equal 3 (List.length (get_weapons store)));
 
+  "apply_augmentation" >::
+    (fun _ -> assert_equal ((List.hd Ship.init.inventory).damage + 1)
+              (List.hd (apply_augmentation Ship.init test_aug).inventory).damage);
+
   "buy_weap_no_scrap" >::
     (fun _ -> assert_equal 1
       ((buy store (ship_with_no_scrap) (List.hd store.weapons).name).inventory 
@@ -97,6 +101,12 @@ let store_tests = [
   "buy_aug" >::
     (fun _ -> assert_equal 4 (List.fold_left (fun acc w -> acc + w.damage) 0
                               ship_with_aug.inventory));
+  
+  "can_buy_false" >:: (fun _ -> assert_equal false (can_buy store 
+                      ship_with_no_scrap (List.hd store.weapons).name));
+  
+  "can_buy_true" >:: (fun _ -> assert_equal true (can_buy new_store 
+                      ship_with_no_scrap "Test Weapon"));
 ]
 
 let e = Event.init ()

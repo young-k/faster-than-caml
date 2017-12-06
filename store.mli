@@ -55,9 +55,3 @@ val buy : store -> Ship.ship -> string -> Ship.ship
     [i] an augmentation or weapon name
   * returns: bool corresponding to if ship can buy item *)
 val can_buy : store -> Ship.ship -> string -> bool
-
-(* [display (x,y) s s'] returns a string intended to display the store
-  * requires: int [x] and [y] that correspond to the width and
-  * height of the user's window, [s] a store state, [s'] a ship state
-  * returns: string that is a visual representation of the store *)
-val display : (int * int) -> store -> Ship.ship -> string

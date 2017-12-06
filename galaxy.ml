@@ -55,5 +55,3 @@ let get_end m =
     | _ -> false
   ) m in
   star.id
-
-let display (x, y) m = failwith "Unimplemented"
