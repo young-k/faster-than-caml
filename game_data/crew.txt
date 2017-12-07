@@ -1,0 +1,8 @@
+Thierry Coquand;2;1;1
+Gerard Huet;2;1;1
+Alan Perlis;1;2;1
+Groot;1;5;1
+John Hopcroft;1;1;2
+Po the Panda;1;2;1
+John Backus;1;1;2
+Peter Naur;1;5;1

@@ -12,7 +12,9 @@ let get_components delta followup () =
 
   let followup_label = new label followup in
   let descrp = new LTerm_widget.label ("You've gained:") in
-  let rsc = new LTerm_widget.label ((string_of_int (delta.scrap))^" Scrap, "^
+  let rsc = if delta.scrap = 99 && delta.fuel = 99 && delta.missiles = 99 then
+    new LTerm_widget.label ("A new crew member.")
+    else new LTerm_widget.label ((string_of_int (delta.scrap))^" Scrap, "^
     (string_of_int (delta.fuel))^" Fuel, "^
     (string_of_int (delta.missiles))^" Missiles.") in
 
