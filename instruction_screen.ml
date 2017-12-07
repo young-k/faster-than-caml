@@ -17,7 +17,9 @@ let text = "                           Instructions                        \n" ^
            "6. Jumping to a star, you can either enter into combat, find a \n" ^
            "   store, see nothing, or uncover an event.                    \n" ^
            "7. The number of '*' next to a system represents that system's \n" ^ 
-           "   power.                                                      \n"
+           "   power.                                                      \n" ^
+           "8. In combat, you can press JUMP at any time, but combat is the\n" ^
+           "   best way to earn scrap.                                     \n"
 
 (* [in_frame w] is w wrapped in a frame *)
 let in_frame w = let f = new frame in f#set w; f 
