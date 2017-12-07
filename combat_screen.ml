@@ -137,19 +137,18 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   footer_left#add systems_frame;
   footer_left#add weapons_frame;
 
-
-
   (* Setup middle of footer *)
   let footer_middle = new vbox in 
   
   let enemy_box = new vbox in 
   
   let stats_box = new hbox in
-  let enemy_stats_label = new label "Enemy Stats:" in 
+  let enemy_stats_label = new label "   Enemy Stats:   " in 
   stats_box#add ~expand:false enemy_stats_label;
   
   let hull_box = new hbox in 
-  let hull_label = new label "Hull:" in
+  let hull_label = 
+    new label ("Hull: " ^ string_of_int (Ship.get_hull combat.enemy)) in
   hull_box#add ~expand:false hull_label;
   
   let enemy_weapons_box = new hbox in 
@@ -158,8 +157,11 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
 
   let enemy_weapons_section = new vbox in 
   for i = 0 to 3 do
-    let label = new label ("Weapon " ^ (string_of_int i) ^ ":") in 
-    enemy_weapons_section#add ~expand:false label;
+    match get_weapon combat.enemy i with
+    | None -> ();
+    | Some w ->
+      let label = new label (w.name) in 
+      enemy_weapons_section#add ~expand:false label;
   done;
 
   enemy_box#add ~expand:false stats_box;
@@ -210,6 +212,7 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
            s#set_text ("Shield Level: " ^ 
                        string_of_int (player.shield.layers));
 
+           hull_label#set_text ("Hull: " ^ string_of_int (Ship.get_hull enemy));
            text_label#set_text (!text)) in
 
   ((map, mainbox), (selected_weapon, event), combat);
