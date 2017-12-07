@@ -38,10 +38,11 @@ type augmentation = {
 }
 
 (* [person] is the record that represents a crew member, contains fields
- * {name, skills: (weapon skills, engine skills, shield skills)} *)
+ * {name, skills: (weapon skills, engine skills, hull skills); hp} *)
 type person = {
   name : string;
   skills : (int * int * int);
+  hp : int;
 }
 
 (* [resources] is the record that represents the resources of a ship including
@@ -226,6 +227,10 @@ val get_augmentation : ship -> int -> augmentation option
 (* [get_person s i] returns Some (ith crew member) of ship s
  * If wrong index/none available, returns None *)
 val get_person : ship -> int -> person option
+
+(* [add_crew] initiates a random person, adds them to the ship's crew,
+ * and applies the person's skills to the ship *)
+val add_crew : ship -> ship
 
 (*----------------------upgrade functions-----------------------------*)
 

@@ -1,4 +1,6 @@
 (* types from ship.mli *)
+open Parser
+open Random
 
 type weapon_type = Ion | Laser | Beam | Missile
 
@@ -30,6 +32,7 @@ type augmentation = {
 type person = {
   name : string;
   skills : (int * int * int);
+  hp : int;
 }
 
 type resources = {
@@ -65,7 +68,8 @@ let init = {
   resources = {fuel = 5; missiles = 1; scrap = 100;};
   crew = [{
     name = "O Camel";
-    skills = (1,1,1)
+    skills = (1,1,1);
+    hp = 5;
   }];
   hull = 30;
   max_hull = 30;
@@ -144,7 +148,20 @@ let set_scrap ship i =
 
 (*----------------------weapon/hull functions----------------------*)
 
-let damage ship dmg wtype = let sh = ship.shield in
+(* [damage_crew] takes in a ship and loops through its list of persons,
+ * applying a 10% chance of damage to each. If a person's heath reaches 0,
+ * they are removed from crew. The first crew member is immune to damage. *)
+let damage_crew ship = 
+  let rec loop lst = match lst with
+    | [] -> lst
+    | h::t -> let chance = float 1.0 in if chance < 0.1 then
+        if h.hp = 1 then t else {h with hp = h.hp-1}::(loop t)
+        else h::(loop t)
+  in
+  {ship with crew = (List.hd ship.crew)::(loop (List.tl ship.crew))}
+
+let damage ship' dmg wtype = let ship = damage_crew ship' in
+  let sh = ship.shield in
   let level = sh.layers in
   if level >= dmg && wtype != Missile then
   {ship with shield = {sh with layers = sh.layers - dmg}}
@@ -254,6 +271,36 @@ let get_augmentation ship ind = try (Some (List.nth (ship.augmentations) ind))
 
 let get_person ship ind = try (Some (List.nth (ship.crew) ind))
   with _ -> None
+
+let init_crew = fun () -> match (get_lines_from_f "./game_data/crew.txt" 1) with
+  | [] -> failwith "File does not contain a person"
+  | h::t ->
+    try
+      begin
+        match (String.split_on_char ';' h) with
+        | a::b::c::d::[] ->
+          let shld = int_of_string b in
+          let evd = int_of_string c in
+          let hll = int_of_string d in
+          {name=a; skills = (shld,evd,hll); hp = 5}
+        | _ -> failwith "Line does not contain number of necessary components"
+      end
+    with
+    | _ -> failwith "Line does not describe a valid crew member."
+
+let get_skill person n = let (a,b,c) = person.skills in
+  if n = 0 then a else if n = 1 then b else c
+
+let add_crew ship = let p = init_crew () in
+  if List.length ship.crew > 1 then ship else
+  let cap = ship.shield.capacity in
+  {ship with
+  crew = p::ship.crew;
+  shield = {ship.shield with capacity = if (get_skill p 0)>1 && cap > 2 then 
+    cap - 1 else cap};
+  evade = ship.evade + (get_skill p 1);
+  max_hull = if (get_skill p 2) > 1 then ship.max_hull+1 else ship.max_hull;
+  }
 
 (*----------------------upgrade functions-----------------------------*)
 let upgrade_engine_level ship =

@@ -4,6 +4,7 @@ open LTerm_widget
 
 open Controller
 open State
+open Ship
 
 open Galaxy_screen
 open Home_screen
@@ -15,6 +16,8 @@ open Ship_screen
 open Text_screen
 
 let exit = ref false
+
+let rec repeat str n acc = if n = 0 then acc else repeat str (n-1) acc^str
 
 (* terminal, controller *)
 let rec loop t c =
@@ -42,6 +45,9 @@ let rec loop t c =
     new label ("Shield Level: " ^ string_of_int (ship.shield.layers)) in
   let crew = 
     new label ("Crew Members: " ^ string_of_int (List.length ship.crew)) in
+  let crew_list = List.map 
+    (fun person -> new label (person.name^": "^(repeat "*" person.hp "")))
+    c.ship.crew in
   let sidebar = new vbox in 
   sidebar#add ~expand:false score;
   sidebar#add ~expand:false jumps;
@@ -55,6 +61,13 @@ let rec loop t c =
   sidebar#add ~expand:false shield;
   sidebar#add ~expand:false new hline;
   sidebar#add ~expand:false crew;
+  sidebar#add ~expand:false (new spacing ~rows:1 ());
+
+  let i = (List.length crew_list)-1 in
+  for n = 0 to i do
+    sidebar#add ~expand:false (List.nth crew_list n);
+  done;
+
   sidebar#add ~expand:false new hline;
   sidebar#add ~expand:false button;
   wrapper#add ~expand:false sidebar;

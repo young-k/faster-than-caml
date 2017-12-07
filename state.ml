@@ -12,7 +12,8 @@ let ship_to_string s =
   let resources = (s_of_i s.resources.fuel) ^ " " ^ 
     (s_of_i s.resources.missiles) ^ " " ^ (s_of_i s.resources.scrap) in
   let persons = List.fold_left 
-    (fun acc (p:person) -> acc ^ p.name ^ "." ^ skills_to_string p.skills ^ ";") 
+    (fun acc (p:person) -> acc ^ p.name ^ "." ^ skills_to_string p.skills ^ "."
+        ^ (string_of_int p.hp) ^ ";") 
       "" s.crew in
   let hull = s_of_i s.hull in
   let max_hull = s_of_i s.max_hull in
@@ -128,7 +129,8 @@ let get_ship lst =
           name = List.nth p_fields 0;
           skills = (List.nth p_fields 1 |> int_of_string, 
                     List.nth p_fields 2 |> int_of_string,
-                    List.nth p_fields 3 |> int_of_string)
+                    List.nth p_fields 3 |> int_of_string);
+          hp = List.nth p_fields 4 |> int_of_string
         }
       ) in
   let hull = List.nth lst 2 |> int_of_string in

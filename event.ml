@@ -49,7 +49,9 @@ let pick_choice s e b =
         missiles = res.missiles + delt1.missiles;
         scrap = res.scrap + delt1.scrap;
       } in
-    {s with resources=updated_resources}
+    if delt1 = {fuel = 99;missiles = 99;scrap = 99}
+    then add_crew s
+    else {s with resources=updated_resources}
   else
   let delt2 = e.snd_choice.delta_resources in
   let updated_resources =
@@ -58,7 +60,9 @@ let pick_choice s e b =
       missiles = res.missiles + delt2.missiles;
       scrap = res.scrap + delt2.scrap;
     } in
-  {s with resources=updated_resources}
+  if delt2 = {fuel = 99;missiles = 99;scrap = 99}
+  then add_crew s
+  else {s with resources=updated_resources}
 
 let get_description e b =
   if b then e.fst_choice.description
