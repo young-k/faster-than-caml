@@ -45,8 +45,8 @@ let pick_choice s e b =
     let delt1 = e.fst_choice.delta_resources in
     let updated_resources =
       {
-        fuel = res.fuel + delt1.fuel;
-        missiles = res.missiles + delt1.missiles;
+        fuel = max (res.fuel + delt1.fuel) 0;
+        missiles = max (res.missiles + delt1.missiles) 0;
         scrap = res.scrap + delt1.scrap;
       } in
     {s with resources=updated_resources}
@@ -54,8 +54,8 @@ let pick_choice s e b =
   let delt2 = e.snd_choice.delta_resources in
   let updated_resources =
     {
-      fuel = res.fuel + delt2.fuel;
-      missiles = res.missiles + delt2.missiles;
+      fuel = max (res.fuel + delt2.fuel) 0;
+      missiles = max (res.missiles + delt2.missiles) 0;
       scrap = res.scrap + delt2.scrap;
     } in
   {s with resources=updated_resources}
