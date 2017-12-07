@@ -6,7 +6,6 @@ open Store
 open Combat
 
 type command =
-  | Attack of int             (* Choose a weapon in slot to attack a room *)
   | Choice of bool            (* Choosing an option (y/n) for events *)
   | Go of int                 (* Go to another star *)
   | Purchase of string        (* Purchase an item from a store *)

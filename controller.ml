@@ -5,7 +5,6 @@ open Event
 open Store
 
 type command =
-  | Attack of int
   | Choice of bool
   | Go of int
   | Purchase of string
@@ -94,9 +93,6 @@ let parse_command c com =
         | Store s -> {c with screen_type=Store s}
         | _ -> failwith "No store in controller"
       end
-    | Attack ind ->
-      (* TODO: Fill in combat logic *)
-      {c with screen_type=GalaxyScreen (c.star_id, c.galaxy);}
     | Purchase s ->
       begin
         (match c.storage with

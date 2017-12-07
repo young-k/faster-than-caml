@@ -88,10 +88,11 @@ let weapon_outcome s fw b =
   | (false, false) ->
     ("Enemy was hit by " ^ fw.name, Ship.damage s fw.damage fw.w_type)
 
-(* [fire_weapons s] fires all weapons that are ready for s, and returns 
+(* [fire_weapons s b] fires all weapons that are ready for s, and returns 
  * s, a list of weapons that will be appended to incoming, and a string
- * of the weapons that were fired. *)
-let fire_weapons s = 
+ * of the weapons that were fired. [b] is whether or not the ship is the
+ * player. *)
+let fire_weapons s b = 
   let iterator = [0;1;2;3] in
   List.fold_left 
     (fun a i ->
@@ -100,19 +101,34 @@ let fire_weapons s =
        | Some weapon ->
          if weapon_ready s i then
            let ship = Ship.fire_weapon s i in
-           let elem = {
-             turns=3;
-             ship_target=Player;
-             room_target=0;
-             name=weapon.name;
-             w_type=weapon.wtype;
-             damage=weapon.damage;
-           } in
-           (ship, 
-            elem::lst, 
-            str ^ "\n" ^ "Enemy ship fired " ^ weapon.name)
+           if b then 
+             let elem = {
+               turns=3;
+               ship_target=Enemy;
+               room_target=0;
+               name=weapon.name;
+               w_type=weapon.wtype;
+               damage=weapon.damage;
+             } in
+             let str = "Your ship fired " in
+             (ship, 
+              elem::lst, 
+              "\n" ^ str ^ weapon.name)
+           else
+             let elem = {
+               turns=3;
+               ship_target=Player;
+               room_target=0;
+               name=weapon.name;
+               w_type=weapon.wtype;
+               damage=weapon.damage;
+             } in
+             let str = "Enemy ship fired " in
+             (ship, 
+              elem::lst, 
+              "\n" ^ str ^ weapon.name)
          else (s, lst, str)
-      | None -> (s, lst, str))
+       | None -> (s, lst, str))
     (s, [], "")
     iterator
 
@@ -137,7 +153,11 @@ let step c =
   let new_enemy = Ship.step (snd (snd new_ships)) in
   let new_incoming = List.filter (fun fw -> fw.turns<>0) incoming in
 
-  let (new_enemy, s, t) = fire_weapons new_enemy in
+  let (new_enemy, s, t) = fire_weapons new_enemy false in
+  let new_incoming = new_incoming @ s in
+  let text = text ^ t in
+
+  let (new_player, s, t) = fire_weapons new_player true in
   let new_incoming = new_incoming @ s in
   let text = text ^ t in
 
