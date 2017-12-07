@@ -22,7 +22,8 @@ let rec get_num_rand lst num acc =
 let get_lines_from_f f num =
   let channel = open_in f in
   let lst = read_lines_f f channel [] in
-  get_num_rand lst num []
+  if List.length lst <= num then lst 
+  else get_num_rand lst num [] 
 
 let rec insert_player n pscore lst = if n = 11 then [] else
   match lst with
