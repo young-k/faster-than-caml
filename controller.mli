@@ -19,6 +19,7 @@ type command =
   | ShowInstructions          (* Show instructions screen *)
   | ShowCurrentScreen         (* Shows the current screen of a controller *)
   | SaveShip of ship          (* Save ship; post-combat *)
+  | CombatWin                 (* Screen after winning combat *)
 
 (* screen_type contains information about what to display on UI *)
 type screen_type =
