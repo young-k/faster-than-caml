@@ -14,7 +14,7 @@
 
 A ship without life forms is nearby. Shall we investigate?;Yes;You found some abandoned resources!;1;1;20;No;You choose to leave the ship alone...;0;0;0
 A ship without life forms is nearby. Shall we investigate?;Yes;You use fuel but don't find anything...;-1;0;0;No;You choose to leave the ship alone...;0;0;0
-You see a stranded ship without fuel. Do you go to help?;Let's go help them;They thank you by giving you resources;0;2;20;Let's leave before they see us;You leave the ship...;0;0;0
+You see a stranded ship without fuel. Do you go to help?;Let's go help them;They thank you by giving you resources.;0;2;20;Let's leave before they see us;You leave the ship...;0;0;0
 You see a stranded ship without fuel. Do you go to help?;Let's go help them;They attack your ship and steal resources.;0;-2;0;Let's leave before they see us;You leave the ship...;0;0;0
 A mining colony is in distress from a disease. Do you go in to help?;Yes;The colony rewards you for your efforts.;0;1;25;No;You leave the colony behind...;0;0;0
 A mining colony is in distress from a disease. Do you go in to help?;Yes;Realizing it's too late, you put the colony out of its misery.;-1;-1;0;No;You leave the colony behind...;0;0;0

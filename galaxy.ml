@@ -12,7 +12,7 @@ let init =
   fun () -> 
     let random_event () =
       let _ = Random.self_init () in 
-      match Random.int 8 with
+      match Random.int 11 with
       | 0 -> Store
       | 1 | 2 -> Nothing
       | 3 | 4 -> Event

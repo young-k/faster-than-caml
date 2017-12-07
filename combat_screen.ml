@@ -58,7 +58,7 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
 
   (* Setting up systems section *)
   let systems_section = new vbox in
-  let systems_label = new label "Systems" in
+  let systems_label = new label "Player Systems" in
   let systems = new hbox in
 
   (* Used to generate display for shield/weapon systems *)
@@ -101,7 +101,7 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   let w_level = ship.systems.weapons_level in
   let w_power = ship.systems.weapons_power in
   let weapons_display = gen_lst_display w_level w_power [] |> gen_display in
-  let weapons_lbl = new label ("Weapons: " ^ weapons_display) in
+  let weapons_lbl = new label ("Player Weapons: " ^ weapons_display) in
   weapons_system#add weapons_lbl;
   systems#add (new spacing ~cols:3 ());
   systems#add weapons_system;
@@ -143,8 +143,6 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   footer_left#add systems_frame;
   footer_left#add weapons_frame;
 
-
-
   (* Setup middle of footer *)
   let footer_middle = new vbox in 
   
@@ -157,7 +155,8 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   stats_box#add (new spacing ~cols:3 ());
 
   let hull_box = new hbox in 
-  let hull_label = new label "Hull:" in
+  let hull_label = 
+    new label ("Hull: " ^ string_of_int (Ship.get_hull combat.enemy)) in
   hull_box#add (new spacing ~cols:3 ());
   hull_box#add ~expand:false hull_label;
   hull_box#add (new spacing ~cols:3 ());
@@ -170,12 +169,15 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
 
   let enemy_weapons_section = new vbox in 
   for i = 0 to 3 do
-    let hbox = new hbox in 
-    let label = new label ("Weapon " ^ (string_of_int i) ^ ":") in
-    hbox#add (new spacing ~cols:3 ());
-    hbox#add ~expand:false label;
-    hbox#add (new spacing ~cols:3 ());
-    enemy_weapons_section#add ~expand:false label;
+    match Ship.get_weapon combat.enemy i with
+    | None -> ();
+    | Some w -> 
+      let hbox = new hbox in 
+      let label = new label w.name in
+      hbox#add (new spacing ~cols:3 ());
+      hbox#add ~expand:false label;
+      hbox#add (new spacing ~cols:3 ());
+      enemy_weapons_section#add ~expand:false label;
   done;
 
   enemy_box#add ~expand:false stats_box;
@@ -188,9 +190,6 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
 
   let enemy_frame = in_frame enemy_box in
   footer_middle#add enemy_frame;
-
-
-
 
   (* Setup right side of footer *)
   let footer_right = new vbox in
@@ -222,11 +221,15 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
            combat := se;
            winner := th;
            let player = (!combat).player in
+           let enemy = (!combat).enemy in
            let resources = Ship.get_resources player in 
            m#set_text ("Missiles: " ^ string_of_int resources.missiles);
            h#set_text ("Hull: " ^ string_of_int (Ship.get_hull player));
            s#set_text ("Shield Level: " ^ 
                        string_of_int (player.shield.layers));
+
+           hull_label#set_text 
+             ("Hull: " ^ string_of_int (Ship.get_hull enemy));
            text_label#set_text (!text)) in
 
   ((map, mainbox), (selected_weapon, event), combat);
