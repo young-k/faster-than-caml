@@ -3,6 +3,7 @@ open Ship
 open Event
 open Galaxy
 open Store
+open State
 
 let test_galaxy = [{id = 10; event = End; reachable = []};
                     {id = 9; event = Store; reachable = [0; 3; 4; 10]};
@@ -239,8 +240,24 @@ let ship_tests = [
   "get_person0" >:: (fun _ -> assert_equal (Some dude)
     (get_person ship 0));
   "get_person1" >:: (fun _ -> assert_equal None
-    (get_person ship 1));
+    (Ship.get_person ship 1));
 
+]
+
+open Controller
+
+let c = load_game ()
+let c' = save_game c; load_game ()
+
+let state_tests = [
+  "state_ship" >:: (fun _ -> assert_equal c.ship c'.ship);
+  "state_screen_type" >:: (fun _ -> assert_equal c.screen_type c'.screen_type);
+  "state_star_id" >:: (fun _ -> assert_equal c.star_id c'.star_id);
+  "state_galaxy" >:: (fun _ -> assert_equal c.galaxy c'.galaxy);
+  "state_storage" >:: (fun _ -> assert_equal c.storage c'.storage);
+  "state_score" >:: (fun _ -> assert_equal c.score c'.score);
+  "state_jumps" >:: (fun _ -> assert_equal c.jumps c'.jumps);
+  "state_galaxies" >:: (fun _ -> assert_equal c.galaxies c'.galaxies);
 ]
 
 let tests = "test suite" >::: List.flatten [
@@ -248,6 +265,7 @@ let tests = "test suite" >::: List.flatten [
   store_tests;
   event_tests;
   ship_tests;
+  state_tests;
 ]
 
 let _ = run_test_tt_main tests

@@ -50,9 +50,9 @@ let event_type_to_string = function
 
 let galaxy_to_string g =
   let reachable_to_string r = List.fold_right (fun i acc -> acc ^ " " ^ s_of_i 
-    i) r "" in
+    i) (List.rev r) "" in
   let lst = List.map (fun s -> s_of_i s.id ^ " " ^ event_type_to_string s.event 
-    ^ reachable_to_string   s.reachable) g in
+    ^ reachable_to_string s.reachable) g in
   List.fold_left (fun acc x -> acc ^ x ^ ";") "" lst
 
 let screen_type_to_string = function
@@ -173,7 +173,7 @@ let get_ship lst =
   List.fold_left 
     (fun ship a -> 
       match a.aug_type with
-      | Damage | CoolDown -> Store.apply_augmentation ship a
+      | Damage | CoolDown -> apply_augmentation ship a
       | _ -> ship
     ) ship augmentations
 
@@ -216,8 +216,7 @@ let get_ship lst =
           event = List.nth star 1 |> string_to_event_type;
           reachable = 
             if List.length star > 2 
-              then List.tl star |> List.tl |> List.map (fun t -> i_of_s t) 
-                  |> List.rev
+              then List.tl star |> List.tl |> List.map (fun t -> i_of_s t)
             else []
         }
       ) g
