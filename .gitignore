@@ -20,6 +20,9 @@ _build/
 setup.data
 setup.log
 
+# save
+game_data/save.txt
+
 # vim files
 *.swp
 *.swo

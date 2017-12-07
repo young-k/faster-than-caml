@@ -140,15 +140,20 @@ let step c =
   let new_incoming = new_incoming @ (snd outcome) in
 
   (* TODO: check new_player if they need to fire anything *)
+  let winner = ref None in
+  if (get_hull new_player)=0 then winner := Some Enemy;
+  if (get_hull new_enemy)=0 then winner := Some Player;
 
-  match text with
-  | "" -> 
+  match (!winner, text) with
+  | Some Enemy, _ -> (c, Winner Enemy)
+  | Some Player, _ -> (c, Winner Player) 
+  | _, "" -> 
     ({c with
         incoming=new_incoming;
         player=new_player;
         enemy=new_enemy},
     Nothing) 
-  | _ ->
+  | _, _ ->
     ({c with
         incoming=new_incoming;
         player=new_player;
