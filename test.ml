@@ -191,7 +191,8 @@ let damaged_ship = {ship with systems = {
   }
 let dude = {
   name = "O Camel";
-  skills = (1,1,1)
+  skills = (1,1,1);
+  hp = 5
 }
 
 let ship_tests = [
@@ -229,6 +230,8 @@ let ship_tests = [
     (damage ship 3 Laser));
   "damage2" >:: (fun _ -> assert_equal {ship with hull = 29}
     (damage ship 1 Missile));
+  "damage3" >:: (fun _ -> assert_equal 0
+    (damage ship 100 Laser).hull);
   "repair" >:: (fun _ -> assert_equal 31 (repair_hull ship 1).hull);
   "get_weapon0" >:: (fun _ -> assert_equal (Some ion)
     (get_weapon ship 0));
