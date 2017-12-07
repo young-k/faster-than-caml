@@ -224,6 +224,9 @@ let ship_tests = [
   "equip" >:: (fun _ -> assert_equal
     {ship with inventory = weap::ship.inventory; equipped = weap::ship.equipped}
     (equip (add_weapon ship weap) 0 0));
+  "unequip" >:: (fun _ -> assert_equal
+    {ship with equipped = []}
+    (unequip ship 0));
 
 (*----------------------system functions---------------------------*)
 
