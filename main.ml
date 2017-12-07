@@ -36,7 +36,8 @@ let rec loop t c =
   let score = new label ("Score: " ^ string_of_int c.score) in
   let jumps = new label ("Jumps: " ^ string_of_int c.jumps) in
   let galaxy = 
-    new label ("  Galaxies traversed: " ^ string_of_int c.galaxies ^ "  ") in
+    new label ("    Galaxies traversed: " ^ 
+               string_of_int c.galaxies ^ "    ") in
   let ship = c.ship in
   let resources = Ship.get_resources ship in 
   let hull = Ship.get_hull ship in
@@ -190,7 +191,6 @@ let rec loop t c =
     wrapper#add mbox;
     jump#on_click 
       (fun () -> Lwt_engine.stop_event event; wakeup wakener ());
-    let weapon_index = !sw in
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
