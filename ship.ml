@@ -160,7 +160,7 @@ let damage_crew ship =
   in
   {ship with crew = (List.hd ship.crew)::(loop (List.tl ship.crew))}
 
-let damage ship' dmg wtype = let ship = damage_crew ship' in
+let damage ship dmg wtype = 
   let sh = ship.shield in
   let level = sh.layers in
   if level >= dmg && wtype != Missile then
@@ -291,9 +291,12 @@ let init_crew = fun () -> match (get_lines_from_f "./game_data/crew.txt" 1) with
 let get_skill person n = let (a,b,c) = person.skills in
   if n = 0 then a else if n = 1 then b else c
 
-let add_crew ship = let p = init_crew () in
-  if List.length ship.crew > 1 then ship else
-  let cap = ship.shield.capacity in
+let rec new_crew ship = let p = init_crew () in if List.length ship.crew >= 9 
+  then None else if List.mem p ship.crew then new_crew ship else Some p
+
+let add_crew ship = match new_crew ship with
+  | None -> ship
+  | Some p -> let cap = ship.shield.capacity in
   {ship with
   crew = p::ship.crew;
   shield = {ship.shield with capacity = if (get_skill p 0)>1 && cap > 2 then 

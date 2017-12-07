@@ -17,7 +17,10 @@ open Text_screen
 
 let exit = ref false
 
-let rec repeat str n acc = if n = 0 then acc else repeat str (n-1) acc^str
+let crew_tag p = let (s,e,h) = p.skills in
+  if s>1 then "Shield specialist"
+  else if e>1 then "Engine specialist"
+  else "Hull technician"
 
 (* terminal, controller *)
 let rec loop t c =
@@ -33,7 +36,8 @@ let rec loop t c =
   let score = new label ("Score: " ^ string_of_int c.score) in
   let jumps = new label ("Jumps: " ^ string_of_int c.jumps) in
   let galaxy = 
-    new label ("  Galaxies traversed: " ^ string_of_int c.galaxies ^ "  ") in
+    new label ("    Galaxies traversed: " ^ 
+               string_of_int c.galaxies ^ "    ") in
   let ship = c.ship in
   let resources = Ship.get_resources ship in 
   let hull = Ship.get_hull ship in
@@ -46,7 +50,7 @@ let rec loop t c =
   let crew = 
     new label ("Crew Members: " ^ string_of_int (List.length ship.crew)) in
   let crew_list = List.map 
-    (fun person -> new label (person.name^": "^(repeat "*" person.hp "")))
+    (fun person -> new label (person.name^": "^(crew_tag person)))
     c.ship.crew in
   let sidebar = new vbox in 
   sidebar#add ~expand:false score;
@@ -187,7 +191,6 @@ let rec loop t c =
     wrapper#add mbox;
     jump#on_click 
       (fun () -> Lwt_engine.stop_event event; wakeup wakener ());
-    let weapon_index = !sw in
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->

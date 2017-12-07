@@ -109,8 +109,9 @@ let get_components exit ship () =
 
 
   let vbox2 = new vbox in
-  let ship_ascii = new label ("hp: "^(repeat "\226\150\136" ship.hull "")^
-    (repeat "\226\150\145" (ship.max_hull-ship.hull) "")^"\n\n"^ship_ascii) in
+  (*let ship_ascii = new label ("hp: "^(repeat "\226\150\136" ship.hull "")^
+    (repeat "\226\150\145" (ship.max_hull-ship.hull) "")^"\n\n"^ship_ascii) in*)
+  let ship_ascii = new label ship_ascii in
   vbox2#add ~expand:false mapbox;
   vbox2#add ship_ascii;
   vbox2#add ~expand:false footer;

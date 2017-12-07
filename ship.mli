@@ -70,7 +70,7 @@ type systems = {
 type ship = {
   (* [resources] is the record containting (fuel, missiles, scrap) *)
   resources: resources;
-  (* [crew] is the list of crew members *)
+  (* [crew] is the list of crew members. Can contain a max of 2 persons *)
   crew: person list;
   (* [hull] is the ship's hp *)
   hull: int;
@@ -229,7 +229,7 @@ val get_augmentation : ship -> int -> augmentation option
 val get_person : ship -> int -> person option
 
 (* [add_crew] initiates a random person, adds them to the ship's crew,
- * and applies the person's skills to the ship *)
+ * and applies the person's skills to the ship. *)
 val add_crew : ship -> ship
 
 (*----------------------upgrade functions-----------------------------*)
