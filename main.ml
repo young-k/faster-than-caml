@@ -165,7 +165,8 @@ let rec loop t c =
         else loop t (parse_command c ShowMap))
   | Combat combat ->
     let result = 
-      Combat_screen.get_components combat button (fst display) () in
+      Combat_screen.get_components 
+        combat button (fst display) missiles hull shield in
     wrapper#add (result |> fst |> snd);
     (result |> fst |> fst)#on_click (wakeup wakener);
     let weapon_index = !(result |> snd |> fst) in

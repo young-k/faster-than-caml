@@ -1,0 +1,18 @@
+4 1 100
+O Camel.3.3.3;
+30
+30
+20
+Ion cannon;
+1 0 5
+Ion cannon;
+
+1 1 1 1 1 1
+Combat
+2
+1 Start 2 3;2 Combat 1 3 4 5;3 Event 1 2 5 6;4 Event 2 7 8;5 Store 2 3 7 9;6 Event 3 8 9;7 Event 4 5 10;8 Event 4 6 10;9 Event 5 6 10;10 End;
+None
+0
+1
+0
+1512613046.09
