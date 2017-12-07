@@ -191,14 +191,22 @@ let rec loop t c =
       Combat_screen.get_components 
         combat (fst display) stats thread in
     wrapper#add mbox;
+    let did_jump = ref false in
     jump#on_click 
-      (fun () -> Lwt_engine.stop_event event; wakeup wakener ());
+      (fun () -> did_jump := true; 
+        Lwt_engine.stop_event event; 
+        wakeup wakener ());
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
+        else if !did_jump then loop t 
+            (parse_command 
+               (parse_command c (SaveShip (!combat.player))) GoToResting)
         else 
-          loop t (parse_command c (SaveShip (!combat).player)))
+          loop t (parse_command (parse_command c (SaveShip (!combat).player))
+                    CombatWin
+                 ))
   | Store s ->
     let (mainBox, item, b, d, quit) = Store_screen.get_components 
         {c with storage = Store s} () in

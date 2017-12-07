@@ -18,6 +18,7 @@ type command =
   | ShowInstructions
   | ShowCurrentScreen
   | SaveShip of ship
+  | CombatWin
 
 type screen_type =
   | HomeScreen
@@ -162,11 +163,11 @@ let parse_command c com =
       end
     | ShowShipScreen -> {c with screen_type=ShipScreen}
     | ShowCurrentScreen -> c
-    | SaveShip s -> 
+    | SaveShip s -> {c with ship=s;}
+    | CombatWin ->
       let text = "You pick up resources from the destroyed ship: " in
       let resources = {fuel=1; missiles=1; scrap=20} in
-      {c with ship=s; 
-              screen_type=Notification (resources, text)}
+      {c with screen_type=Notification (resources, text)}
 
 let get_display c =
   c.ship, c.screen_type
