@@ -1,7 +1,8 @@
 (* The [Store] represents the store where a user can buy upgrades for their
  * ship. *)
 
-(* [store] contains all weapons and all augmentations availalbe to buy *)
+(* [store] contains all weapons, augmentations, fuel, and missiles availalbe 
+ * to buy *)
 type store = {
   weapons : Ship.weapon list;
   augmentations : Ship.augmentation list;
@@ -9,8 +10,10 @@ type store = {
   missiles : int;
 }
 
+(* Int value of fuel cost in scraps *)
 val fuel_cost : int
 
+(* INt value of missile cost in scraps *)
 val missile_cost : int
 
 (* [parse_weapon s] generates a weapon by parsing a string [s] with format

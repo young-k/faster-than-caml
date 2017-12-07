@@ -81,25 +81,34 @@ let apply_augmentation (s : Ship.ship) (a : augmentation) =
                         (fun weap -> {weap with damage = weap.damage + a.stat})
                         s.inventory in 
               let equipped = List.map
-                            (fun weap -> {weap with damage = weap.damage + a.stat})
+                            (fun weap -> 
+                              {weap with 
+                                damage = weap.damage + a.stat
+                              }
+                            )
                             s.equipped in
                             {s with inventory = inv; equipped = equipped}
   | CoolDown -> let inv = List.map
-                          (fun (weap:weapon) -> {weap with
-                                        capacity = max 0 (weap.capacity - a.stat);
-                                        charge = min weap.charge
-                                                (max 0 (weap.capacity - a.stat))
-                                        }
+                          (fun (weap:weapon) -> 
+                            {weap with
+                              capacity = max 0 (weap.capacity - a.stat);
+                              charge = min weap.charge
+                                      (max 0 (weap.capacity - a.stat))
+                            }
                           )
                           s.inventory in
                 let equipped = List.map
-                          (fun (weap:weapon) -> {weap with
-                                        capacity = max 0 (weap.capacity - a.stat);
-                                        charge = min weap.charge
-                                                (max 0 (weap.capacity - a.stat))
-                                        }
+                          (fun (weap:weapon) -> 
+                            {weap with
+                              capacity = max 0 (weap.capacity - a.stat);
+                              charge = min weap.charge
+                                      (max 0 (weap.capacity - a.stat))
+                            }
                           )
-                          s.equipped in {s with inventory = inv; equipped = equipped}
+                          s.equipped in {s with 
+                                          inventory = inv; 
+                                          equipped = equipped
+                                        }
 
 let buy st (s : Ship.ship) i =
   if i = "Fuel" then
