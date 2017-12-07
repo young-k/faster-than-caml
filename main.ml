@@ -185,9 +185,11 @@ let rec loop t c =
         else if !show_ship then loop t (parse_command c ShowShipScreen)
         else loop t (parse_command c ShowMap))
   | Combat combat ->
-    let ((jump, mbox), (sw, event)) = 
+    let ((jump, mbox), (sw, event), combat) = 
+      let stats = (missiles, hull, shield) in 
+      let thread = (waiter, wakener) in 
       Combat_screen.get_components 
-        combat button (fst display) missiles hull shield in
+        combat (fst display) stats thread in
     wrapper#add mbox;
     jump#on_click 
       (fun () -> Lwt_engine.stop_event event; wakeup wakener ());
@@ -195,27 +197,26 @@ let rec loop t c =
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command c GoToResting))
-        (* 
-        else loop t (parse_command c (Attack weapon_index))) *)
+        else 
+          loop t (parse_command c (SaveShip (!combat).player)))
   | Store s ->
     let (mainBox, item, b, d, quit) = Store_screen.get_components 
-      {c with storage = Store s} () in
+        {c with storage = Store s} () in
     wrapper#add mainBox;
     b#on_click (wakeup wakener);
     d#on_click (wakeup wakener);
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
-        if !exit then return ()
-        else if !quit then loop t (parse_command c ShowShipConfirm)
-        else if item#text = "1 Hull" then loop t (parse_command 
-          {c with ship = Ship.repair_hull c.ship 1} ShowStore) 
-        else if item#text = "All Hull" then loop t (parse_command 
-          {c with ship = Ship.repair_all_hull c.ship} ShowStore)
-        else if item#text <> "_" then 
-          loop t (parse_command {c with storage = Store s} (Purchase item#text))
-        else loop t (parse_command {c with storage = Store s} ShowStore))
+         if !exit then return ()
+         else if !quit then loop t (parse_command c ShowShipConfirm)
+         else if item#text = "1 Hull" then loop t (parse_command 
+                                                     {c with ship = Ship.repair_hull c.ship 1} ShowStore) 
+         else if item#text = "All Hull" then loop t (parse_command 
+                                                       {c with ship = Ship.repair_all_hull c.ship} ShowStore)
+         else if item#text <> "_" then 
+           loop t (parse_command {c with storage = Store s} (Purchase item#text))
+         else loop t (parse_command {c with storage = Store s} ShowStore))
   | ShipConfirm ->
     let result = Ship_confirm_screen.get_components c () in
     wrapper#add (fst result);
@@ -223,17 +224,17 @@ let rec loop t c =
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
-        if !exit then return ()
-        else loop t (parse_command c GoToResting))
+         if !exit then return ()
+         else loop t (parse_command c GoToResting))
   | GalaxyScreen (star_id, gal)->
     let result = Galaxy_screen.get_components star_id gal in
     wrapper#add (fst result);
     (result |> snd |> fst)#on_click (wakeup wakener);
     Lwt.finalize
-    (fun () -> run t frame waiter)
-    (fun () ->
-      if !exit then return ()
-      else loop t (parse_command c (Go !(result |> snd |> snd))))
+      (fun () -> run t frame waiter)
+      (fun () ->
+         if !exit then return ()
+         else loop t (parse_command c (Go !(result |> snd |> snd))))
   | Event event ->
     let result = Event_screen.get_components event () in
     wrapper#add (fst result);
@@ -241,8 +242,8 @@ let rec loop t c =
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
-        if !exit then return ()
-        else loop t (parse_command c (Choice (!(result |> snd |> snd)="Yes"))))
+         if !exit then return ()
+         else loop t (parse_command c (Choice (!(result |> snd |> snd)="Yes"))))
   | Notification (rsc, fol) ->
     let result = Notification_screen.get_components rsc fol () in
     wrapper#add (fst result);
@@ -250,37 +251,37 @@ let rec loop t c =
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
-        if !exit then return ()
-        else loop t (parse_command c (GoToResting)))
+         if !exit then return ()
+         else loop t (parse_command c (GoToResting)))
   | ShipScreen ->
     let (mainBox, action, d, equip, unequip, upgrade, index) = 
       Ship_screen.get_components c () in
     wrapper#add mainBox;
     d#on_click (fun () -> equip := false; unequip := false; 
-                          upgrade := false; wakeup wakener ());
+                 upgrade := false; wakeup wakener ());
     action#on_click (fun () -> if !unequip || !equip || !upgrade 
-                                then wakeup wakener ());
+                      then wakeup wakener ());
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
-        if !exit then return ()
-        else if !unequip then loop t (parse_command 
-          {c with ship = (Ship.unequip c.ship !index)} ShowShipScreen)
-        else if !equip then loop t (parse_command
-          {c with 
-            ship = (Ship.equip c.ship (List.length c.ship.equipped) !index)
-          }
-          ShowShipScreen)
-        else if !upgrade then 
-          let new_ship = 
-            (match !index with
+         if !exit then return ()
+         else if !unequip then loop t (parse_command 
+                                         {c with ship = (Ship.unequip c.ship !index)} ShowShipScreen)
+         else if !equip then loop t (parse_command
+                                       {c with 
+                                        ship = (Ship.equip c.ship (List.length c.ship.equipped) !index)
+                                       }
+                                       ShowShipScreen)
+         else if !upgrade then 
+           let new_ship = 
+             (match !index with
               | 0 -> (Ship.upgrade_shield_level c.ship)
               | 1 -> (Ship.upgrade_engine_level c.ship)
               | 2 -> (Ship.upgrade_weapons_level c.ship)
               | _ -> failwith "Invalid index"
-            ) in
-          loop t (parse_command {c with ship = new_ship} ShowShipScreen)
-        else loop t (parse_command c GoToResting))
+             ) in
+           loop t (parse_command {c with ship = new_ship} ShowShipScreen)
+         else loop t (parse_command c GoToResting))
   | NextGalaxy ->
     let result = Text_screen.get_components 2 () in
     wrapper#remove sidebar;
@@ -293,8 +294,8 @@ let rec loop t c =
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
-        if !exit then return ()
-        else loop t (parse_command c (Go 1)))
+         if !exit then return ()
+         else loop t (parse_command c (Go 1)))
 
 let main () =
   let controller = Controller.init in
