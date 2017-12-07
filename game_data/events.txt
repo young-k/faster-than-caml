@@ -10,9 +10,13 @@
 #Total event cost of around 40
 #can't lose scrap
 
-A ship without life forms is nearby. Shall we investigate?;Yes;You found some abandoned resources!;1;1;20;No;You leave the ship;0;0;0
-You see a stranded ship without fuel. Do you go to help?;Let's go help them;They thank you by giving you resources;0;2;20;Let's leave before they see us;You abandon the ship;0;0;0
-A mining colony is in distress from a disease. Do you go in to help?;Yes;The colony rewards you for your efforts.;1;1;30;No;You leave the colony behind;0;0;0
-You see a research station being attacked by pirates. Do you interfere?;Yes;You successfully stopped the attack!;-1;1;0;No;You abandon the researchers;0;0;0
+A ship without life forms is nearby. Shall we investigate?;Yes;You found some abandoned resources!;1;1;20;No;You choose to leave the ship alone...;0;0;0
+A ship without life forms is nearby. Shall we investigate?;Yes;You use fuel but don't find anything...;-1;0;0;No;You choose to leave the ship alone...;0;0;0
+You see a stranded ship without fuel. Do you go to help?;Let's go help them;They thank you by giving you resources;0;2;20;Let's leave before they see us;You leave the ship...;0;0;0
+You see a stranded ship without fuel. Do you go to help?;Let's go help them;They attack your ship and steal resources.;0;-2;0;Let's leave before they see us;You leave the ship...;0;0;0
+A mining colony is in distress from a disease. Do you go in to help?;Yes;The colony rewards you for your efforts.;0;1;25;No;You leave the colony behind...;0;0;0
+A mining colony is in distress from a disease. Do you go in to help?;Yes;Realizing it's too late, you put the colony out of its misery.;-1;-1;0;No;You leave the colony behind...;0;0;0
+You see a research station being attacked by pirates. Do you interfere?;Yes;The researchers give you scrap for your efforts.;0;0;25;No;You abandon the researchers...;0;0;0
+You see a research station being attacked by pirates. Do you interfere?;Yes;You attempt to shoot the ship but ultimately fail.;-1;-1;0;No;You abandon the researchers...;0;0;0
 Two space ships are about to explode. Which one do you save?;The one with more people!;The people reward you with scrap.;0;1;30;The one with more missiles!;You find 2 missiles and scrap!;0;2;20
-You find a ships fleeing from giant alien spiders! What do you do?;Get rid of the spiders;You succeed in taking them down!;0;0;40;Leave the spiders alone;You run away from the spiders.;0;0;0
+You find a ships fleeing from giant alien spiders! What do you do?;Get rid of the spiders;They are much too strong, and you spend your fuel racing away.;-2;0;0;Leave the spiders alone;You run away from the spiders.;0;0;0
