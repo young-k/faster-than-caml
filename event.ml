@@ -38,7 +38,6 @@ let init =
     with
     | _ -> failwith "Line does not describe a valid event."
 
-let cap i = if i<0 then 0 else i
 
 let pick_choice s e b =
   let res = s.resources in
@@ -46,9 +45,10 @@ let pick_choice s e b =
     let delt1 = e.fst_choice.delta_resources in
     let updated_resources =
       {
-        fuel = cap (res.fuel + delt1.fuel);
-        missiles = cap (res.missiles + delt1.missiles);
-        scrap = cap (res.scrap + delt1.scrap);
+
+        fuel = max (res.fuel + delt1.fuel) 0;
+        missiles = max (res.missiles + delt1.missiles) 0;
+        scrap = res.scrap + delt1.scrap;
       } in
     if delt1 = {fuel = 99;missiles = 99;scrap = 99}
     then add_crew s
@@ -57,9 +57,9 @@ let pick_choice s e b =
   let delt2 = e.snd_choice.delta_resources in
   let updated_resources =
     {
-      fuel = cap (res.fuel + delt2.fuel);
-      missiles = cap (res.missiles + delt2.missiles);
-      scrap = cap (res.scrap + delt2.scrap);
+      fuel = max (res.fuel + delt2.fuel) 0;
+      missiles = max (res.missiles + delt2.missiles) 0;
+      scrap = res.scrap + delt2.scrap;
     } in
   if delt2 = {fuel = 99;missiles = 99;scrap = 99}
   then add_crew s
