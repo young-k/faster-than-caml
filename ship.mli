@@ -144,7 +144,7 @@ val repair_all_hull : ship -> ship
 
 (* [repair_hull s i] returns ship [s] with hull increased by the int given [i]
  * with appropiate scrap deducted *)
- val repair_hull : ship -> int -> ship
+val repair_hull : ship -> int -> ship
 
 (* [increase_hull s i] returns ship [s] with max_hull increased by specified 
  * amount [i] *)

@@ -134,6 +134,16 @@ let event_tests = [
 ]
 
 let ship = Ship.init
+let shield0 = {
+  layers = 0;
+  charge = 5;
+  capacity = 5;
+}
+let shield1 = {
+  layers = 1;
+  charge = 5;
+  capacity = 5;
+}
 let init_rcs = {fuel = 5; missiles = 1; scrap = 100;}
 let new_rcs = {fuel = 4; missiles = 3; scrap = 103;}
 let new_rcs1 = {fuel = 6; missiles = 1; scrap = 100;}
@@ -172,6 +182,11 @@ let dude = {
 let ship_tests = [
   "evade" >:: (fun _ -> assert_equal 20 (evade ship));
   "get_hull" >:: (fun _ -> assert_equal 30 (get_hull ship));
+  "charge_shield0" >:: (fun _ -> assert_equal ship (charge_shield ship));
+  "charge_shield1" >:: (fun _ -> assert_equal ship 
+    (charge_shield {ship with shield = shield0}));
+  "charge_shield2" >:: (fun _ -> assert_equal {ship with shield = shield1} 
+    (charge_shield {ship with shield = shield1}));
 
 (*----------------------resources get/set functions----------------*)
 
@@ -190,10 +205,12 @@ let ship_tests = [
 
 (*----------------------weapon/hull functions----------------------*)
 
-  (* "damage0" >:: (fun _ -> assert_equal {ship with shield = (0,5)}
+  "damage0" >:: (fun _ -> assert_equal 
+    {ship with shield = {ship.shield with layers = 0}}
     (damage ship 1 Laser));
-  "damage1" >:: (fun _ -> assert_equal {ship with shield = (0,5); hull = 28}
-    (damage ship 3 Laser)); *)
+  "damage1" >:: (fun _ -> assert_equal 
+    {ship with shield = {ship.shield with layers = 0}; hull = 28}
+    (damage ship 3 Laser));
   "damage2" >:: (fun _ -> assert_equal {ship with hull = 29}
     (damage ship 1 Missile));
   "repair" >:: (fun _ -> assert_equal 31 (repair_hull ship 1).hull);

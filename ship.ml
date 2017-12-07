@@ -93,12 +93,12 @@ let init = {
   }];
   augmentations = [];
   systems = {
-  shield_level = 1;
-  shield_power = 1;
-  engine_level = 1;
-  engine_power = 1;
-  weapons_level = 1;
-  weapons_power = 1;
+    shield_level = 1;
+    shield_power = 1;
+    engine_level = 1;
+    engine_power = 1;
+    weapons_level = 1;
+    weapons_power = 1;
   }
 
 }

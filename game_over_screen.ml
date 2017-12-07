@@ -43,8 +43,10 @@ let get_components str pscore () =
   modal#add (new spacing ~rows:1 ());
   modal#add ~expand:false hbox;
   
-  modal#add (new spacing ~rows:3 ());
+  modal#add ~expand:false (new hline);
+  modal#add (new spacing ~rows:1 ());
   modal#add ~expand:false (new LTerm_widget.label "Scoreboard");
+  modal#add (new spacing ~rows:1 ());
 
   let scbd = new vbox in
   let scores = get_scores pscore in
@@ -53,6 +55,7 @@ let get_components str pscore () =
     scbd#add ~expand:false (new LTerm_widget.label str);
   done;
   modal#add ~expand:false scbd;
+  modal#add (new spacing ~rows:1 ());
   write_score scores;
 
   mainbox#add (new spacing ~rows:7 ());
