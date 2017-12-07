@@ -26,22 +26,18 @@ let get_lines_from_f f num =
   else get_num_rand lst num [] 
 
 let rec insert_player n pscore lst = 
-  if n=11 then [] 
-  else
+  if n = 11 then [] else
     match lst with
-    | [] -> 
-      if n <10 && pscore>0 
-      then ((string_of_int n) ^ ": " ^ (string_of_int pscore))::[] 
+    | [] -> if n <10 && pscore > 0 then ((string_of_int n)^": "^
+                                         (string_of_int pscore))::[] 
       else []
-    | h::t -> 
-      if pscore > h 
-      then 
-        if h = 0 then ((string_of_int n) ^ ": " ^ (string_of_int pscore))::
-                      (insert_player (n+1) (-1) t)
-        else ((string_of_int n)^": "^(string_of_int pscore))::
-             (insert_player (n+1) (-1) lst)
-      else ((string_of_int n)^": "^(string_of_int h))::
-           (insert_player (n+1) pscore t)
+    | h::t -> if pscore > h then if h = 0 then
+          ((string_of_int n)^": "^(string_of_int pscore))::(insert_player 
+                                                              (n+1) (-1) t)
+        else ((string_of_int n)^": "^(string_of_int pscore))::(insert_player 
+                                                                 (n+1) (-1) lst)
+      else ((string_of_int n)^": "^(string_of_int h))::(insert_player
+                                                          (n+1) pscore t)
 
 let rec read_score ch lst =
   try
