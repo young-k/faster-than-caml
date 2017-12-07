@@ -173,9 +173,6 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   let enemy_frame = in_frame enemy_box in
   footer_middle#add enemy_frame;
 
-
-
-
   (* Setup right side of footer *)
   let footer_right = new vbox in
 
@@ -206,11 +203,13 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
            combat := se;
            winner := th;
            let player = (!combat).player in
+           let enemy = (!combat).enemy in
            let resources = Ship.get_resources player in 
            m#set_text ("Missiles: " ^ string_of_int resources.missiles);
            h#set_text ("Hull: " ^ string_of_int (Ship.get_hull player));
            s#set_text ("Shield Level: " ^ 
                        string_of_int (player.shield.layers));
+
            text_label#set_text (!text)) in
 
   ((map, mainbox), (selected_weapon, event), combat);

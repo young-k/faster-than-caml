@@ -1,4 +1,5 @@
 compile:
+	touch game_data/save.txt
 	rm -rf _build/
 	jbuilder build main.exe
 
