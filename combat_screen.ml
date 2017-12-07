@@ -179,9 +179,6 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   let enemy_frame = in_frame enemy_box in
   footer_middle#add enemy_frame;
 
-
-
-
   (* Setup right side of footer *)
   let footer_right = new vbox in
 
