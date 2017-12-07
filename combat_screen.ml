@@ -158,7 +158,7 @@ let get_components combat exit ship m h s =
 
   let combat = ref combat in
   let text = ref "" in
-  let event =  Lwt_engine.on_timer 0.3 true 
+  let event =  Lwt_engine.on_timer 0.7 true 
       (fun _ -> 
          let res = step (!text) (!combat) in
          combat := (snd res);
