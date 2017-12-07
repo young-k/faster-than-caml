@@ -1,5 +1,6 @@
 # Weapons
 # name cost damage capacity charge weapon_type
+
 Ion cannon;10;1;4;0;Ion
 Basic Laser;40;1;3;0;Laser
 Leto;40;1;5;0;Missile
@@ -16,3 +17,4 @@ Chain Vulcan Laser;100;6;17;0;Laser
 Swarm;90;6;20;0;Missile
 Ultimate Camel;150;10;25;0;Missile
 Falcon Laser;75;4;10;0;Laser
+Ion cannon;10;1;2;0;Ion
