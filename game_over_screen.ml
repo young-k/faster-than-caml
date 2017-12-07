@@ -28,6 +28,7 @@ let get_components str pscore () =
 
   let logo = new LTerm_widget.label text in
   let msg = new LTerm_widget.label str in
+  let psc = new LTerm_widget.label ("Your score: "^(string_of_int pscore)) in
 
   (* button code: refactor this *)
   let hbox = new hbox in
@@ -40,6 +41,7 @@ let get_components str pscore () =
   modal#add (new spacing ~rows:1 ());
 
   modal#add ~expand:false msg;
+  modal#add ~expand:false psc;
   modal#add (new spacing ~rows:1 ());
   modal#add ~expand:false hbox;
   

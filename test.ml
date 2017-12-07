@@ -222,11 +222,18 @@ let ship_tests = [
     {ship with inventory = weap::ship.inventory}
     (add_weapon ship weap));
   "equip" >:: (fun _ -> assert_equal
-    {ship with inventory = weap::ship.inventory; equipped = weap::ship.equipped}
+    {ship with inventory = weap::ship.inventory; equipped =weap::ship.equipped}
     (equip (add_weapon ship weap) 0 0));
   "unequip" >:: (fun _ -> assert_equal
-    {ship with equipped = []}
-    (unequip ship 0));
+    {ship with equipped = []} (unequip ship 0));
+  "charge_weapons" >:: (fun _ -> assert_equal
+    {ship with equipped = [{ion with charge = 1}]} (charge_weapons ship));
+  "weapon_ready0" >:: (fun _ -> assert_equal false (weapon_ready ship 0));
+  "weapon_ready1" >:: (fun _ -> assert_equal true
+    (weapon_ready (charge_weapons ship |> charge_weapons) 0));
+  "fire_weapon0" >:: (fun _ -> assert_equal ship (fire_weapon ship 0));
+  "fire_weapon1" >:: (fun _ -> assert_equal ship 
+    (fire_weapon (charge_weapons ship |> charge_weapons) 0));
 
 (*----------------------system functions---------------------------*)
 

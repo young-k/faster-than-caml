@@ -65,7 +65,7 @@ let init = {
   resources = {fuel = 5; missiles = 1; scrap = 100;};
   crew = [{
     name = "O Camel";
-    skills = (3,3,3)
+    skills = (1,1,1)
   }];
   hull = 30;
   max_hull = 30;
