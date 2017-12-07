@@ -137,6 +137,51 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   footer_left#add systems_frame;
   footer_left#add weapons_frame;
 
+
+
+  (* Setup middle of footer *)
+  let footer_middle = new vbox in 
+  
+  let enemy_box = new vbox in 
+  
+  let stats_box = new hbox in
+  let enemy_stats_label = new label "Enemy Stats:" in 
+  stats_box#add ~expand:false enemy_stats_label;
+  
+  let hull_box = new hbox in 
+  let hull_label = new label "Hull" in
+  hull_box#add ~expand:false hull_label;
+
+  let enemy_hull_box = new hbox in
+  let enemy_hull = new label "-Fill in enemy hull-" in
+  enemy_hull_box#add ~expand:false enemy_hull;
+  
+  let enemy_weapons_box = new hbox in 
+  let enemy_weapons_label = new label "Weapons:" in
+  enemy_weapons_box#add ~expand:false enemy_weapons_label;
+
+  let enemy_weapons_section = new vbox in 
+  for i = 0 to 3 do
+    let label = new label ("Weapon " ^ (string_of_int i) ^ ":") in 
+    enemy_weapons_section#add ~expand:false label;
+  done;
+
+  enemy_box#add ~expand:false stats_box;
+  enemy_box#add new hline;
+  enemy_box#add ~expand:false hull_box;
+  enemy_box#add new hline;
+  enemy_box#add ~expand:false enemy_hull_box;
+  enemy_box#add new hline;
+  enemy_box#add ~expand:false enemy_weapons_box;
+  enemy_box#add new hline;
+  enemy_box#add ~expand:false enemy_weapons_section;
+
+  let enemy_frame = in_frame enemy_box in
+  footer_middle#add enemy_frame;
+
+
+
+
   (* Setup right side of footer *)
   let footer_right = new vbox in
 
@@ -149,6 +194,7 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   footer_right#add textbox_frame;
 
   footer#add footer_left;
+  footer#add ~expand:false footer_middle;
   footer#add footer_right;
 
   mainbox#add footer;
