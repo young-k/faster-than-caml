@@ -8,9 +8,7 @@ open Combat
 type command =
   | Attack of int             (* Choose a weapon in slot to attack a room *)
   | Choice of bool            (* Choosing an option (y/n) for events *)
-  | Equip of (string * int)   (* Equip a weapon to a certain slot *)
   | Go of int                 (* Go to another star *)
-  | Power of string           (* Get the power level of a system *)
   | Purchase of string        (* Purchase an item from a store *)
   | ShowMap                   (* Displays the map *)
   | ShowStore                 (* Displays a store *) 
