@@ -17,7 +17,8 @@ type command =
   | ShowShipScreen            (* Screen for details on ship & ship upgrades *)
   | ShowHomeScreen            (* Show home screen *)
   | ShowInstructions          (* Show instructions screen *)
-  | ShowCurrentScreen
+  | ShowCurrentScreen         (* Shows the current screen of a controller *)
+  | SaveShip of ship          (* Save ship; post-combat *)
 
 (* screen_type contains information about what to display on UI *)
 type screen_type =

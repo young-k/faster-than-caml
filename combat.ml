@@ -161,7 +161,6 @@ let step c =
   let new_incoming = new_incoming @ s in
   let text = text ^ t in
 
-  (* TODO: check new_player if they need to fire anything *)
   let winner = ref None in
   if (get_hull new_player)=0 then winner := Some Enemy;
   if (get_hull new_enemy)=0 then winner := Some Player;
