@@ -1,12 +1,12 @@
 # Weapons
 # name cost damage capacity charge weapon_type
-Ion cannon;10;1;2;0;Ion
-Basic Laser;40;1;10;0;Laser
-Leto;40;1;9;0;Missile
-Dual Lasers;55;2;10;0;Laser
-Artemis;48;2;10;0;Missile
-Burst Laser;70;3;11;0;Laser
-Hermes;45;3;14;0;Missile
+Ion cannon;10;1;4;0;Ion
+Basic Laser;40;1;3;0;Laser
+Leto;40;1;5;0;Missile
+Dual Lasers;55;2;6;0;Laser
+Artemis;48;2;7;0;Missile
+Burst Laser;70;3;8;0;Laser
+Hermes;45;3;10;0;Missile
 Heavy Laser;65;4;13;0;Laser
 Pegasus;60;4;20;0;Missile
 Hull Laser;75;5;15;0;Laser
