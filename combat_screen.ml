@@ -81,7 +81,9 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   let engine_display = gen_lst_display e_level e_power [] |> gen_display in
   let engine_lbl = new label ("Engine Level: " ^ engine_display) in
   engine_system#add engine_lbl;
+  systems#add (new spacing ~cols:3 ());
   systems#add engine_system;
+  systems#add (new spacing ~cols:3 ());
   systems#add ~expand:false new vline;
 
   let shield_system = new vbox in
@@ -90,7 +92,9 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   let shield_display = gen_lst_display s_level s_power [] |> gen_display in
   let shield_lbl = new label ("Shield: " ^ shield_display) in
   shield_system#add shield_lbl;
+  systems#add (new spacing ~cols:3 ());
   systems#add shield_system;
+  systems#add (new spacing ~cols:3 ());
   systems#add ~expand:false new vline;
 
   let weapons_system = new vbox in
@@ -99,7 +103,9 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   let weapons_display = gen_lst_display w_level w_power [] |> gen_display in
   let weapons_lbl = new label ("Weapons: " ^ weapons_display) in
   weapons_system#add weapons_lbl;
+  systems#add (new spacing ~cols:3 ());
   systems#add weapons_system;
+  systems#add (new spacing ~cols:3 ());
 
   systems_section#add systems_label;
   systems_section#add ~expand:false new hline;
@@ -137,31 +143,39 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   footer_left#add systems_frame;
   footer_left#add weapons_frame;
 
+
+
   (* Setup middle of footer *)
   let footer_middle = new vbox in 
   
   let enemy_box = new vbox in 
   
   let stats_box = new hbox in
-  let enemy_stats_label = new label "   Enemy Stats:   " in 
+  let enemy_stats_label = new label "Enemy Stats:" in 
+  stats_box#add (new spacing ~cols:3 ());
   stats_box#add ~expand:false enemy_stats_label;
-  
+  stats_box#add (new spacing ~cols:3 ());
+
   let hull_box = new hbox in 
-  let hull_label = 
-    new label ("Hull: " ^ string_of_int (Ship.get_hull combat.enemy)) in
+  let hull_label = new label "Hull:" in
+  hull_box#add (new spacing ~cols:3 ());
   hull_box#add ~expand:false hull_label;
+  hull_box#add (new spacing ~cols:3 ());
   
   let enemy_weapons_box = new hbox in 
   let enemy_weapons_label = new label "Weapons:" in
+  enemy_weapons_box#add (new spacing ~cols:3 ());
   enemy_weapons_box#add ~expand:false enemy_weapons_label;
+  enemy_weapons_box#add (new spacing ~cols:3 ());
 
   let enemy_weapons_section = new vbox in 
   for i = 0 to 3 do
-    match get_weapon combat.enemy i with
-    | None -> ();
-    | Some w ->
-      let label = new label (w.name) in 
-      enemy_weapons_section#add ~expand:false label;
+    let hbox = new hbox in 
+    let label = new label ("Weapon " ^ (string_of_int i) ^ ":") in
+    hbox#add (new spacing ~cols:3 ());
+    hbox#add ~expand:false label;
+    hbox#add (new spacing ~cols:3 ());
+    enemy_weapons_section#add ~expand:false label;
   done;
 
   enemy_box#add ~expand:false stats_box;
@@ -175,6 +189,9 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   let enemy_frame = in_frame enemy_box in
   footer_middle#add enemy_frame;
 
+
+
+
   (* Setup right side of footer *)
   let footer_right = new vbox in
 
@@ -187,9 +204,9 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   footer_right#add textbox_frame;
 
   let info_hbox = new hbox in 
-  info_hbox#add footer_left;
+  info_hbox#add ~expand:false footer_left;
   info_hbox#add ~expand:false footer_middle;
-  footer#add info_hbox;
+  footer#add ~expand:false info_hbox;
   footer#add footer_right;
 
   mainbox#add footer;
@@ -205,14 +222,11 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
            combat := se;
            winner := th;
            let player = (!combat).player in
-           let enemy = (!combat).enemy in
            let resources = Ship.get_resources player in 
            m#set_text ("Missiles: " ^ string_of_int resources.missiles);
            h#set_text ("Hull: " ^ string_of_int (Ship.get_hull player));
            s#set_text ("Shield Level: " ^ 
                        string_of_int (player.shield.layers));
-
-           hull_label#set_text ("Hull: " ^ string_of_int (Ship.get_hull enemy));
            text_label#set_text (!text)) in
 
   ((map, mainbox), (selected_weapon, event), combat);
