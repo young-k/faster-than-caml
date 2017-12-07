@@ -28,12 +28,12 @@ let rec read_lines_rand f ch num lst =
   else
     try
       let line = input_line ch in
-      if (line= "" || (String.get line 0) = '#')
+      if (line= "" || (String.get line 0) = '#' || List.mem line lst)
       then
         read_lines_rand f ch num lst
       else
         let _ = Random.self_init() in 
-        if (Random.float 1.0 > 0.5)
+        if (Random.float 1.0 > 0.95)
         then
           read_lines_rand f ch (num-1) (line::lst)
         else
@@ -41,7 +41,7 @@ let rec read_lines_rand f ch num lst =
     with
     | End_of_file ->
       let channel = open_in f in
-      read_lines channel num lst
+      read_lines_rand f channel num lst
 
 let get_lines_from_f f num =
   let channel = open_in f in
