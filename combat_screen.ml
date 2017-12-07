@@ -149,12 +149,8 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   stats_box#add ~expand:false enemy_stats_label;
   
   let hull_box = new hbox in 
-  let hull_label = new label "Hull" in
+  let hull_label = new label "Hull:" in
   hull_box#add ~expand:false hull_label;
-
-  let enemy_hull_box = new hbox in
-  let enemy_hull = new label "-Fill in enemy hull-" in
-  enemy_hull_box#add ~expand:false enemy_hull;
   
   let enemy_weapons_box = new hbox in 
   let enemy_weapons_label = new label "Weapons:" in
@@ -169,8 +165,6 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   enemy_box#add ~expand:false stats_box;
   enemy_box#add new hline;
   enemy_box#add ~expand:false hull_box;
-  enemy_box#add new hline;
-  enemy_box#add ~expand:false enemy_hull_box;
   enemy_box#add new hline;
   enemy_box#add ~expand:false enemy_weapons_box;
   enemy_box#add new hline;
@@ -193,8 +187,10 @@ let get_components combat ship (m, h, s) (waiter, wakener) =
   let textbox_frame = in_frame textbox in
   footer_right#add textbox_frame;
 
-  footer#add footer_left;
-  footer#add ~expand:false footer_middle;
+  let info_hbox = new hbox in 
+  info_hbox#add footer_left;
+  info_hbox#add ~expand:false footer_middle;
+  footer#add info_hbox;
   footer#add footer_right;
 
   mainbox#add footer;
