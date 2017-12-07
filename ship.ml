@@ -160,7 +160,7 @@ let damage_crew ship =
   in
   {ship with crew = (List.hd ship.crew)::(loop (List.tl ship.crew))}
 
-let damage ship' dmg wtype = let ship = damage_crew ship' in
+let damage ship' dmg wtype = let ship = {ship' with crew=[]} in
   let sh = ship.shield in
   let level = sh.layers in
   if level >= dmg && wtype != Missile then
