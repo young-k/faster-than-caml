@@ -17,7 +17,10 @@ open Text_screen
 
 let exit = ref false
 
-let rec repeat str n acc = if n = 0 then acc else repeat str (n-1) acc^str
+let crew_tag p = let (s,e,h) = p.skills in
+  if s>1 then "Shield specialist"
+  else if e>1 then "Engine specialist"
+  else "Hull technician"
 
 (* terminal, controller *)
 let rec loop t c =
@@ -46,7 +49,7 @@ let rec loop t c =
   let crew = 
     new label ("Crew Members: " ^ string_of_int (List.length ship.crew)) in
   let crew_list = List.map 
-    (fun person -> new label (person.name^": "^(repeat "*" person.hp "")))
+    (fun person -> new label (person.name^": "^(crew_tag person)))
     c.ship.crew in
   let sidebar = new vbox in 
   sidebar#add ~expand:false score;
