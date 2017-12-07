@@ -158,16 +158,17 @@ let get_components combat exit ship m h s =
 
   let combat = ref combat in
   let text = ref "" in
-  ignore (Lwt_engine.on_timer 0.15 true 
-            (fun _ -> 
-               let res = step (!text) (!combat) in
-               combat := (snd res);
-               text := (fst res);
-               let player = (!combat).player in
-               let resources = Ship.get_resources player in 
-               m#set_text ("Missiles: " ^ string_of_int resources.missiles);
-               h#set_text ("Hull: " ^ string_of_int (Ship.get_hull player));
-               s#set_text ("Shield: " ^ string_of_int (ship.shield.layers));
-               text_label#set_text (!text)));
+  let event =  Lwt_engine.on_timer 0.3 true 
+      (fun _ -> 
+         let res = step (!text) (!combat) in
+         combat := (snd res);
+         text := (fst res);
+         let player = (!combat).player in
+         let resources = Ship.get_resources player in 
+         m#set_text ("Missiles: " ^ string_of_int resources.missiles);
+         h#set_text ("Hull: " ^ string_of_int (Ship.get_hull player));
+         s#set_text ("Shield Level: " ^ 
+                     string_of_int (player.shield.layers));
+         text_label#set_text (!text)) in
 
-  ((map, mainbox), (selected_weapon, text_label));
+  ((map, mainbox), (selected_weapon, event));

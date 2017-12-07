@@ -89,13 +89,13 @@ let weapon_outcome s fw b =
     ("Enemy was hit by " ^ fw.name, Ship.damage s fw.damage fw.w_type)
 
 (* [fire_weapons s] fires all weapons that are ready for s, and returns 
- * s, and a list of weapons that will be appended to incoming. *)
+ * s, a list of weapons that will be appended to incoming, and a string
+ * of the weapons that were fired. *)
 let fire_weapons s = 
   let iterator = [0;1;2;3] in
   List.fold_left 
     (fun a i ->
-       let s = fst a in
-       let lst = snd a in
+       let (s, lst, str) = a in
        match get_weapon s i with
        | Some weapon ->
          if weapon_ready s i then
@@ -108,10 +108,12 @@ let fire_weapons s =
              w_type=weapon.wtype;
              damage=weapon.damage;
            } in
-           (ship, elem::lst)
-         else (s, lst)
-      | None -> (s, lst))
-    (s, [])
+           (ship, 
+            elem::lst, 
+            str ^ "\n" ^ "Enemy ship fired " ^ weapon.name)
+         else (s, lst, str)
+      | None -> (s, lst, str))
+    (s, [], "")
     iterator
 
 let step c =
@@ -135,9 +137,9 @@ let step c =
   let new_enemy = Ship.step (snd (snd new_ships)) in
   let new_incoming = List.filter (fun fw -> fw.turns<>0) incoming in
 
-  let outcome = fire_weapons new_enemy in
-  let new_enemy = (fst outcome) in
-  let new_incoming = new_incoming @ (snd outcome) in
+  let (new_enemy, s, t) = fire_weapons new_enemy in
+  let new_incoming = new_incoming @ s in
+  let text = text ^ t in
 
   (* TODO: check new_player if they need to fire anything *)
   let winner = ref None in

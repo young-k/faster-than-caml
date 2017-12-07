@@ -152,7 +152,8 @@ let rec loop t c =
         if !exit then return ()
         else loop t (parse_command c GoToResting))
   | Resting ->
-    let (map, ship_screen, mainbox) = Resting_screen.get_components button (fst display) () in
+    let (map, ship_screen, mainbox) = 
+      Resting_screen.get_components button (fst display) () in
     wrapper#add mainbox;
     let show_ship = ref false in 
       map#on_click (fun () -> show_ship := false; wakeup wakener ());
@@ -164,12 +165,13 @@ let rec loop t c =
         else if !show_ship then loop t (parse_command c ShowShipScreen)
         else loop t (parse_command c ShowMap))
   | Combat combat ->
-    let result = 
+    let ((jump, mbox), (sw, event)) = 
       Combat_screen.get_components 
         combat button (fst display) missiles hull shield in
-    wrapper#add (result |> fst |> snd);
-    (result |> fst |> fst)#on_click (wakeup wakener);
-    let weapon_index = !(result |> snd |> fst) in
+    wrapper#add mbox;
+    jump#on_click 
+      (fun () -> Lwt_engine.stop_event event; wakeup wakener ());
+    let weapon_index = !sw in
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
