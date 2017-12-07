@@ -90,7 +90,8 @@ let get_components c () =
     else if c.ship.resources.scrap < Store.missile_cost 
       then ("\nYou do not have enough scrap", "_")
     else ("\nCost: " ^ string_of_int Store.missile_cost, "Missile") in
-  let mbutton = new button ("Missiles: " ^ string_of_int s.missiles ^ " available") in
+  let mbutton = new button ("Missiles: " ^ string_of_int s.missiles ^ 
+                            " available") in
     mbutton#on_click (fun () -> label#set_text ("Missile" ^ fst mtext); 
                                 item#set_text(snd mtext));
   let h1text = 

@@ -15,7 +15,7 @@ type event = {
   snd_choice: choice
 }
 
-(* [init] randomly generates an event from game data *)
+(* [init ()] randomly generates an event from game data *)
 val init : unit -> event
 
 (* [pick_choice s e b] applies consequences of choice to ship and returns the

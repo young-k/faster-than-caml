@@ -27,10 +27,16 @@ let galaxy_tests = [
                                           (reachable test_galaxy 3));
   "reachable_none" >:: (fun _ -> assert_equal [] (reachable test_galaxy 10));
 
-  "get_event" >:: (fun _ -> assert_equal Store (get_event test_galaxy 9));
+  "get_event_store" >:: (fun _ -> assert_equal Store (get_event test_galaxy 9));
+  "get_event_combat" >:: (fun _ -> assert_equal Combat 
+                                    (get_event test_galaxy 2));
+  "get_event_event" >:: (fun _ -> assert_equal Event (get_event test_galaxy 7));
   "get_event_nothing" >:: (fun _ -> assert_equal Nothing
-                              (get_event test_galaxy 5));
+                                    (get_event test_galaxy 5));
+
   "get_event_end" >:: (fun _ -> assert_equal End (get_event test_galaxy 10));
+  "get_event_end_random" >:: (fun _ -> assert_equal End (get_event 
+                                                         random_galaxy 10));
 
   "get_end" >:: (fun _ -> assert_equal 10 (get_end test_galaxy));
   "get_end_random" >:: (fun _ -> assert_equal 10 (get_end random_galaxy));
@@ -64,7 +70,8 @@ let new_store : store = {
   missiles = 5;
 }
 
-let ship_with_no_scrap = {Ship.init with resources={fuel = 0; missiles = 0; scrap = 0}}
+let ship_with_no_scrap = 
+    {Ship.init with resources={fuel = 0; missiles = 0; scrap = 0}}
 
 let ship_with_weap = (buy new_store (Ship.init) "Test Weapon")
 let ship_with_aug = (buy new_store ship_with_weap "Test Augmentation")
@@ -72,6 +79,14 @@ let ship_with_aug = (buy new_store ship_with_weap "Test Augmentation")
 let store_tests = [
   "init_weapons" >:: (fun _ -> assert_equal 3 (List.length store.weapons));
   "init_aug" >:: (fun _ -> assert_equal 3 (List.length store.augmentations));
+  "init_fuel" >:: (fun _ -> assert_equal 5 store.fuel);
+  "init_missiles" >:: (fun _ -> assert_equal 5 store.missiles);
+
+  "parse_weapon" >:: (fun _ -> assert_equal test_weapon 
+                                (parse_weapon "Test Weapon;0;1;10;10;Laser"));
+
+  "parse_augmentation" >:: (fun _ -> assert_equal test_aug (parse_augmentation 
+    "Test Augmentation;0;Damage;1;Increase damage of all weapons by 1"));
 
   "get_augmentations" >::
     (fun _ -> assert_equal 3 (List.length (get_augmentations store)));
@@ -81,7 +96,7 @@ let store_tests = [
 
   "apply_augmentation" >::
     (fun _ -> assert_equal ((List.hd Ship.init.inventory).damage + 1)
-              (List.hd (apply_augmentation Ship.init test_aug).inventory).damage);
+            (List.hd (apply_augmentation Ship.init test_aug).inventory).damage);
 
   "buy_weap_no_scrap" >::
     (fun _ -> assert_equal 1
@@ -176,7 +191,7 @@ let damaged_ship = {ship with systems = {
   }
 let dude = {
   name = "O Camel";
-  skills = (3,3,3)
+  skills = (1,1,1)
 }
 
 let ship_tests = [
@@ -190,7 +205,8 @@ let ship_tests = [
 
 (*----------------------resources get/set functions----------------*)
 
-  "get_resources" >:: (fun _ -> assert_equal init_rcs (Ship.get_resources ship));
+  "get_resources" >:: (fun _ -> assert_equal init_rcs 
+                                (Ship.get_resources ship));
   "set_resources" >:: (fun _ -> assert_equal {ship with resources = new_rcs}
     (set_resources ship (-1,2,3)));
   "get_fuel" >:: (fun _ -> assert_equal 5 (get_fuel ship));
