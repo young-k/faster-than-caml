@@ -25,18 +25,23 @@ let get_lines_from_f f num =
   if List.length lst <= num then lst 
   else get_num_rand lst num [] 
 
-let rec insert_player n pscore lst = if n = 11 then [] else
-  match lst with
-  | [] -> if n <10 && pscore > 0 then ((string_of_int n)^": "^
-                                        (string_of_int pscore))::[]
-          else []
-  | h::t -> if pscore > h then if h = 0 then
-      ((string_of_int n)^": "^(string_of_int pscore))::(insert_player
-                                                        (n+1) (-1) t)
-      else ((string_of_int n)^": "^(string_of_int pscore))::(insert_player
-                                                              (n+1) (-1) lst)
-    else ((string_of_int n)^": "^(string_of_int h))::(insert_player
-                                                      (n+1) pscore t)
+let rec insert_player n pscore lst = 
+  if n=11 then [] 
+  else
+    match lst with
+    | [] -> 
+      if n <10 && pscore>0 
+      then ((string_of_int n) ^ ": " ^ (string_of_int pscore))::[] 
+      else []
+    | h::t -> 
+      if pscore > h 
+      then 
+        if h = 0 then ((string_of_int n) ^ ": " ^ (string_of_int pscore))::
+                      (insert_player (n+1) (-1) t)
+        else ((string_of_int n)^": "^(string_of_int pscore))::
+             (insert_player (n+1) (-1) lst)
+      else ((string_of_int n)^": "^(string_of_int h))::
+           (insert_player (n+1) pscore t)
 
 let rec read_score ch lst =
   try
@@ -46,6 +51,7 @@ let rec read_score ch lst =
   with
   | End_of_file -> lst
 
-let get_scores pscore = let channel = try open_in "./game_data/scoreboard.txt"
+let get_scores pscore = 
+  let channel = try open_in "./game_data/scoreboard.txt" 
     with _ -> failwith "Core game data missing: scoreboard.txt." in
   read_score channel [] |> List.rev |> insert_player 1 pscore
