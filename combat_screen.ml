@@ -109,17 +109,10 @@ let get_components combat exit ship () =
   for i = 0 to 3 do
     match (Ship.get_weapon ship i) with
     | Some w ->
-      let vbox = new vbox in
       let label_box = new hbox in 
       let some = new label w.name in
-      let fire_clicked = selected_weapon := i in
-      let fire_button = new button "FIRE" in
-      fire_button#on_click (fun () -> fire_clicked);
-      let fire_frame = in_frame fire_button in
       label_box#add ~expand:false some;
-      vbox#add ~expand:false label_box;
-      vbox#add ~expand:false fire_frame;
-      weapons#add vbox;
+      weapons#add label_box;
       weapons#add ~expand:false new vline;
     | None ->
       let vbox = new vbox in
