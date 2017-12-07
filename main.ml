@@ -55,6 +55,7 @@ let rec loop t c =
   sidebar#add ~expand:false shield;
   sidebar#add ~expand:false new hline;
   sidebar#add ~expand:false crew;
+  sidebar#add ~expand:false new hline;
   sidebar#add ~expand:false button;
   wrapper#add ~expand:false sidebar;
   let sidebarline = new vline in
