@@ -138,7 +138,7 @@ let rec loop t c =
       (fun () -> run t frame waiter)
       (fun () ->
         if !exit then return ()
-        else loop t (parse_command Controller.init ShowStartText))
+        else loop t (parse_command (Controller.init ()) ShowStartText))
   | StartScreen ->
     let result = Text_screen.get_components 0 () in
     wrapper#remove sidebar;
@@ -294,7 +294,7 @@ let rec loop t c =
         else loop t (parse_command c (Go 1)))
 
 let main () =
-  let controller = Controller.init in
+  let controller = Controller.init () in
 
   Lazy.force LTerm.stdout >>= fun term ->
   LTerm.enable_mouse term >>= fun () ->

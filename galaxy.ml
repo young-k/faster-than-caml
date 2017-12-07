@@ -7,15 +7,16 @@ type star = {
 }
 type galaxy = star list
 
-let _ = Random.self_init ()
 
 let init =
-  fun () -> let random_event () =
-    match Random.int 8 with
-    | 0 -> Store
-    | 1 | 2 -> Nothing
-    | 3 | 4 -> Event
-    | _ -> Combat in
+  fun () -> 
+    let random_event () =
+      let _ = Random.self_init () in 
+      match Random.int 8 with
+      | 0 -> Store
+      | 1 | 2 -> Nothing
+      | 3 | 4 -> Event
+      | _ -> Combat in
   let ret = [
     {id = 2; event = End; reachable = [1;3;4;5]};
     {id = 3; event = End; reachable = [1;2;5;6]};

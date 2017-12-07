@@ -55,7 +55,7 @@ type controller = {
 }
 
 (* [init] generates a controller *)
-val init: controller
+val init: unit -> controller
 
 (* [parse_command c com] is the resulting controller after parsing a command
    and applying the results. *)

@@ -52,7 +52,7 @@ type controller = {
   start_time: float;
 }
 
-let init =
+let init () =
   let init_galaxy = Galaxy.init () in
   {
     ship = Ship.init;
