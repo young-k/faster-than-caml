@@ -70,7 +70,8 @@ let new_store : store = {
   missiles = 5;
 }
 
-let ship_with_no_scrap = {Ship.init with resources={fuel = 0; missiles = 0; scrap = 0}}
+let ship_with_no_scrap = 
+    {Ship.init with resources={fuel = 0; missiles = 0; scrap = 0}}
 
 let ship_with_weap = (buy new_store (Ship.init) "Test Weapon")
 let ship_with_aug = (buy new_store ship_with_weap "Test Augmentation")
@@ -95,7 +96,7 @@ let store_tests = [
 
   "apply_augmentation" >::
     (fun _ -> assert_equal ((List.hd Ship.init.inventory).damage + 1)
-              (List.hd (apply_augmentation Ship.init test_aug).inventory).damage);
+            (List.hd (apply_augmentation Ship.init test_aug).inventory).damage);
 
   "buy_weap_no_scrap" >::
     (fun _ -> assert_equal 1
@@ -204,7 +205,8 @@ let ship_tests = [
 
 (*----------------------resources get/set functions----------------*)
 
-  "get_resources" >:: (fun _ -> assert_equal init_rcs (Ship.get_resources ship));
+  "get_resources" >:: (fun _ -> assert_equal init_rcs 
+                                (Ship.get_resources ship));
   "set_resources" >:: (fun _ -> assert_equal {ship with resources = new_rcs}
     (set_resources ship (-1,2,3)));
   "get_fuel" >:: (fun _ -> assert_equal 5 (get_fuel ship));

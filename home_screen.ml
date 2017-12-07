@@ -14,7 +14,8 @@ let in_frame w = let f = new frame in f#set w; f
 let get_components () =
   let mainbox = new vbox in
 
-  let logo = new LTerm_widget.label (text ^ "\n\nCreated by Megan Le, Wendy Zhang, Kevin Chan, Young Kim.") in
+  let logo = new LTerm_widget.label 
+    (text ^ "\n\nCreated by Megan Le, Wendy Zhang, Kevin Chan, Young Kim.") in
   mainbox#add logo;
 
   let hbox = new hbox in

@@ -240,8 +240,10 @@ let rec loop t c =
     let (mainBox, action, d, equip, unequip, upgrade, index) = 
       Ship_screen.get_components c () in
     wrapper#add mainBox;
-    d#on_click (fun () -> equip := false; unequip := false; upgrade := false; wakeup wakener ());
-    action#on_click (fun () -> if !unequip || !equip || !upgrade then wakeup wakener ());
+    d#on_click (fun () -> equip := false; unequip := false; 
+                          upgrade := false; wakeup wakener ());
+    action#on_click (fun () -> if !unequip || !equip || !upgrade 
+                                then wakeup wakener ());
     Lwt.finalize
       (fun () -> run t frame waiter)
       (fun () ->
@@ -249,7 +251,9 @@ let rec loop t c =
         else if !unequip then loop t (parse_command 
           {c with ship = (Ship.unequip c.ship !index)} ShowShipScreen)
         else if !equip then loop t (parse_command
-          {c with ship = (Ship.equip c.ship (List.length c.ship.equipped) !index)}
+          {c with 
+            ship = (Ship.equip c.ship (List.length c.ship.equipped) !index)
+          }
           ShowShipScreen)
         else if !upgrade then 
           let new_ship = 

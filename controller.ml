@@ -105,9 +105,11 @@ let parse_command c com =
            let m_count = if s = "Missile" then 1 else 0 in
            let store = if (can_buy st c.ship s) then
                {
-                 augmentations = List.filter (fun (a : augmentation) -> a.name <> s)
+                 augmentations = List.filter (fun (a : augmentation) -> 
+                                              a.name <> s)
                      st.augmentations;
-                 weapons = List.filter (fun (w : weapon) -> w.name <> s) st.weapons;
+                 weapons = List.filter (fun (w : weapon) -> w.name <> s) 
+                            st.weapons;
                  missiles = st.missiles - m_count;
                  fuel = st.fuel - f_count;
                } else st in
