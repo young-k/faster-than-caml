@@ -33,6 +33,8 @@ let init =
     @ [{id = 10; event = End; reachable = []}] in
   (ret, 1)
 
+(* [find_star m i] returns the star in galaxy [m] with id [i]
+ * requires: galaxy [m], valid star id [i] *)
 let find_star m id = List.find (fun s -> s.id = id) m
 
 let reachable m id =

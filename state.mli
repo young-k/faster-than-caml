@@ -4,6 +4,7 @@
 (* [save_game c] takes a controller which acts as the current game state, 
  * converts it to a textual representation, and then writes it to
  * 'game_data/save.txt' 
+ * requires: a valid controller
  * returns: a unit *)
 val save_game : Controller.controller -> unit
 
